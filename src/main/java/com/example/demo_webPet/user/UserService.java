@@ -11,7 +11,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void signup(CreateUserDto dto) {
+    public void createUser(CreateUserDto dto) {
         // 아이디 중복 체크
         if (userRepository.existsByUserId(dto.userId())){
             throw new UserIdDuplicatedException();

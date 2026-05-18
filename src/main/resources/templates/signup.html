@@ -15,7 +15,7 @@
        <!-- <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>-->
     </div>
 
-    <p th:text="${errorMsg}"></p>
+    <p th:if="${errorMsg}"  th:text="${errorMsg}"></p>
     <button type="submit">회원가입</button>
 </form>
 </body>
