@@ -1,10 +1,9 @@
-package com.example.shelter;
-import com.example.animal.Animal;
+package com.example.demo_webPet.shelter;
+import com.example.demo_webPet.animal.Animal;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 
@@ -29,7 +28,7 @@ public final class Shelter {
     @Column(nullable = false)
     private String phone;
 
-    @OneToMany(mappedBy = "animal")
+    @OneToMany(mappedBy = "shelter")
     @Getter(AccessLevel.PACKAGE)
     private List<Animal> animalList;
 }

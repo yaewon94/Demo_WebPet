@@ -1,12 +1,11 @@
-package com.example.adoption;
+package com.example.demo_webPet.adoption;
 
-import com.example.animal.Animal;
-import com.example.user.User;
+import com.example.demo_webPet.animal.Animal;
+import com.example.demo_webPet.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Getter(AccessLevel.PACKAGE)

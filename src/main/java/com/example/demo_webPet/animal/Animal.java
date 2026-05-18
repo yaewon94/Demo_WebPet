@@ -1,14 +1,13 @@
-package com.example.animal;
+package com.example.demo_webPet.animal;
 
-import com.example.adoption.AdoptionRequest;
-import com.example.shelter.Shelter;
+import com.example.demo_webPet.adoption.AdoptionRequest;
+import com.example.demo_webPet.shelter.Shelter;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 
@@ -43,7 +42,7 @@ public final class Animal {
     @JoinColumn(name="shelter_id", nullable=false) // DB 레벨 검증
     private Shelter shelter;
 
-    @OneToMany(mappedBy = "adoptionRequest")
+    @OneToMany(mappedBy = "animal")
     @Getter(AccessLevel.NONE)
     private List<AdoptionRequest> adoptionRequestList;
 
