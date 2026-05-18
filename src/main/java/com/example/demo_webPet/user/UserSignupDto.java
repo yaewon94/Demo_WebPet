@@ -13,7 +13,7 @@ import lombok.Setter;
 // Getter 어노테이션 필요 없음 : 객체.필드명() 이렇게 가져오면 됨
 public record UserSignupDto(
         @NotBlank(message = UserConstants.MSG_INPUT_ID_REQUIRED)
-        String id,
+        String id, // USER_ID_TYPE이 아닌 String으로 받아도 괜찮음. html로 들어오는건 모두 문자열로 받기 때문에
 
         @NotBlank(message = UserConstants.MSG_INPUT_PW_REQUIRED) // java, validation 레벨 검증
         @Column(nullable = false) // db 레벨 검증
