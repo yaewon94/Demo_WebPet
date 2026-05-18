@@ -4,7 +4,7 @@
 <!--
 <form action="/signup" method="post">
 -->
-<form th:action="@{/signup}" th:object="${userSignupDto}" method="post">
+<form th:action="@{/user}" th:object="${createUserDto}" method="post">
     <div>
         <!--<input type="text" name="id" placeholder="아이디">-->
         아이디 <input type="text" th:field="*{userId}">

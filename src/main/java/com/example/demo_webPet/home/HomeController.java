@@ -9,6 +9,6 @@ public class HomeController {
     @GetMapping("/")
     public String homePage(){
         //return "home"; // 반환값이 .html
-        return "redirect:/signup"; // redirect 는 GET 요청으로 이동함
+        return "redirect:/user"; // redirect 는 GET 요청으로 이동함
     }
 }

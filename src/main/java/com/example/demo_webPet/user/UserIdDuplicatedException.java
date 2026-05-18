@@ -2,9 +2,9 @@ package com.example.demo_webPet.user;
 
 import com.example.demo_webPet.Global.ErrorCode;
 
-public class DuplicatedUserIdException extends UserException{
+public class UserIdDuplicatedException extends UserException{
 
-    public DuplicatedUserIdException(){
+    public UserIdDuplicatedException(){
         super(ErrorCode.DUPLICATED_USER_ID);
     }
 }

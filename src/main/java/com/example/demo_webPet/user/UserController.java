@@ -1,6 +1,5 @@
 package com.example.demo_webPet.user;
 
-import com.example.demo_webPet.Global.ViewName;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,28 +17,29 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/signup")
+    // TEMP
+    @GetMapping("/user")
     public String signupPage(Model model){
         //model.addAttribute(MODEL_NAME, new UserSignupDto()); // dto class
-        model.addAttribute("userSignupDto", UserSignupDto.getNewInstance()); // record
-        return ViewName.SIGNUP.getName(); // html 파일명
+        model.addAttribute("createUserDto", CreateUserDto.getNewInstance()); // record
+        return "signup"; // html 파일명
     }
 
-    @PostMapping("/signup")
-    public String signup(@Valid @ModelAttribute("userSignupDto") UserSignupDto dto, BindingResult bindingResult, Model model) {
+    @PostMapping("/user")
+    public String createUser(@Valid @ModelAttribute("createUserDto") CreateUserDto dto, BindingResult bindingResult, Model model) {
 
         // java validation 레벨에서 입력값 검증
         if (bindingResult.hasErrors()) {
             model.addAttribute("errorMsg", Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
-            return ViewName.SIGNUP.getName();
+            return "signup";
         }
 
         // service 레벨에서 입력값 검증
         try {
             userService.signup(dto);
-        } catch (DuplicatedUserIdException e) {
+        } catch (UserIdDuplicatedException e) {
             model.addAttribute("errorMsg", e.getMessage());
-            return ViewName.SIGNUP.getName();
+            return "signup";
         }
 
         return "redirect:/";

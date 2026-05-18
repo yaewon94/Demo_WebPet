@@ -11,10 +11,10 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void signup(UserSignupDto dto) {
+    public void signup(CreateUserDto dto) {
         // 아이디 중복 체크
         if (userRepository.existsByUserId(dto.userId())){
-            throw new DuplicatedUserIdException();
+            throw new UserIdDuplicatedException();
         }
 
         User user = new User();
