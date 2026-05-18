@@ -11,11 +11,15 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void signup(String id, String password) {
+    public void signup(UserSignupDto dto) {
+        // 아이디 중복 체크
+        if (userRepository.existsByUserId(dto.userId())){
+            throw new DuplicatedUserIdException();
+        }
+
         User user = new User();
-        user.setId(USER_ID_TYPE.of(id));
-        user.setPassword(password);
-        System.out.println("====================== 회원객체 = " + user.toString());
+        user.setUserId(dto.userId());
+        user.setPassword(dto.password());
 
         userRepository.save(user);
     }
