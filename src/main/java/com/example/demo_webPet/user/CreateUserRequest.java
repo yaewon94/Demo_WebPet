@@ -11,7 +11,7 @@ import static com.example.demo_webPet.user.UserConstants.PATTERN_REGEXP_USER_ID;
 // 디폴트 생성자 x
 // 생성후 값 변경 불가능 (안전성 좋음) : Setter 없음
 // Getter 어노테이션 필요 없음 : 객체.필드명() 이렇게 가져오면 됨
-public record CreateUserDto(
+public record CreateUserRequest(
         @NotBlank(message = UserConstants.MSG_INPUT_ID_REQUIRED)
         @Size(min = UserConstants.VALUE_MIN_USER_ID_SIZE, max=UserConstants.VALUE_MAX_USER_ID_SIZE, message = UserConstants.MSG_USER_ID_SIZE_REQUIRED)
         @Pattern(regexp = PATTERN_REGEXP_USER_ID, message = MSG_USER_ID_PATTERN_CONSTRAINT) // 영어, 숫자로만 제한
@@ -21,8 +21,8 @@ public record CreateUserDto(
         @Size(min = UserConstants.VALUE_MIN_PASSWORD_SIZE, max=UserConstants.VALUE_MAX_PASSWORD_SIZE, message = UserConstants.MSG_PW_SIZE_REQUIRED)
         String password
 ) {
-    public static CreateUserDto getNewInstance() {
-        return new CreateUserDto(null, null);
+    public static CreateUserRequest getNewInstance() {
+        return new CreateUserRequest(null, null);
     }
 }
 
