@@ -1,6 +1,7 @@
 package com.example.demo_webPet.user;
 
 import com.example.demo_webPet.Common.UrlConstants;
+import com.example.demo_webPet.user.CreateUserRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -16,7 +17,7 @@ import java.util.Arrays;
 
 @Controller
 @RequiredArgsConstructor // final 필드 + @NonNull 필드만 골라서 생성자를 자동으로 만들어주는 것
-public class UserController {
+class UserController {
 
     private static final String VIEW_NAME_SIGN_UP = "signup";
 

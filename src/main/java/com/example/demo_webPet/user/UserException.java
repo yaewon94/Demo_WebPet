@@ -3,7 +3,7 @@ package com.example.demo_webPet.user;
 import lombok.Getter;
 
 @Getter
-public abstract class UserException extends RuntimeException{
+abstract class UserException extends RuntimeException{
 
     private final UserCode code;
 

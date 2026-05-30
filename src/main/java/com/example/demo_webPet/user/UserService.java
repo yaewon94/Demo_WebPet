@@ -1,9 +1,10 @@
 package com.example.demo_webPet.user;
 
+import com.example.demo_webPet.user.CreateUserRequest;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+class UserService {
 
     private final UserRepository userRepository;
 
