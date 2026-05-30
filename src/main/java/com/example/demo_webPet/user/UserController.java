@@ -2,6 +2,7 @@ package com.example.demo_webPet.user;
 
 import com.example.demo_webPet.Common.UrlConstants;
 import com.example.demo_webPet.user.CreateUserRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -37,7 +38,8 @@ class UserController {
     public String createUser(@Valid @ModelAttribute("createUserRequest") CreateUserRequest request
             , BindingResult bindingResult
             , Model model
-            , RedirectAttributes ra) {
+            , RedirectAttributes ra
+            , HttpSession session) {
 
         // 1. java validation 레벨에서 입력값 검증
         String errorMsg = null;
@@ -61,8 +63,10 @@ class UserController {
         // TODO :
         // - REST로 바꿀때 RestControllerAdvice에서 에러(메세지 등) 정보 반환
         // - 기존 form 데이터 유지, 페이지 이동은 프론트가 하도록 변경
+        LoginUserDto loginUserDto;
+
         try {
-            userService.createUser(request);
+            loginUserDto = userService.createUser(request);
         }catch(UserIdDuplicatedException e){
             ra.addFlashAttribute("errorMsg", e.getMessage());
             ra.addFlashAttribute("createUserRequest", request);
@@ -70,7 +74,11 @@ class UserController {
         }
 
         // 회원가입 성공 시
-        // TODO : 프론트에서 회원가입 성공 메세지 출력 후, 홈화면으로 이동
+        // 세션에 로그인 정보 저장
+        session.setAttribute("login_user_info", loginUserDto);
+        session.setMaxInactiveInterval(LoginUserDto.MAX_LOGIN_TIME);
+
+        // TODO : 프론트에서 회원가입 성공 메세지 출력
         return "redirect:/"; // redirect는 Get메소드 호출
     }
 }

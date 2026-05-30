@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <body>
+<div>
+    <b th:if="${login_user_info}"  th:text="${login_user_info.userId}"></b> 님 로그인
+</div>
 <a th:href="${url_signup}">회원가입</a>
 </body>
 </html>

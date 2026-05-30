@@ -12,7 +12,7 @@ class UserService {
         this.userRepository = userRepository;
     }
 
-    public void createUser(CreateUserRequest dto) {
+    public LoginUserDto createUser(CreateUserRequest dto) {
         // 아이디 중복 체크
         if (userRepository.existsByUserId(dto.userId())){
             throw new UserIdDuplicatedException();
@@ -21,7 +21,8 @@ class UserService {
         User user = new User();
         user.setUserId(dto.userId());
         user.setPassword(dto.password());
-
         userRepository.save(user);
+
+        return new LoginUserDto(user.getId(), user.getUserId(), user.getType());
     }
 }
