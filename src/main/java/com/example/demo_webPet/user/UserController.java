@@ -1,5 +1,6 @@
 package com.example.demo_webPet.user;
 
+import com.example.demo_webPet.Common.UrlConstants;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -17,21 +18,21 @@ import java.util.Arrays;
 @RequiredArgsConstructor // final 필드 + @NonNull 필드만 골라서 생성자를 자동으로 만들어주는 것
 public class UserController {
 
-    static final String URL_USER = "/user";
-    static final String VIEW_NAME_SIGN_UP = "signup";
+    private static final String VIEW_NAME_SIGN_UP = "signup";
 
     private final UserService userService;
 
     // TEMP
-    @GetMapping(URL_USER)
+    @GetMapping(UrlConstants.URL_SIGNUP)
     public String signupPage(Model model){
+        model.addAttribute("url", UrlConstants.URL_SIGNUP);
         if (!model.containsAttribute("createUserRequest")) {
             model.addAttribute("createUserRequest", CreateUserRequest.getNewInstance()); // record
         }
         return VIEW_NAME_SIGN_UP; // html 파일명
     }
 
-    @PostMapping(URL_USER)
+    @PostMapping(UrlConstants.URL_SIGNUP)
     public String createUser(@Valid @ModelAttribute("createUserRequest") CreateUserRequest request
             , BindingResult bindingResult
             , Model model
@@ -64,11 +65,11 @@ public class UserController {
         }catch(UserIdDuplicatedException e){
             ra.addFlashAttribute("errorMsg", e.getMessage());
             ra.addFlashAttribute("createUserRequest", request);
-            return "redirect:" + URL_USER;
+            return "redirect:" + UrlConstants.URL_SIGNUP;
         }
 
         // 회원가입 성공 시
         // TODO : 프론트에서 회원가입 성공 메세지 출력 후, 홈화면으로 이동
-        return "redirect:/";
+        return "redirect:/"; // redirect는 Get메소드 호출
     }
 }
