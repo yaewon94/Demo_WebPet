@@ -21,9 +21,6 @@ import java.util.Arrays;
 @RequiredArgsConstructor // final 필드 + @NonNull 필드만 골라서 생성자를 자동으로 만들어주는 것
 class UserController {
 
-    private static final String VIEW_NAME_SIGN_UP = "/user/signup";
-    private static final String VIEW_NAME_LOGIN = "/user/login";
-
     private final UserService userService;
 
     // TEMP
@@ -33,7 +30,7 @@ class UserController {
         if (!model.containsAttribute("createUserRequest")) {
             model.addAttribute("createUserRequest", CreateUserRequest.getNewInstance()); // record
         }
-        return VIEW_NAME_SIGN_UP; // html 파일명
+        return UrlConstants.URL_SIGNUP; // html 파일명
     }
 
     @PostMapping(UrlConstants.URL_SIGNUP)
@@ -58,7 +55,7 @@ class UserController {
 
         if (errorMsg != null) {
             model.addAttribute("errorMsg", errorMsg);
-            return VIEW_NAME_SIGN_UP;
+            return UrlConstants.URL_SIGNUP;
         }
 
         // 2. service 레벨에서 입력값 검증
@@ -70,16 +67,9 @@ class UserController {
         try {
             loginUserDto = userService.createUser(request);
         }catch(UserException e){
-           /* if(e.getCode() == UserCode.ERROR_USER_ID_VALUE_OVERFLOW){
-                // TODO : 프론트에서 회원가입 불가 메세지 출력
-                System.out.println(e.getCode().getMessage());
-                System.out.println(e.getCode().getDebugMessage());
-                return "redirect:/";
-            }else{*/
-                ra.addFlashAttribute("errorMsg", e.getCode().getMessage());
-                ra.addFlashAttribute("createUserRequest", request);
-                return "redirect:" + UrlConstants.URL_SIGNUP;
-           // }
+            ra.addFlashAttribute("errorMsg", e.getCode().getMessage());
+            ra.addFlashAttribute("createUserRequest", request);
+            return "redirect:" + UrlConstants.URL_SIGNUP;
         }
 
         // 회원가입 성공 시
@@ -90,18 +80,35 @@ class UserController {
         return "redirect:/"; // redirect는 Get메소드 호출
     }
 
-    /*@GetMapping(UrlConstants.URL_LOGIN)
+    @GetMapping(UrlConstants.URL_LOGIN)
     public String loginPage(Model model){
         model.addAttribute("url", UrlConstants.URL_LOGIN);
-        model.addAttribute("loginUserDto", SessionUserDto.getNewInstance());
-        return VIEW_NAME_LOGIN;
+        model.addAttribute("loginUserDto", LoginUserDto.getNewInstance());
+        return UrlConstants.URL_LOGIN;
     }
 
     @PostMapping(UrlConstants.URL_LOGIN)
-    public String loginUser(@Valid @ModelAttribute("loginUserDto") SessionUserDto loginUserDto
+    public String loginUser(@Valid @ModelAttribute("loginUserDto") LoginUserDto loginUserDto
             , BindingResult bindingResult
-            , Model model){
+            , Model model
+            , HttpSession session){
+
+        // 1. validation 검증
+        if(bindingResult.hasErrors()){
+            FieldError fieldError = bindingResult.getFieldError();
+            if (fieldError != null) {
+                model.addAttribute("errorMsg", fieldError.getDefaultMessage());
+            }
+            return UrlConstants.URL_LOGIN;
+        }
+
+        // 2. service 검증
+        // 예외 발생할 경우 @ControllerAdvice에서 처리
+        userService.loginUser(loginUserDto);
+
+        // 로그인 정보 저장
+        SessionManager.login(new SessionUserDto(loginUserDto.id(), loginUserDto.userId()), session);
 
         return "redirect:/";
-    }*/
+    }
 }

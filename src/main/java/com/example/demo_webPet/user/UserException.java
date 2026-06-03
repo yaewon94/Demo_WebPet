@@ -3,10 +3,11 @@ package com.example.demo_webPet.user;
 import lombok.Getter;
 
 @Getter
-class UserException extends RuntimeException{
+public class UserException extends RuntimeException{
 
     private final UserCode code;
-    public UserException(UserCode code) {
+
+    protected UserException(UserCode code) {
         super(code.getMessage());
         this.code = code;
     }

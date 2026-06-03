@@ -16,6 +16,7 @@ public class HomeController {
         model.addAttribute("url_signup", UrlConstants.URL_SIGNUP);
         model.addAttribute("url_login", UrlConstants.URL_LOGIN);
         model.addAttribute(SessionUserDto.SESSION_KEY, SessionManager.getLoginUser(session));
+
         return "home"; // 반환값이 .html
     }
 }

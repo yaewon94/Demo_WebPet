@@ -1,0 +1,15 @@
+<html>
+<body>
+<form th:action="${url}" th:object="${loginUserDto}" method="post">
+    <div>
+        아이디 <input type="text" th:field="*{userId}">
+    </div>
+    <div>
+        비밀번호 <input type="password" th:field="*{password}">
+    </div>
+
+    <p th:if="${errorMsg}"  th:text="${errorMsg}"></p>
+    <button type="submit">로그인</button>
+</form>
+</body>
+</html>

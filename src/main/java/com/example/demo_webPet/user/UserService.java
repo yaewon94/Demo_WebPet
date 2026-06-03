@@ -1,4 +1,5 @@
 package com.example.demo_webPet.user;
+import com.example.demo_webPet.common.UrlConstants;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -6,11 +7,11 @@ class UserService {
 
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public LoginUserDto createUser(CreateUserRequest dto) {
+    LoginUserDto createUser(CreateUserRequest dto) {
         // 아이디 중복 체크
         if (userRepository.existsByUserId(dto.userId())){
             throw new UserException(UserCode.ERROR_DUPLICATED_USER_ID);
@@ -21,12 +22,19 @@ class UserService {
         user.setPassword(dto.password());
         userRepository.save(user);
 
-        // ID값 확인
-        /*if(user.getId() < 0) {
-            // TODO : DB에서 user데이터 삭제
-            throw new UserException(UserCode.ERROR_USER_ID_VALUE_OVERFLOW);
-        }*/
+        return new LoginUserDto(user.getId(), user.getUserId(), null);
+    }
 
-        return new LoginUserDto(user.getId(), user.getUserId());
+    void loginUser(LoginUserDto dto){
+        // 아이디 존재 여부 체크
+        User user = userRepository
+                .findByUserId(dto.userId())
+                .orElseThrow(() ->
+                        new UserAuthException(UserCode.ERROR_USER_ID_IS_NOT_EXIST, UrlConstants.URL_LOGIN));
+
+        // 비밀번호 일치 여부 체크
+        if (!user.getPassword().equals(dto.password())) {
+            throw new UserAuthException(UserCode.ERROR_USER_PASSWORD_MISMATCH, UrlConstants.URL_LOGIN);
+        }
     }
 }

@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html>
 <body>
-<div th:if="${SESSION_USER}">
+<div th:if="${SESSION_USER != null}">
     <b th:text="${SESSION_USER.userId}"></b>님 로그인
 </div>
-<!--TODO : 로그인 상태 아닐때만 해당 버튼이 뜨게-->
-<a th:href="${url_login}">로그인</a>
+<a th:if="${SESSION_USER == null}" th:href="${url_login}">로그인</a>
 <a th:href="${url_signup}">회원가입</a>
 </body>
 </html>
