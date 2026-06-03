@@ -1,4 +1,4 @@
-package com.example.demo_webPet.Common;
+package com.example.demo_webPet.common;
 
 public record Response<T>(
         String code,

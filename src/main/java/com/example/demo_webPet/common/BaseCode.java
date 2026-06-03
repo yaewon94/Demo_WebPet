@@ -1,4 +1,4 @@
-package com.example.demo_webPet.Common;
+package com.example.demo_webPet.common;
 
 public interface BaseCode {
     String getCode();

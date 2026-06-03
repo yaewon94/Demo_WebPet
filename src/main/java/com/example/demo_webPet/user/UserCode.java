@@ -1,6 +1,6 @@
 package com.example.demo_webPet.user;
 
-import com.example.demo_webPet.Common.BaseCode;
+import com.example.demo_webPet.common.BaseCode;
 import lombok.Getter;
 
 @Getter
