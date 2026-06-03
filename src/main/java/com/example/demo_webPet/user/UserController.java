@@ -1,7 +1,8 @@
 package com.example.demo_webPet.user;
 
-import com.example.demo_webPet.Common.UrlConstants;
-import com.example.demo_webPet.user.CreateUserRequest;
+import com.example.demo_webPet.common.UrlConstants;
+import com.example.demo_webPet.common.session.SessionManager;
+import com.example.demo_webPet.common.session.SessionUserDto;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,8 @@ import java.util.Arrays;
 @RequiredArgsConstructor // final 필드 + @NonNull 필드만 골라서 생성자를 자동으로 만들어주는 것
 class UserController {
 
-    private static final String VIEW_NAME_SIGN_UP = "signup";
+    private static final String VIEW_NAME_SIGN_UP = "/user/signup";
+    private static final String VIEW_NAME_LOGIN = "/user/login";
 
     private final UserService userService;
 
@@ -67,18 +69,39 @@ class UserController {
 
         try {
             loginUserDto = userService.createUser(request);
-        }catch(UserIdDuplicatedException e){
-            ra.addFlashAttribute("errorMsg", e.getMessage());
-            ra.addFlashAttribute("createUserRequest", request);
-            return "redirect:" + UrlConstants.URL_SIGNUP;
+        }catch(UserException e){
+           /* if(e.getCode() == UserCode.ERROR_USER_ID_VALUE_OVERFLOW){
+                // TODO : 프론트에서 회원가입 불가 메세지 출력
+                System.out.println(e.getCode().getMessage());
+                System.out.println(e.getCode().getDebugMessage());
+                return "redirect:/";
+            }else{*/
+                ra.addFlashAttribute("errorMsg", e.getCode().getMessage());
+                ra.addFlashAttribute("createUserRequest", request);
+                return "redirect:" + UrlConstants.URL_SIGNUP;
+           // }
         }
 
         // 회원가입 성공 시
         // 세션에 로그인 정보 저장
-        session.setAttribute("login_user_info", loginUserDto);
-        session.setMaxInactiveInterval(LoginUserDto.MAX_LOGIN_TIME);
+        SessionManager.login(new SessionUserDto(loginUserDto.id(), loginUserDto.userId()), session);
 
         // TODO : 프론트에서 회원가입 성공 메세지 출력
         return "redirect:/"; // redirect는 Get메소드 호출
     }
+
+    /*@GetMapping(UrlConstants.URL_LOGIN)
+    public String loginPage(Model model){
+        model.addAttribute("url", UrlConstants.URL_LOGIN);
+        model.addAttribute("loginUserDto", SessionUserDto.getNewInstance());
+        return VIEW_NAME_LOGIN;
+    }
+
+    @PostMapping(UrlConstants.URL_LOGIN)
+    public String loginUser(@Valid @ModelAttribute("loginUserDto") SessionUserDto loginUserDto
+            , BindingResult bindingResult
+            , Model model){
+
+        return "redirect:/";
+    }*/
 }
