@@ -13,9 +13,16 @@ public class HomeController {
 
     @GetMapping("/")
     public String homePage(Model model, HttpSession session){
-        model.addAttribute("url_signup", UrlConstants.URL_SIGNUP);
-        model.addAttribute("url_login", UrlConstants.URL_LOGIN);
-        model.addAttribute(SessionUserDto.SESSION_KEY, SessionManager.getLoginUser(session));
+
+        SessionUserDto sessionUserDto = SessionManager.getLoginUser(session);
+
+        if(sessionUserDto == null){
+            model.addAttribute("url_signup", UrlConstants.URL_SIGNUP);
+            model.addAttribute("url_login", UrlConstants.URL_LOGIN);
+        }else{
+            model.addAttribute(SessionUserDto.SESSION_KEY, sessionUserDto);
+            model.addAttribute("url_logout", UrlConstants.URL_LOGOUT);
+        }
 
         return "home"; // 반환값이 .html
     }

@@ -1,10 +1,25 @@
 <!DOCTYPE html>
 <html>
-<body>
-<div th:if="${SESSION_USER != null}">
+<body th:with="LOGIN=${SESSION_USER != null}">
+
+<div th:if="${LOGIN}">
     <b th:text="${SESSION_USER.userId}"></b>님 로그인
 </div>
-<a th:if="${SESSION_USER == null}" th:href="${url_login}">로그인</a>
-<a th:href="${url_signup}">회원가입</a>
+
+<div>
+<span th:unless="${LOGIN}">
+    <a th:href="${url_login}">로그인</a>
+    <a th:href="${url_signup}">회원가입</a>
+</span>
+    <form th:if="${LOGIN}" th:action="${url_logout}" method="post">
+        <button type="submit">
+            로그아웃
+        </button>
+    </form>
+<!--<span th:if="${LOGIN}">
+    <a th:href="${url_logout}">로그아웃</a>
+</span> // a 링크는 get 메소드만 호출 가능-->
+</div>
+
 </body>
 </html>

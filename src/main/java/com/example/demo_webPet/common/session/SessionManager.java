@@ -13,4 +13,8 @@ public final class SessionManager {
     public static SessionUserDto getLoginUser(HttpSession session){
         return (SessionUserDto) session.getAttribute(SessionUserDto.SESSION_KEY);
     }
+
+    public static void logout(HttpSession session){
+        session.removeAttribute(SessionUserDto.SESSION_KEY);
+    }
 }

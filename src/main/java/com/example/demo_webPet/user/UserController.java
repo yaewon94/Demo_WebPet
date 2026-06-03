@@ -25,7 +25,7 @@ class UserController {
 
     // TEMP
     @GetMapping(UrlConstants.URL_SIGNUP)
-    public String signupPage(Model model){
+    String signupPage(Model model){
         model.addAttribute("url", UrlConstants.URL_SIGNUP);
         if (!model.containsAttribute("createUserRequest")) {
             model.addAttribute("createUserRequest", CreateUserRequest.getNewInstance()); // record
@@ -34,7 +34,7 @@ class UserController {
     }
 
     @PostMapping(UrlConstants.URL_SIGNUP)
-    public String createUser(@Valid @ModelAttribute("createUserRequest") CreateUserRequest request
+    String createUser(@Valid @ModelAttribute("createUserRequest") CreateUserRequest request
             , BindingResult bindingResult
             , Model model
             , RedirectAttributes ra
@@ -81,14 +81,14 @@ class UserController {
     }
 
     @GetMapping(UrlConstants.URL_LOGIN)
-    public String loginPage(Model model){
+    String loginPage(Model model){
         model.addAttribute("url", UrlConstants.URL_LOGIN);
         model.addAttribute("loginUserDto", LoginUserDto.getNewInstance());
         return UrlConstants.URL_LOGIN;
     }
 
     @PostMapping(UrlConstants.URL_LOGIN)
-    public String loginUser(@Valid @ModelAttribute("loginUserDto") LoginUserDto loginUserDto
+    String loginUser(@Valid @ModelAttribute("loginUserDto") LoginUserDto loginUserDto
             , BindingResult bindingResult
             , Model model
             , HttpSession session){
@@ -109,6 +109,12 @@ class UserController {
         // 로그인 정보 저장
         SessionManager.login(new SessionUserDto(loginUserDto.id(), loginUserDto.userId()), session);
 
+        return "redirect:/";
+    }
+
+    @PostMapping(UrlConstants.URL_LOGOUT)
+    String logout(HttpSession session){
+        SessionManager.logout(session);
         return "redirect:/";
     }
 }
