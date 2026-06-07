@@ -1,34 +1,28 @@
 package com.example.demo_webPet.shelter;
 import com.example.demo_webPet.animal.Animal;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import lombok.AccessLevel;
 import lombok.Getter;
 
 import java.util.List;
 
 @Entity
 @Getter
+@Table(name="TB_Shelter")
 public final class Shelter {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter(AccessLevel.NONE)
     private Long id;
 
-    @NotBlank
     @Column(nullable = false)
     private String name;
 
-    @NotBlank
     @Column(nullable = false)
     private String address;
 
-    @NotBlank
     @Column(nullable = false)
     private String phone;
 
-    @OneToMany(mappedBy = "shelter")
-    @Getter(AccessLevel.PACKAGE)
+    @OneToMany(mappedBy = "shelter") // DB컬럼명이 아닌 상대 엔티티의 필드명
     private List<Animal> animalList;
 }

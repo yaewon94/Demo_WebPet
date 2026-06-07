@@ -3,6 +3,7 @@ package com.example.demo_webPet.user;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +11,7 @@ import static com.example.demo_webPet.user.UserConstants.PATTERN_REGEXP_USER_ID;
 
 @Entity
 @Getter
-@Setter
+@Setter(AccessLevel.PACKAGE)
 @Table(name = "TB_user")
 //@Setter(AccessLevel.PACKAGE) // 별로 의미 없음 : JPA는 reflection으로 필드 접근 가능, 같은 클래스 내부 메서드로 변경 가능, 서비스 레이어에서 우회 가능하므로
 public final class User {
