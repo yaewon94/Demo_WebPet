@@ -52,19 +52,4 @@ public final class User {
     public User(UserType type){
         this.type = type;
     }
-
-    public enum UserType{
-        NORMAL("개인회원"),
-        SHELTER("보호소 계정");
-
-        private final String label;
-
-        UserType(String label){
-            this.label = label;
-        }
-
-        public String GetLabel(){
-            return label;
-        }
-    }
 }

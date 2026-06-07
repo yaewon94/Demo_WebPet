@@ -2,10 +2,11 @@
 <html>
 <body th:with="LOGIN=${SESSION_USER != null}">
 
+<!-- 로그인, 회원가입 관련 링크 패널-->
+<div>
 <div th:if="${LOGIN}">
     <b th:text="${SESSION_USER.userId}"></b>님 로그인
 </div>
-
 <div>
 <span th:unless="${LOGIN}">
     <a th:href="${url_login}">로그인</a>
@@ -19,6 +20,12 @@
 <!--<span th:if="${LOGIN}">
     <a th:href="${url_logout}">로그아웃</a>
 </span> // a 링크는 get 메소드만 호출 가능-->
+</div>
+</div>
+
+<!-- 게시판 패널-->
+<div>
+    <a th:href="${url_board_animal_shelter_notice}">보호동물 조회</a>
 </div>
 
 </body>

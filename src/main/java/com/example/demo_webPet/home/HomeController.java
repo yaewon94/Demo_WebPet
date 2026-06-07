@@ -1,6 +1,6 @@
 package com.example.demo_webPet.home;
 
-import com.example.demo_webPet.common.UrlConstants;
+import com.example.demo_webPet.common.constants.UrlConstants;
 import com.example.demo_webPet.common.session.SessionManager;
 import com.example.demo_webPet.common.session.SessionUserDto;
 import jakarta.servlet.http.HttpSession;
@@ -23,6 +23,8 @@ public class HomeController {
             model.addAttribute(SessionUserDto.SESSION_KEY, sessionUserDto);
             model.addAttribute("url_logout", UrlConstants.URL_LOGOUT);
         }
+
+        model.addAttribute("url_board_animal_shelter_notice", UrlConstants.URL_BOARD_ANIMAL_SHELTER_NOTICE_LIST);
 
         return "home"; // 반환값이 .html
     }
