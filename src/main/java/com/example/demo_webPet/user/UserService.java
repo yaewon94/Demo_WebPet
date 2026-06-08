@@ -1,5 +1,5 @@
 package com.example.demo_webPet.user;
-import com.example.demo_webPet.common.UrlConstants;
+import com.example.demo_webPet.common.constants.UrlConstants;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,12 +17,12 @@ class UserService {
             throw new UserException(UserCode.ERROR_DUPLICATED_USER_ID);
         }
 
-        User user = new User();
+        User user = new User(dto.type());
         user.setUserId(dto.userId());
         user.setPassword(dto.password());
         userRepository.save(user);
 
-        return new LoginUserDto(user.getId(), user.getUserId(), null);
+        return new LoginUserDto(user.getId(), user.getUserId(), null, user.getType());
     }
 
     void loginUser(LoginUserDto dto){

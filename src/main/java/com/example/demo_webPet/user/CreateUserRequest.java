@@ -17,10 +17,13 @@ record CreateUserRequest(
 
         @NotBlank(message = UserConstants.MSG_INPUT_PW_REQUIRED) // java, validation 레벨 검증
         @Size(min = VALUE_MIN_PASSWORD_SIZE, max=VALUE_MAX_PASSWORD_SIZE, message = MSG_PW_SIZE_REQUIRED)
-        String password
+        String password,
+
+        // TODO : 제약사항, 2지선다
+        UserType type
 ) {
     public static CreateUserRequest getNewInstance() {
-        return new CreateUserRequest(null, null);
+        return new CreateUserRequest(null, null, UserType.NORMAL);
     }
 
     private static final int VALUE_MIN_USER_ID_SIZE = 8;

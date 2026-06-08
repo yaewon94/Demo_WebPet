@@ -1,12 +1,14 @@
 package com.example.demo_webPet.common.session;
 
+import com.example.demo_webPet.user.LoginUserDto;
 import jakarta.servlet.http.HttpSession;
 
 public final class SessionManager {
     private SessionManager(){}
 
-    public static void login(SessionUserDto dto, HttpSession session){
-        session.setAttribute(SessionUserDto.SESSION_KEY, dto);
+    public static void login(LoginUserDto loginUserDto, HttpSession session){
+        SessionUserDto sessionUserDto = new SessionUserDto(loginUserDto.id(), loginUserDto.userId(), loginUserDto.type());
+        session.setAttribute(SessionUserDto.SESSION_KEY, sessionUserDto);
         session.setMaxInactiveInterval(SessionUserDto.MAX_LOGIN_TIME);
     }
 
