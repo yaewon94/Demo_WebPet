@@ -1,8 +1,7 @@
 package com.example.demo_webPet.user;
 
-import com.example.demo_webPet.common.UrlConstants;
+import com.example.demo_webPet.common.constants.UrlConstants;
 import com.example.demo_webPet.common.session.SessionManager;
-import com.example.demo_webPet.common.session.SessionUserDto;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +12,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Arrays;
@@ -74,21 +74,23 @@ class UserController {
 
         // 회원가입 성공 시
         // 세션에 로그인 정보 저장
-        SessionManager.login(new SessionUserDto(loginUserDto.id(), loginUserDto.userId()), session);
+        SessionManager.login(loginUserDto, session);
 
         // TODO : 프론트에서 회원가입 성공 메세지 출력
         return "redirect:/"; // redirect는 Get메소드 호출
     }
 
     @GetMapping(UrlConstants.URL_LOGIN)
-    String loginPage(Model model){
+    String loginPage(@RequestParam(required = false)String redirect, Model model){
         model.addAttribute("url", UrlConstants.URL_LOGIN);
         model.addAttribute("loginUserDto", LoginUserDto.getNewInstance());
+        model.addAttribute("redirect", redirect);
         return UrlConstants.URL_LOGIN;
     }
 
     @PostMapping(UrlConstants.URL_LOGIN)
-    String loginUser(@Valid @ModelAttribute("loginUserDto") LoginUserDto loginUserDto
+    String loginUser(@RequestParam(required = false)String redirect
+            , @Valid @ModelAttribute("loginUserDto") LoginUserDto loginUserDto
             , BindingResult bindingResult
             , Model model
             , HttpSession session){
@@ -107,8 +109,12 @@ class UserController {
         userService.loginUser(loginUserDto);
 
         // 로그인 정보 저장
-        SessionManager.login(new SessionUserDto(loginUserDto.id(), loginUserDto.userId()), session);
+        SessionManager.login(loginUserDto, session);
 
+        // 페이지 이동
+        if (redirect != null && !redirect.isEmpty()) {
+            return "redirect:" + redirect;
+        }
         return "redirect:/";
     }
 
