@@ -1,7 +1,9 @@
 package com.example.demo_webPet.user;
 
+import com.example.demo_webPet.common.constants.ModelParamConstants;
 import com.example.demo_webPet.common.constants.UrlConstants;
 import com.example.demo_webPet.common.session.SessionManager;
+import com.example.demo_webPet.common.util.ErrorCheck;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,10 +26,17 @@ class UserController {
 
     private final UserService userService;
 
+    @ModelAttribute("list_userTypes")
+    UserType[] userTypes() {
+        return UserType.values();
+    }
+
     // TEMP
     @GetMapping(UrlConstants.URL_SIGNUP)
     String signupPage(Model model){
         model.addAttribute("url", UrlConstants.URL_SIGNUP);
+        //model.addAttribute("list_userTypes", UserType.values());
+
         if (!model.containsAttribute("createUserRequest")) {
             model.addAttribute("createUserRequest", CreateUserRequest.getNewInstance()); // record
         }
@@ -41,20 +51,10 @@ class UserController {
             , HttpSession session) {
 
         // 1. java validation 레벨에서 입력값 검증
-        String errorMsg = null;
-        // 바인딩 오류가 여러개일 경우 아이디 오류 출력을 우선순위로 하기 위해
-        for (String field : Arrays.asList("userId", "password")) {
-
-            FieldError error = bindingResult.getFieldError(field);
-
-            if (error != null) {
-                errorMsg = error.getDefaultMessage();
-                break;
-            }
-        }
-
+        String errorMsg = ErrorCheck.validationCheck(bindingResult
+                , "userId", "password", "type");
         if (errorMsg != null) {
-            model.addAttribute("errorMsg", errorMsg);
+            model.addAttribute(ModelParamConstants.ERROR_MSG, errorMsg);
             return UrlConstants.URL_SIGNUP;
         }
 
@@ -67,7 +67,7 @@ class UserController {
         try {
             loginUserDto = userService.createUser(request);
         }catch(UserException e){
-            ra.addFlashAttribute("errorMsg", e.getCode().getMessage());
+            ra.addFlashAttribute(ModelParamConstants.ERROR_MSG, e.getCode().getMessage());
             ra.addFlashAttribute("createUserRequest", request);
             return "redirect:" + UrlConstants.URL_SIGNUP;
         }

@@ -11,7 +11,6 @@ public record LoginUserDto(
         @NotBlank(message = UserConstants.MSG_INPUT_PW_REQUIRED)
         String password,
 
-        // TODO : 제약사항, 2지선다
         UserType type){
 
     public static final String SESSION_KEY = "LOGIN_USER";

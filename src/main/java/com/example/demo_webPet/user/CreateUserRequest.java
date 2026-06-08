@@ -1,6 +1,7 @@
 package com.example.demo_webPet.user;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -19,7 +20,7 @@ record CreateUserRequest(
         @Size(min = VALUE_MIN_PASSWORD_SIZE, max=VALUE_MAX_PASSWORD_SIZE, message = MSG_PW_SIZE_REQUIRED)
         String password,
 
-        // TODO : 제약사항, 2지선다
+        @NotNull(message = MSG_USER_TYPE_REQUIRED)
         UserType type
 ) {
     public static CreateUserRequest getNewInstance() {
@@ -34,6 +35,8 @@ record CreateUserRequest(
     private static final int VALUE_MIN_PASSWORD_SIZE = 8;
     private static final int VALUE_MAX_PASSWORD_SIZE = 20;
     private static final String MSG_PW_SIZE_REQUIRED = "비밀번호는 " + VALUE_MIN_PASSWORD_SIZE + "~" + VALUE_MAX_PASSWORD_SIZE +"글자여야 합니다";
+
+    private static final String MSG_USER_TYPE_REQUIRED = "회원타입을 선택해주세요";
 }
 
 /*Getter
