@@ -12,10 +12,9 @@ public final class ErrorCheck {
 
     // 우선순위가 있는 필드의 에러탐색
     // @ return : error message
-    public static String validationCheck(BindingResult bindingResult, String... fields) {
+    public static String validationCheckInOrder(BindingResult bindingResult, String... fields) {
 
         if (bindingResult.hasErrors()) {
-
             List<ObjectError> errors = bindingResult.getAllErrors();
             for (String field : fields) {
                 for (ObjectError error : errors) {

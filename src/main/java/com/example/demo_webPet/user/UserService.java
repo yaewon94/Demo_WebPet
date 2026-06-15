@@ -1,16 +1,19 @@
 package com.example.demo_webPet.user;
 import com.example.demo_webPet.common.constants.UrlConstants;
+import com.example.demo_webPet.shelter.ShelterService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 class UserService {
 
     private final UserRepository userRepository;
+    private final ShelterService shelterService;
 
-    UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
+    @Transactional
     LoginUserDto createUser(CreateUserRequest dto) {
         // 아이디 중복 체크
         if (userRepository.existsByUserId(dto.userId())){
@@ -20,8 +23,10 @@ class UserService {
         User user = new User(dto.type());
         user.setUserId(dto.userId());
         user.setPassword(dto.password());
+        user.setShelter(shelterService.getShelter(dto.shelter_id()));
         userRepository.save(user);
 
+        // TODO : user id(PK) 만 넣기
         return new LoginUserDto(user.getId(), user.getUserId(), null, user.getType());
     }
 

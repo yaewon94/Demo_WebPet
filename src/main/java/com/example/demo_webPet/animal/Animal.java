@@ -33,8 +33,7 @@ public final class Animal {
     @Column(nullable = false)
     private AnimalStatus status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shelter_id", nullable = false)
+    @Embedded
     private Shelter shelter;
 
     @Column(nullable = false)

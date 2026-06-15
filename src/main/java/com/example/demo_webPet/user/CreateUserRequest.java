@@ -1,9 +1,7 @@
 package com.example.demo_webPet.user;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import com.example.demo_webPet.shelter.ShelterConstants;
+import jakarta.validation.constraints.*;
 
 // [ record ]
 // 디폴트 생성자 x
@@ -21,10 +19,13 @@ record CreateUserRequest(
         String password,
 
         @NotNull(message = MSG_USER_TYPE_REQUIRED)
-        UserType type
+        UserType type,
+
+        @NotNull(message = ShelterConstants.MSG_SHELTER_INPUT_REQUIRED)
+        Long shelter_id // type == UserType.SHELTER인 경우만 view에 shelter list 보여줄 것
 ) {
     public static CreateUserRequest getNewInstance() {
-        return new CreateUserRequest(null, null, UserType.NORMAL);
+        return new CreateUserRequest(null, null, UserType.NORMAL, -1L);
     }
 
     private static final int VALUE_MIN_USER_ID_SIZE = 8;

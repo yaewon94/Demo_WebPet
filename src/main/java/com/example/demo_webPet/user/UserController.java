@@ -4,6 +4,8 @@ import com.example.demo_webPet.common.constants.ModelParamConstants;
 import com.example.demo_webPet.common.constants.UrlConstants;
 import com.example.demo_webPet.common.session.SessionManager;
 import com.example.demo_webPet.common.util.ErrorCheck;
+import com.example.demo_webPet.shelter.ShelterDto;
+import com.example.demo_webPet.shelter.ShelterService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,50 +13,52 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Arrays;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor // final 필드 + @NonNull 필드만 골라서 생성자를 자동으로 만들어주는 것
 class UserController {
 
     private final UserService userService;
+    private final ShelterService shelterService;
 
-    @ModelAttribute("list_userTypes")
+    @ModelAttribute("list_userTypes") // GET, POST 둘다 적용
     UserType[] userTypes() {
         return UserType.values();
     }
+    @ModelAttribute("list_shelter")
+    public List<ShelterDto> shelters() { return shelterService.getShelterList(); }
 
     // TEMP
     @GetMapping(UrlConstants.URL_SIGNUP)
     String signupPage(Model model){
         model.addAttribute("url", UrlConstants.URL_SIGNUP);
-        //model.addAttribute("list_userTypes", UserType.values());
 
-        if (!model.containsAttribute("createUserRequest")) {
-            model.addAttribute("createUserRequest", CreateUserRequest.getNewInstance()); // record
+        if (!model.containsAttribute("request")) {
+            model.addAttribute("request", CreateUserRequest.getNewInstance()); // record
         }
         return UrlConstants.URL_SIGNUP; // html 파일명
     }
 
     @PostMapping(UrlConstants.URL_SIGNUP)
-    String createUser(@Valid @ModelAttribute("createUserRequest") CreateUserRequest request
+    String createUser(@Valid @ModelAttribute("request") CreateUserRequest request
             , BindingResult bindingResult
             , Model model
             , RedirectAttributes ra
             , HttpSession session) {
 
         // 1. java validation 레벨에서 입력값 검증
-        String errorMsg = ErrorCheck.validationCheck(bindingResult
-                , "userId", "password", "type");
+        String errorMsg = ErrorCheck.validationCheckInOrder(bindingResult
+                , "userId", "password", "type", "shelter_id");
         if (errorMsg != null) {
             model.addAttribute(ModelParamConstants.ERROR_MSG, errorMsg);
+            model.addAttribute("request", request);
             return UrlConstants.URL_SIGNUP;
         }
 
@@ -68,7 +72,7 @@ class UserController {
             loginUserDto = userService.createUser(request);
         }catch(UserException e){
             ra.addFlashAttribute(ModelParamConstants.ERROR_MSG, e.getCode().getMessage());
-            ra.addFlashAttribute("createUserRequest", request);
+            ra.addFlashAttribute("request", request);
             return "redirect:" + UrlConstants.URL_SIGNUP;
         }
 

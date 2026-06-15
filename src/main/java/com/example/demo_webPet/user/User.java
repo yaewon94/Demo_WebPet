@@ -1,5 +1,6 @@
 package com.example.demo_webPet.user;
 
+import com.example.demo_webPet.shelter.Shelter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -11,9 +12,7 @@ import static com.example.demo_webPet.user.UserConstants.PATTERN_REGEXP_USER_ID;
 
 @Entity
 @Getter
-@Setter(AccessLevel.PACKAGE)
 @Table(name = "TB_user")
-//@Setter(AccessLevel.PACKAGE) // 별로 의미 없음 : JPA는 reflection으로 필드 접근 가능, 같은 클래스 내부 메서드로 변경 가능, 서비스 레이어에서 우회 가능하므로
 public final class User {
 
     //@EmbeddedId
@@ -27,6 +26,7 @@ public final class User {
     @NotBlank
     @Pattern(regexp = PATTERN_REGEXP_USER_ID)
     @Column(nullable = false, unique = true) // DB 레벨에서의 검증
+    @Setter(AccessLevel.PACKAGE)
     private String userId;
 
     @Column(nullable = false)
@@ -34,8 +34,12 @@ public final class User {
     @Enumerated(EnumType.STRING)
     private final UserType type;
 
+    @Embedded
+    private Shelter shelter;
+
     @NotBlank
     @Column(nullable = false)
+    @Setter(AccessLevel.PACKAGE)
     private String password;
 
     /*private String phone;
@@ -48,8 +52,18 @@ public final class User {
     public User(){
         this.type = UserType.NORMAL;
     }
-
     public User(UserType type){
         this.type = type;
+    }
+
+    void setShelter(Shelter shelter) {
+        if(type == UserType.SHELTER){
+            if(shelter == null){
+                throw new IllegalArgumentException("보호소 계정이 아닌 경우 보호소를 선택할 수 없습니다");
+            }
+        }else{
+            throw new IllegalArgumentException("보호소를 선택해 주세요");
+        }
+        this.shelter = shelter;
     }
 }

@@ -1,28 +1,24 @@
 package com.example.demo_webPet.shelter;
-import com.example.demo_webPet.animal.Animal;
-import jakarta.persistence.*;
-import lombok.Getter;
 
-import java.util.List;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
-@Entity
-@Getter
-@Table(name="TB_Shelter")
-public final class Shelter {
+@Embeddable
+public class Shelter {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, name="shelter_id")
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(nullable = false, name="shelter_name_snapshot")
+    private String name_snapshot;
 
-    @Column(nullable = false)
-    private String address;
+    public Shelter() {
+        this.id = -1L;
+        this.name_snapshot = null;
+    }
 
-    @Column(nullable = false)
-    private String phone;
-
-    @OneToMany(mappedBy = "shelter") // DB컬럼명이 아닌 상대 엔티티의 필드명
-    private List<Animal> animalList;
+    Shelter(Long id, String name){
+        this.id = id;
+        this.name_snapshot = name;
+    }
 }
