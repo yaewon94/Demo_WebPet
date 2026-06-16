@@ -1,25 +1,21 @@
 <!DOCTYPE html>
 <html>
-<body th:with="LOGIN=${SESSION_USER != null}">
-
+<body>
 <!-- 로그인, 회원가입 관련 링크 패널-->
 <div>
-<div th:if="${LOGIN}">
-    <b th:text="${SESSION_USER.userId}"></b>님 로그인
+<div th:if="${has_login_user}">
+    <b th:text="${user_name}"></b>님 로그인
 </div>
 <div>
-<span th:unless="${LOGIN}">
+<span th:unless="${has_login_user}">
     <a th:href="${url_login}">로그인</a>
     <a th:href="${url_signup}">회원가입</a>
 </span>
-    <form th:if="${LOGIN}" th:action="${url_logout}" method="post">
+    <form th:if="${has_login_user}" th:action="${url_logout}" method="post">
         <button type="submit">
             로그아웃
         </button>
     </form>
-<!--<span th:if="${LOGIN}">
-    <a th:href="${url_logout}">로그아웃</a>
-</span> // a 링크는 get 메소드만 호출 가능-->
 </div>
 </div>
 

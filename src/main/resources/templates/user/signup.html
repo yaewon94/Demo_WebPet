@@ -5,23 +5,20 @@
 <body>
 <form th:action="${url}" th:object="${request}" method="post">
     <div>
-        <!--<input type="text" name="id" placeholder="아이디">-->
-        아이디 <input type="text" th:field="*{userId}">
-        <!--<p th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}">-->
+        아이디 <input type="text" th:field="*{user_name}">
     </div>
     <div>
         비밀번호 <input type="password" th:field="*{password}">
-       <!-- <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>-->
     </div>
     <div>
         회원유형
-        <span th:each="type : ${list_userTypes}">
+        <span th:each="user_type : ${list_userType}">
             <label>
                 <!-- name : dto 필드명-->
                 <input type="radio"
-                    name="type"
-                    th:value="${type}" th:checked="${request.type == type}"/>
-                <span th:text="#{${'userType.' + type.name()}}"></span>
+                    name="user_type"
+                    th:value="${user_type}" th:checked="${request.user_type == user_type}"/>
+                <span th:text="#{${'userType.' + user_type.name()}}"></span>
             </label>
         </span>
         <!-- TODO : 보호소 계정일 경우 보호소 목록 출력-->
@@ -42,28 +39,6 @@
         <button type="submit">회원가입</button>
     </div>
 </form>
-
-<script>
-    const errorMsg = document.getElementById("errorMsg");
-    const shelterArea = document.getElementById("optional_display_shelter");
-    const isUserTypeChecked = document.querySelector('input[name="type"]:checked');
-
-    if (isUserTypeChecked) {
-        updateShelterUI(isUserTypeChecked.value);
-    }
-
-    function updateShelterUI(value) {
-        if (value !== "SHELTER" && errorMsg) {
-            errorMsg.innerText = "";
-        }
-        shelterArea.classList.toggle("display_hidden", value !== "SHELTER");
-    }
-
-    document.querySelectorAll('input[name="type"]').forEach(radio => {
-        radio.addEventListener("change", function () {
-            updateShelterUI(this.value);
-        });
-    });
-</script>
+<script th:src="@{/js/signup.js}"></script>
 </body>
 </html>

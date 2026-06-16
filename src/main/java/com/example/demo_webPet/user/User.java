@@ -8,7 +8,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
-import static com.example.demo_webPet.user.UserConstants.PATTERN_REGEXP_USER_ID;
+import static com.example.demo_webPet.user.UserConstants.PATTERN_REGEXP_USER_NAME;
 
 @Entity
 @Getter
@@ -24,10 +24,10 @@ public final class User {
     private long id;
 
     @NotBlank
-    @Pattern(regexp = PATTERN_REGEXP_USER_ID)
-    @Column(nullable = false, unique = true) // DB 레벨에서의 검증
+    @Pattern(regexp = PATTERN_REGEXP_USER_NAME)
+    @Column(nullable = false, unique = true, name="user_name") // DB 레벨에서의 검증
     @Setter(AccessLevel.PACKAGE)
-    private String userId;
+    private String userName;
 
     @Column(nullable = false)
     //@Getter(AccessLevel.PACKAGE) // 이미 클래스에 getter어노테이션을 선언하면 필드는 접근제한을 따로 설정한다고 해도 적용 안됨
@@ -49,10 +49,10 @@ public final class User {
 
     // TODO : 가입날짜, 탈퇴날짜 추가 (탈퇴회원 구분 별도)
 
-    public User(){
+    User(){
         this.type = UserType.NORMAL;
     }
-    public User(UserType type){
+    User(UserType type){
         this.type = type;
     }
 

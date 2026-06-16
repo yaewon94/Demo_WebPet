@@ -1,5 +1,7 @@
 package com.example.demo_webPet.common.interceptor;
 
+import com.example.demo_webPet.auth.LoginCheckInterceptor;
+import com.example.demo_webPet.auth.ShelterUserOnlyInterceptor;
 import com.example.demo_webPet.common.constants.UrlConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,6 @@
 package com.example.demo_webPet.common.exception;
 
-import com.example.demo_webPet.user.UserAuthException;
+import com.example.demo_webPet.auth.AuthException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,8 +17,8 @@ public class GlobalExceptionHandler {
         return "error/500";
     }
 
-    @ExceptionHandler(UserAuthException.class)
-    public String handle(UserAuthException e, RedirectAttributes ra) {
+    @ExceptionHandler(AuthException.class)
+    public String handle(AuthException e, RedirectAttributes ra) {
         ra.addFlashAttribute("errorMsg", e.getMessage());
         return "redirect:" + e.getRedirectionPage();
     }
