@@ -1,6 +1,6 @@
 package com.example.demo_webPet.common.interceptor;
 
-import com.example.demo_webPet.common.constants.ModelParamConstants;
+import com.example.demo_webPet.common.output.view.ModelParamConstants;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;

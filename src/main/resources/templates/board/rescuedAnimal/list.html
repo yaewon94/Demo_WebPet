@@ -1,8 +1,8 @@
 <html>
 <body>
 <!-- javascript -->
-<script th:if="${session.errorMsg}">
-    alert('[[${session.errorMsg}]]');
+<script th:if="${errorMsg}">
+    alert('[[${errorMsg}]]');
 </script>
 
 <!-- 링크 패널-->
