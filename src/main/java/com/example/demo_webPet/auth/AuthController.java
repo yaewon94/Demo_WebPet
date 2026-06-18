@@ -1,6 +1,7 @@
 package com.example.demo_webPet.auth;
 
 import com.example.demo_webPet.common.constants.UrlConstants;
+import com.example.demo_webPet.common.output.view.ModelParamConstants;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +22,9 @@ final class AuthController {
 
     @GetMapping(UrlConstants.URL_LOGIN)
     public String loginPage(@RequestParam(required = false)String redirect, Model model){
-        model.addAttribute("url", UrlConstants.URL_LOGIN);
+        model.addAttribute(ModelParamConstants.URL, UrlConstants.URL_LOGIN);
         model.addAttribute("request", LoginRequest.getNewInstance());
-        model.addAttribute("redirect", redirect);
+        model.addAttribute(ModelParamConstants.REDIRECT_URL, redirect);
         return UrlConstants.URL_LOGIN;
     }
 
@@ -38,14 +39,16 @@ final class AuthController {
         if(bindingResult.hasErrors()){
             FieldError fieldError = bindingResult.getFieldError();
             if (fieldError != null) {
-                model.addAttribute("errorMsg", fieldError.getDefaultMessage());
+                model.addAttribute(ModelParamConstants.ERROR_MSG, fieldError.getDefaultMessage());
+                model.addAttribute(ModelParamConstants.REDIRECT_URL, redirect);
+                model.addAttribute("request", request);
             }
             return UrlConstants.URL_LOGIN;
         }
 
         // 2. service 검증
-        // 예외 발생할 경우 @ControllerAdvice에서 처리
-        authService.login(request, session);
+        // 예외 발생할 경우 GlobalExceptionHandler 에서 처리
+        authService.login(request, session, redirect);
 
         // 페이지 이동
         if (redirect != null && !redirect.isEmpty()) {

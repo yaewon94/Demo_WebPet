@@ -1,20 +1,25 @@
 const errorMsg = document.getElementById("errorMsg");
+const errorCode = document.getElementById("errorCode").value;
 const shelterArea = document.getElementById("optional_display_shelter");
 const isUserTypeChecked = document.querySelector('input[name="user_type"]:checked');
 
 if (isUserTypeChecked) {
-    updateShelterUI(isUserTypeChecked.value);
+    updateUI(isUserTypeChecked.value);
 }
 
-function updateShelterUI(value) {
-    if (value !== "SHELTER" && errorMsg) {
+function updateUI(userType) {
+    shelterArea.classList.toggle("display_hidden", userType !== "SHELTER");
+    clearShelterRelatedError(userType);
+}
+
+function clearShelterRelatedError(userType){
+    if(userType !== "SHELTER" && errorCode === "SHELTER_REQUIRED") {
         errorMsg.innerText = "";
     }
-    shelterArea.classList.toggle("display_hidden", value !== "SHELTER");
 }
 
 document.querySelectorAll('input[name="user_type"]').forEach(radio => {
     radio.addEventListener("change", function () {
-        updateShelterUI(this.value);
+        updateUI(this.value);
     });
 });

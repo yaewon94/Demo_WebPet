@@ -10,6 +10,10 @@
 
     <p th:if="${errorMsg}"  th:text="${errorMsg}"></p>
     <button type="submit">로그인</button>
+    <div>
+        <!-- th:field는 name이 없어도 되지만, th:value는 name이 있어야 함 -->
+        <input type="hidden" name="redirect" th:value="${redirect}">
+    </div>
 </form>
 </body>
 </html>

@@ -12,26 +12,19 @@ public final class ErrorCheck {
 
     // 우선순위가 있는 필드의 에러탐색
     // @ return : error message
-    public static String validationCheckInOrder(BindingResult bindingResult, String... fields) {
+    public static FieldError getFirstFieldError(BindingResult bindingResult, String... fields) {
 
-        if (bindingResult.hasErrors()) {
-            List<ObjectError> errors = bindingResult.getAllErrors();
+        List<FieldError> errorList = bindingResult.getFieldErrors();
+
+        if (!errorList.isEmpty()) {
             for (String field : fields) {
-                for (ObjectError error : errors) {
-                    // 필드 에러
-                    if (error instanceof FieldError fieldError) {
-                        if (fieldError.getField().equals(field)) {
-                            return fieldError.getDefaultMessage();
-                        }
-                    }
-                    // 글로벌 에러
-                    else{
-                        return error.getDefaultMessage();
+                for (FieldError error : errorList) {
+                    if (error.getField().equals(field)) {
+                        return error;
                     }
                 }
             }
         }
-
         return null;
     }
 }

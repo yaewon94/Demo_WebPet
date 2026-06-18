@@ -59,11 +59,12 @@ public final class User {
     void setShelter(Shelter shelter) {
         if(type == UserType.SHELTER){
             if(shelter == null){
-                throw new IllegalArgumentException("보호소 계정이 아닌 경우 보호소를 선택할 수 없습니다");
+                throw new IllegalArgumentException("보호소를 선택해 주세요");
             }
-        }else{
-            throw new IllegalArgumentException("보호소를 선택해 주세요");
+            this.shelter = shelter;
         }
-        this.shelter = shelter;
+        else{
+            this.shelter = null;
+        }
     }
 }

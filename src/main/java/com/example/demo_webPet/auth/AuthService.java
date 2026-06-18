@@ -44,20 +44,21 @@ public class AuthService {
         return user;*/
     }
 
-    void login(LoginRequest request, HttpSession session){
+    void login(LoginRequest request, HttpSession session, String redirectPage){
         // 아이디 존재 여부 체크
         User user = userRepository
                 .findByUserName(request.user_name())
                 .orElseThrow(() ->
-                        new AuthException(AuthCode.ERROR_USER_NAME_IS_NOT_EXIST, UrlConstants.URL_LOGIN));
+                        new AuthException(AuthCode.ERROR_USER_NAME_IS_NOT_EXIST, redirectPage));
 
         // 비밀번호 일치 여부 체크
         if (!user.getPassword().equals(request.password())) {
-            throw new AuthException(AuthCode.ERROR_USER_PASSWORD_MISMATCH, UrlConstants.URL_LOGIN);
+            throw new AuthException(AuthCode.ERROR_USER_PASSWORD_MISMATCH, redirectPage);
         }
 
         // 세션 저장
         createLoginSession(session, user.getId());
+        // TODO : 로그인 유저 정보 캐시에 저장
     }
 
     void logout(HttpSession session){

@@ -14,7 +14,7 @@ public class FlashAttributeInterceptor {
         // interceptor는 model, redirectAttribute에 접근불가능해서 session에만 값 저장할 수 있는데
         // session은 요청이 바뀌어도 값이 그대로 남아있기 때문
         String value = (String)session.getAttribute(ModelParamConstants.ERROR_MSG);
-        if(value != null) {
+        if(value != null && !value.isEmpty()) {
             model.addAttribute(ModelParamConstants.ERROR_MSG, value);
             session.removeAttribute(ModelParamConstants.ERROR_MSG);
         }

@@ -22,7 +22,7 @@ record CreateUserRequest(
         UserType user_type,
 
         @NotNull(message = ShelterConstants.MSG_SHELTER_INPUT_REQUIRED)
-        Long shelter_id // user_type == UserType.SHELTER인 경우만 view에 shelter list 보여줄 것
+        Long shelter_id
 ) {
     static CreateUserRequest getNewInstance() {
         return new CreateUserRequest(null, null, UserType.NORMAL, -1L);
@@ -38,4 +38,12 @@ record CreateUserRequest(
     private static final String MSG_PW_SIZE_REQUIRED = "비밀번호는 " + VALUE_MIN_PASSWORD_SIZE + "~" + VALUE_MAX_PASSWORD_SIZE +"글자여야 합니다";
 
     private static final String MSG_USER_TYPE_REQUIRED = "회원타입을 선택해주세요";
+
+//    @AssertTrue(message = ShelterConstants.MSG_SHELTER_INPUT_REQUIRED)
+//    public boolean checkValidShelterId() {
+//        if (user_type == UserType.SHELTER) {
+//            return shelter_id != null;
+//        }
+//        return true;
+//    }
 }

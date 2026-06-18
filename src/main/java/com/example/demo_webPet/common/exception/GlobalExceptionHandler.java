@@ -1,6 +1,7 @@
 package com.example.demo_webPet.common.exception;
 
 import com.example.demo_webPet.auth.AuthException;
+import com.example.demo_webPet.common.constants.UrlConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,7 +21,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AuthException.class)
     public String handle(AuthException e, RedirectAttributes ra) {
         ra.addFlashAttribute("errorMsg", e.getMessage());
-        return "redirect:" + e.getRedirectionPage();
+
+        String redirect = e.getRedirectionPage();
+        if(redirect == null || redirect.isEmpty()) return "redirect:" + UrlConstants.URL_LOGIN;
+        else return "redirect:" + UrlConstants.URL_LOGIN + "?redirect=" + e.getRedirectionPage();
     }
 
     /*@ExceptionHandler(UserIdDuplicatedException.class)

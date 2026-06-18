@@ -1,7 +1,7 @@
 package com.example.demo_webPet.user;
 
 import com.example.demo_webPet.auth.AuthService;
-import com.example.demo_webPet.common.constants.ModelParamConstants;
+import com.example.demo_webPet.common.output.view.ModelParamConstants;
 import com.example.demo_webPet.common.constants.UrlConstants;
 import com.example.demo_webPet.common.util.ErrorCheck;
 import com.example.demo_webPet.shelter.ShelterDto;
@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,8 +55,27 @@ final class UserController {
             , HttpSession session) {
 
         // 1. java validation 레벨에서 입력값 검증
-        String errorMsg = ErrorCheck.validationCheckInOrder(bindingResult
-                , "user_name", "password", "user_type", "shelter_id");
+        String errorMsg = null;
+        FieldError fieldError = null;
+
+        if(request.user_type() == UserType.SHELTER){
+            fieldError = ErrorCheck.getFirstFieldError(bindingResult
+                    , "user_name", "password", "user_type", "shelter_id");
+        }else{
+            fieldError = ErrorCheck.getFirstFieldError(bindingResult
+                    , "user_name", "password", "user_type");
+        }
+
+        if(fieldError != null){
+            errorMsg = fieldError.getDefaultMessage();
+            if(fieldError.getField().equals("shelter_id")){
+                model.addAttribute("errorCode", "SHELTER_REQUIRED");
+            }
+        }else{
+            ObjectError globalError = bindingResult.getGlobalError();
+            if(globalError != null) errorMsg = globalError.getDefaultMessage();
+        }
+
         if (errorMsg != null) {
             model.addAttribute(ModelParamConstants.ERROR_MSG, errorMsg);
             model.addAttribute("request", request);

@@ -6,19 +6,19 @@ import jakarta.persistence.Embeddable;
 @Embeddable
 public class Shelter {
 
-    @Column(nullable = false, name="shelter_id")
+    @Column(name="shelter_id")
     private Long id;
 
-    @Column(nullable = false, name="shelter_name_snapshot")
-    private String name_snapshot;
+    @Column(name="shelter_name_snapshot")
+    private String nameSnapshot;
 
     public Shelter() {
         this.id = -1L;
-        this.name_snapshot = null;
+        this.nameSnapshot = null;
     }
 
     Shelter(Long id, String name){
         this.id = id;
-        this.name_snapshot = name;
+        this.nameSnapshot = name;
     }
 }
