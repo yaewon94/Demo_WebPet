@@ -20,7 +20,7 @@ public final class NormalUserOnlyInterceptor implements HandlerInterceptor {
                              HttpServletResponse response,
                              Object handler) throws Exception{
 
-        if (authService.getLoginUser(request).getType() != UserType.NORMAL) {
+        if (authService.getLoginUser(request).user_type() != UserType.NORMAL) {
             // 알림 메세지
             request.getSession().setAttribute(ModelParamConstants.ERROR_MSG, AuthCode.ERROR_NOT_NORMAL_USER.getMessage());
             // 페이지 리다이렉션

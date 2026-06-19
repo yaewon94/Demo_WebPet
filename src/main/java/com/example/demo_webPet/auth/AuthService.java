@@ -14,34 +14,25 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class AuthService {
 
-    private static final String SESSION_KEY_USER_ID = "USER_ID";
+    private static final String SESSION_KEY_USER = "LOGIN_USER";
     private static final int SESSION_MAX_LOGIN_TIME = 30 * 60;
 
     private final UserRepository userRepository;
 
-    public void createLoginSession(HttpSession session, Long user_id){
-        session.setAttribute(SESSION_KEY_USER_ID, user_id);
+    public void createLoginSession(HttpSession session, User user){
+        session.setAttribute(SESSION_KEY_USER, LoginUserDto.from(user));
         session.setMaxInactiveInterval(SESSION_MAX_LOGIN_TIME);
     }
 
-    public User getLoginUser(HttpSession session){
+    public LoginUserDto getLoginUser(HttpSession session){
         if(session == null) return null;
-        Long user_id = (Long)session.getAttribute(SESSION_KEY_USER_ID);
-        if(user_id == null) return null;
-
-        return userRepository.findById(user_id).orElse(null);
+        LoginUserDto dto = (LoginUserDto) session.getAttribute(SESSION_KEY_USER);
+        if(dto == null) return null;
+        return dto;
     }
 
-    User getLoginUser(HttpServletRequest request){
-        /*// HttpServletRequest 에 캐싱 여부 확인
-        User user = (User)request.getAttribute("user");
-        if(user != null) return user;*/
-
-        // 세션 체크
+    LoginUserDto getLoginUser(HttpServletRequest request){
         return getLoginUser(request.getSession(false));
-        /*User user = getLoginUser(request.getSession(false));
-        request.setAttribute("user", user);
-        return user;*/
     }
 
     void login(LoginRequest request, HttpSession session, String redirectPage){
@@ -57,11 +48,10 @@ public class AuthService {
         }
 
         // 세션 저장
-        createLoginSession(session, user.getId());
-        // TODO : 로그인 유저 정보 캐시에 저장
+        createLoginSession(session, user);
     }
 
     void logout(HttpSession session){
-        session.removeAttribute(SESSION_KEY_USER_ID);
+        session.removeAttribute(SESSION_KEY_USER);
     }
 }

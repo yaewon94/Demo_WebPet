@@ -12,9 +12,8 @@ class UserService {
     private final UserRepository userRepository;
     private final ShelterService shelterService;
 
-    // @ return : user id(pk)
     @Transactional
-    Long createUser(CreateUserRequest dto) {
+    User createUser(CreateUserRequest dto) {
         // 아이디 중복 체크
         if (userRepository.existsByUserName(dto.user_name())){
             throw new UserException(UserCode.ERROR_DUPLICATED_USER_NAME);
@@ -26,6 +25,6 @@ class UserService {
         user.setShelter(shelterService.getShelter(dto.shelter_id()));
         userRepository.save(user);
 
-        return user.getId();
+        return user;
     }
 }

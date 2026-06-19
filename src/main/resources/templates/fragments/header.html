@@ -8,7 +8,7 @@
         <a th:href="${url_signup}">회원가입</a>
     </div>
     <div th:unless="${loginUser == null}">
-        <b th:text="${loginUser.userName}"></b>님 로그인
+        <b th:text="${loginUser.user_name}"></b>님 로그인
         <form th:action="${url_logout}" method="post">
             <button type="submit">
                 로그아웃

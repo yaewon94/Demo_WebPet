@@ -20,7 +20,7 @@ public final class ShelterUserOnlyInterceptor implements HandlerInterceptor {
                              HttpServletResponse response,
                              Object handler) throws Exception {
 
-        if (authService.getLoginUser(request).getType() != UserType.SHELTER) {
+        if (authService.getLoginUser(request).user_type()!= UserType.SHELTER) {
             // 알림 메세지
             request.getSession().setAttribute(ModelParamConstants.ERROR_MSG, AuthCode.ERROR_NOT_SHELTER_USER.getMessage());
             // 페이지 리다이렉션
