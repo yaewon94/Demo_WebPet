@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<header th:fragment="header">
+    <!-- 로그인, 회원가입 관련 링크 패널-->
+    <div th:if="${loginUser == null}">
+        <a th:href="${url_login}">로그인</a>
+        <a th:href="${url_signup}">회원가입</a>
+    </div>
+    <div th:unless="${loginUser == null}">
+        <b th:text="${loginUser.userName}"></b>님 로그인
+        <form th:action="${url_logout}" method="post">
+            <button type="submit">
+                로그아웃
+            </button>
+        </form>
+    </div>
+</header>
+</body>
+</html>

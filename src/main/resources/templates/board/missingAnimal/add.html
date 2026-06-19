@@ -1,5 +1,9 @@
 <html>
 <body>
+<!-- header -->
+<div th:replace="~{fragments/header :: header}"></div>
+
+<!-- form -->
 <form th:action="${url}" th:object="${request}" method="post">
     <p th:if="${errorMsg}"  th:text="${errorMsg}"></p>
     <div>
