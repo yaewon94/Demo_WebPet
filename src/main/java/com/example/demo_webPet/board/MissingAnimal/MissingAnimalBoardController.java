@@ -27,7 +27,6 @@ final class MissingAnimalBoardController {
     @GetMapping(UrlConstants.URL_BOARD_MISSING_ANIMAL_ADD)
     public String showAnimalAddPage(Model model){
         // 로그인 여부는 interceptor에서 처리
-        // TODO : 일반계정만 쓸수 있게
 
         model.addAttribute("url", UrlConstants.URL_BOARD_MISSING_ANIMAL_ADD);
         if(!model.containsAttribute("request")){

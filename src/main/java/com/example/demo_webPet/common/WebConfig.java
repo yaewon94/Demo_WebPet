@@ -1,6 +1,7 @@
-package com.example.demo_webPet;
+package com.example.demo_webPet.common;
 
 import com.example.demo_webPet.auth.LoginCheckInterceptor;
+import com.example.demo_webPet.auth.NormalUserOnlyInterceptor;
 import com.example.demo_webPet.auth.ShelterUserOnlyInterceptor;
 import com.example.demo_webPet.common.constants.UrlConstants;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     private final LoginCheckInterceptor loginCheckInterceptor;
     private final ShelterUserOnlyInterceptor shelterUserOnlyInterceptor;
+    private final NormalUserOnlyInterceptor normalUserOnlyInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -33,5 +35,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(shelterUserOnlyInterceptor)
                 .addPathPatterns(
                         UrlConstants.URL_BOARD_RESCUED_ANIMAL_ADD);
+
+        registry.addInterceptor(normalUserOnlyInterceptor)
+                .addPathPatterns(
+                        UrlConstants.URL_BOARD_MISSING_ANIMAL_ADD);
     }
 }
