@@ -20,6 +20,7 @@ final class HomeController {
 
         User user = authService.getLoginUser(session);
 
+        // 회원가입, 로그인, 로그아웃 패널
         if(user != null){
             model.addAttribute("has_login_user", true);
             model.addAttribute("user_name", user.getUserName());
@@ -29,7 +30,9 @@ final class HomeController {
             model.addAttribute("url_login", UrlConstants.URL_LOGIN);
         }
 
-        model.addAttribute("url_board_animal_shelter_notice", UrlConstants.URL_BOARD_ANIMAL_SHELTER_NOTICE_LIST);
+        // 게시판 패널
+        model.addAttribute("url_board_missing_animal_list", UrlConstants.URL_BOARD_MISSING_ANIMAL_LIST);
+        model.addAttribute("url_board_rescued_animal_list", UrlConstants.URL_BOARD_RESCUED_ANIMAL_LIST);
 
         return "home"; // 반환값이 .html
     }

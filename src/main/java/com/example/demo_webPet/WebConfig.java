@@ -1,4 +1,4 @@
-package com.example.demo_webPet.common.interceptor;
+package com.example.demo_webPet;
 
 import com.example.demo_webPet.auth.LoginCheckInterceptor;
 import com.example.demo_webPet.auth.ShelterUserOnlyInterceptor;
@@ -24,13 +24,14 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(loginCheckInterceptor)
                 .addPathPatterns(
                         UrlConstants.URL_LOGOUT,
-                        UrlConstants.URL_BOARD_ANIMAL_SHELTER_NOTICE_ADD);
+                        UrlConstants.URL_BOARD_MISSING_ANIMAL_ADD,
+                        UrlConstants.URL_BOARD_RESCUED_ANIMAL_ADD);
                 /*.excludePathPatterns(
                         UrlConstants.URL_LOGIN,
                         UrlConstants.URL_SIGNUP);*/
 
         registry.addInterceptor(shelterUserOnlyInterceptor)
                 .addPathPatterns(
-                        UrlConstants.URL_BOARD_ANIMAL_SHELTER_NOTICE_ADD);
+                        UrlConstants.URL_BOARD_RESCUED_ANIMAL_ADD);
     }
 }

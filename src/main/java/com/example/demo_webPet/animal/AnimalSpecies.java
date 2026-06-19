@@ -4,18 +4,10 @@ import com.example.demo_webPet.common.util.EnumUtils;
 import lombok.Getter;
 
 @Getter
-enum AnimalSpecies {
-    DOG("강아지"),
-    CAT("고양이"),
-    ETC("기타");
+public enum AnimalSpecies {
+    DOG,CAT,ETC;
 
-    private final String label;
-
-    AnimalSpecies(String label){
-        this.label = label;
-    }
-
-    static AnimalSpecies from(String value) {
+    public static AnimalSpecies from(String value) {
         return EnumUtils.parse(AnimalSpecies.class, value);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.demo_webPet.animal;
 
+import com.example.demo_webPet.common.util.ValidationCheck;
 import com.example.demo_webPet.shelter.Shelter;
 
 import jakarta.persistence.*;
@@ -26,41 +27,34 @@ public final class Animal {
     private Integer age = 0;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private AnimalGender gender = AnimalGender.MALE;
+    private AnimalGender gender;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AnimalStatus status;
 
+    private LocalDate missingDate;
+    private String missingLocation;
+
+    private LocalDate rescuedDate;
+    private String foundLocation;
     @Embedded
     private Shelter shelter;
 
-    @Column(nullable = false)
-    private LocalDate rescuedDate;
-
-    @Column(nullable = false)
-    // TODO : 지도 표시
-    private String foundLocation;
-
-    @Column(nullable = false)
-    private String imgPath;
-
-    /*@OneToMany(mappedBy = "animal")
-    @Getter(AccessLevel.NONE)
-    private List<AdoptionRequest> adoptionRequestList;*/
-
     void setAge(Integer age) {
-        if(age < AnimalConstants.MIN_AGE || age > AnimalConstants.MAX_AGE){
-            throw new IllegalArgumentException(age + " : PARAM ERROR");
+        if(age == null){
+            this.age = null;
+        }
+        else if(age < AnimalConstants.MIN_AGE || age > AnimalConstants.MAX_AGE){
+            throw new IllegalArgumentException("동물 나이가 알맞지 않습니다 : " + age);
         }
         this.age = age;
     }
 
-    void setRescuedDate(LocalDate rescuedDate) {
-        if (rescuedDate.isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException(rescuedDate + " : PARAM ERROR");
-        }
-        this.rescuedDate = rescuedDate;
+    @PrePersist
+    @PreUpdate
+    private void validateDate() {
+        ValidationCheck.validateNotFutureDate(missingDate, "실종날짜");
+        ValidationCheck.validateNotFutureDate(rescuedDate, "구조날짜");
     }
 }

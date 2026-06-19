@@ -1,15 +1,18 @@
 package com.example.demo_webPet.board;
 
+import com.example.demo_webPet.common.constants.CommonValidConstants;
 import com.example.demo_webPet.user.User;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Getter
-abstract class Board
+public abstract class Board
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,22 +20,25 @@ abstract class Board
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
+    @Setter(AccessLevel.PACKAGE)
     private User user;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = CommonValidConstants.MAX_SIZE_TITLE)
     private String title;
 
+    @Column(nullable = false)
+    @Setter(AccessLevel.PACKAGE)
     private String content;
 
-    void setCreatedAt(LocalDateTime createdAt) {
-        if (createdAt.isAfter(LocalDateTime.now())) {
-            throw new IllegalArgumentException(createdAt + " : PARAM ERROR");
-        }
-
-        this.createdAt = createdAt;
+    void setTitle(String title){
+        // 최대 글자수를 넘으면 잘라서 db에 저장
+        if(title == null) return;
+        this.title = title.substring(
+                0,
+                Math.min(title.length(), CommonValidConstants.MAX_SIZE_TITLE));
     }
 }

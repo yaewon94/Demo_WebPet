@@ -3,7 +3,7 @@ package com.example.demo_webPet.user;
 import com.example.demo_webPet.auth.AuthService;
 import com.example.demo_webPet.common.output.view.ModelParamConstants;
 import com.example.demo_webPet.common.constants.UrlConstants;
-import com.example.demo_webPet.common.util.ErrorCheck;
+import com.example.demo_webPet.common.util.ValidationCheck;
 import com.example.demo_webPet.shelter.ShelterDto;
 import com.example.demo_webPet.shelter.ShelterService;
 import jakarta.servlet.http.HttpSession;
@@ -59,10 +59,10 @@ final class UserController {
         FieldError fieldError = null;
 
         if(request.user_type() == UserType.SHELTER){
-            fieldError = ErrorCheck.getFirstFieldError(bindingResult
+            fieldError = ValidationCheck.getFirstFieldError(bindingResult
                     , "user_name", "password", "user_type", "shelter_id");
         }else{
-            fieldError = ErrorCheck.getFirstFieldError(bindingResult
+            fieldError = ValidationCheck.getFirstFieldError(bindingResult
                     , "user_name", "password", "user_type");
         }
 
