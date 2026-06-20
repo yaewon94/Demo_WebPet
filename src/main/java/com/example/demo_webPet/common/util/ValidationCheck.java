@@ -2,6 +2,7 @@ package com.example.demo_webPet.common.util;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -10,8 +11,15 @@ public final class ValidationCheck {
 
     private ValidationCheck() {}
 
+    // BindingResult 에러탐색 (field, global 통합)
+    public static ObjectError getFirstError(BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return bindingResult.getAllErrors().getFirst();
+        }
+        return null;
+    }
+
     // 우선순위가 있는 필드의 에러탐색
-    // @ return : error message
     public static FieldError getFirstFieldError(BindingResult bindingResult, String... fields) {
 
         List<FieldError> errorList = bindingResult.getFieldErrors();

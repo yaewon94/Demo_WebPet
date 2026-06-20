@@ -9,7 +9,7 @@ import jakarta.validation.constraints.PastOrPresent;
 
 import java.time.LocalDate;
 
-record MissingAnimalBoardWriteRequest(
+public record MissingAnimalBoardWriteRequest(
         @NotBlank(message = CommonValidConstants.MSG_INPUT_TITLE)
         String title,
 

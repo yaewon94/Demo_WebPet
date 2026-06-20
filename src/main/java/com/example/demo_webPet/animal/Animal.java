@@ -1,5 +1,6 @@
 package com.example.demo_webPet.animal;
 
+import com.example.demo_webPet.board.MissingAnimal.MissingAnimalBoardWriteRequest;
 import com.example.demo_webPet.common.util.ValidationCheck;
 import com.example.demo_webPet.shelter.Shelter;
 
@@ -56,5 +57,14 @@ public final class Animal {
     private void validateDate() {
         ValidationCheck.validateNotFutureDate(missingDate, "실종날짜");
         ValidationCheck.validateNotFutureDate(rescuedDate, "구조날짜");
+    }
+
+    public static Animal from(MissingAnimalBoardWriteRequest dto){
+        Animal animal = new Animal();
+        animal.species = dto.species();
+        animal.status = AnimalStatus.MISSING;
+        animal.missingDate = dto.missingDate();
+        animal.missingLocation = dto.missingLocation();
+        return animal;
     }
 }

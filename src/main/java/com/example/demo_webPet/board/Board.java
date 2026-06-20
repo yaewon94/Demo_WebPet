@@ -20,7 +20,7 @@ public abstract class Board
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
-    @Setter(AccessLevel.PACKAGE)
+    @Setter(AccessLevel.PUBLIC)
     private User user;
 
     @CreationTimestamp
@@ -31,10 +31,14 @@ public abstract class Board
     private String title;
 
     @Column(nullable = false)
-    @Setter(AccessLevel.PACKAGE)
+    @Setter(AccessLevel.PUBLIC)
     private String content;
 
-    void setTitle(String title){
+    // TODO : 댓글 리스트
+
+    protected Board(){}
+
+    public void setTitle(String title){
         // 최대 글자수를 넘으면 잘라서 db에 저장
         if(title == null) return;
         this.title = title.substring(

@@ -13,7 +13,9 @@ import lombok.Setter;
 @Table(name="TB_Board_MissingAnimal")
 final class MissingAnimalBoard extends Board {
 
-    @OneToOne(fetch = FetchType.LAZY)
+    // cascade : JPA 에서 해당 엔티티를 자동으로 생성,수정,삭제
+    // - PERSIST(insert, update), MERGE(준영속 => 영속상태), REMOVE(delete)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "animal_id", nullable = false)
     private Animal animal;
 
