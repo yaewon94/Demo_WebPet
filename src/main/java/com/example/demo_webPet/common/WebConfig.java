@@ -1,5 +1,6 @@
 package com.example.demo_webPet.common;
 
+import com.example.demo_webPet.auth.GuestOnlyInterceptor;
 import com.example.demo_webPet.auth.LoginCheckInterceptor;
 import com.example.demo_webPet.auth.NormalUserOnlyInterceptor;
 import com.example.demo_webPet.auth.ShelterUserOnlyInterceptor;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
+    private final GuestOnlyInterceptor guestOnlyInterceptor;
     private final LoginCheckInterceptor loginCheckInterceptor;
     private final ShelterUserOnlyInterceptor shelterUserOnlyInterceptor;
     private final NormalUserOnlyInterceptor normalUserOnlyInterceptor;
@@ -23,6 +25,11 @@ public class WebConfig implements WebMvcConfigurer {
         // Interceptor.preHandle() -> Controller -> Interceptor.postHandle() -> view 렌더링
         // preHandle() 은 addInterceptor() 로 추가한 interceptor 순서로 호출
         // postHandle() 은 그 반대순서
+        registry.addInterceptor(guestOnlyInterceptor)
+                .addPathPatterns(
+                        UrlConstants.URL_LOGIN,
+                        UrlConstants.URL_SIGNUP);
+
         registry.addInterceptor(loginCheckInterceptor)
                 .addPathPatterns(
                         UrlConstants.URL_LOGOUT,
