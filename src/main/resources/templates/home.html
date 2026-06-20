@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-<html>
-<body>
-<!-- header -->
-<div th:replace="~{fragments/header :: header}"></div>
+<html layout:decorate="~{layout/common_layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
+<div layout:fragment="content">
 <!-- 게시판 패널-->
-<div>
-    <a th:href="${url_board_missing_animal_list}">실종신고 게시판</a>
-    <a th:href="${url_board_rescued_animal_list}">보호동물 조회</a>
+    <div>
+        <a th:href="${url_board_missing_animal_list}">실종신고 게시판</a>
+        <a th:href="${url_board_rescued_animal_list}">보호동물 조회</a>
+    </div>
 </div>
-
-</body>
 </html>

@@ -1,8 +1,8 @@
-<html>
-<body>
-<!-- header -->
-<div th:replace="~{fragments/header :: header}"></div>
+<!DOCTYPE html>
+<html layout:decorate="~{layout/common_layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
+<div layout:fragment="content">
 <!-- 링크 패널-->
 <div>
     <a th:href="${url}">
@@ -13,10 +13,5 @@
 <!-- 게시물 목록 패널-->
 <div>
 </div>
-
-<!-- javascript -->
-<script th:if="${errorMsg}">
-    alert('[[${errorMsg}]]');
-</script>
-</body>
+</div>
 </html>

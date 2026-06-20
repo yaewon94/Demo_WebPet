@@ -5,6 +5,7 @@ import com.example.demo_webPet.auth.LoginUserDto;
 import com.example.demo_webPet.common.constants.UrlConstants;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
@@ -13,6 +14,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 public final class GlobalModelAttribute {
 
     private final AuthService authService;
+    private final Environment environment;
+
+    @ModelAttribute("applicationName")
+    public String getApplicationName() {
+        return environment.getProperty("spring.application.name");
+    }
 
     @ModelAttribute("loginUser")
     public LoginUserDto getLoginUser(HttpSession session) {

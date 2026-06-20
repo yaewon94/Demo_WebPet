@@ -1,8 +1,8 @@
-<html>
-<body>
-<!-- header -->
-<div th:replace="~{fragments/header :: header}"></div>
+<!DOCTYPE html>
+<html layout:decorate="~{layout/common_layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
+<div layout:fragment="content">
 <!-- form -->
 <form th:action="${url}" th:object="${request}" method="post">
     <p th:if="${errorMsg}"  th:text="${errorMsg}"></p>
@@ -41,5 +41,5 @@
         <button type="submit">등록</button>
     </div>
 </form>
-</body>
+</div>
 </html>

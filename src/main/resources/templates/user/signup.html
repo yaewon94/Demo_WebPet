@@ -1,9 +1,8 @@
-<html>
-<head>
-    <link rel="stylesheet" th:href="@{/common.css}">
-</head>
-<body>
+<!DOCTYPE html>
+<html layout:decorate="~{layout/auth_layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
+<div layout:fragment="content">
 <input type="hidden"  id="errorCode" th:value="${errorCode}">
 
 <form th:action="${url}" th:object="${request}" method="post">
@@ -43,5 +42,5 @@
     </div>
 </form>
 <script th:src="@{/js/signup.js(v=${appVersion})}"></script>
-</body>
+</div>
 </html>

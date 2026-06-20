@@ -1,5 +1,8 @@
-<html>
-<body>
+<!DOCTYPE html>
+<html layout:decorate="~{layout/auth_layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<div layout:fragment="content">
 <form th:action="${url}" th:object="${request}" method="post">
     <div>
         아이디 <input type="text" th:field="*{user_name}">
@@ -15,5 +18,5 @@
         <input type="hidden" name="redirect" th:value="${redirect}">
     </div>
 </form>
-</body>
+</div>
 </html>

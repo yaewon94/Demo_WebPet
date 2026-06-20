@@ -1,8 +1,5 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<body>
-<header th:fragment="header">
-    <!-- 로그인, 회원가입 관련 링크 패널-->
+<!-- 유저 버튼 패널 -->
+<th:block th:fragment="user_panel">
     <div th:if="${loginUser == null}">
         <a th:href="${url_login}">로그인</a>
         <a th:href="${url_signup}">회원가입</a>
@@ -15,6 +12,4 @@
             </button>
         </form>
     </div>
-</header>
-</body>
-</html>
+</th:block>

@@ -25,6 +25,9 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
+	// thymeleaf
+	implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
+
 	// Database
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	runtimeOnly("org.postgresql:postgresql")
