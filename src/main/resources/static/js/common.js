@@ -1,5 +1,5 @@
-const errorMsg = document.getElementById("errorMsg")?.dataset.errorMsg;
+const alertMsg = document.getElementById("alert")?.dataset.errorMsg;
 
-if (errorMsg?.trim()) {
-    alert(errorMsg);
+if (alertMsg?.trim()) {
+    alert(alertMsg);
 }

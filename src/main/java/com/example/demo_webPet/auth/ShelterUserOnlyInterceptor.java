@@ -22,7 +22,7 @@ public final class ShelterUserOnlyInterceptor implements HandlerInterceptor {
 
         if (authService.getLoginUser(request).user_type()!= UserType.SHELTER) {
             // 알림 메세지
-            request.getSession().setAttribute(ModelParamConstants.ERROR_MSG, AuthCode.ERROR_NOT_SHELTER_USER.getMessage());
+            request.getSession().setAttribute(ModelParamConstants.ALERT, AuthCode.ERROR_NOT_SHELTER_USER.getMessage());
             // 페이지 리다이렉션
             String uri = request.getRequestURI();
             response.sendRedirect(uri.startsWith(UrlConstants.URL_BOARD_RESCUED_ANIMAL_ROOT) ?
