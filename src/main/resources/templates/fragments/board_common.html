@@ -1,0 +1,26 @@
+<th:block th:fragment="board_list_table(URL_PREFIX)">
+<table>
+    <thead>
+    <tr>
+        <th>번호</th>
+        <th>제목</th>
+        <th>작성날짜</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="board : ${boardList}">
+        <td th:text="${board.id}"></td>
+        <td>
+            <a th:href="${URL_PREFIX + board.id}"
+               th:text="${board.title}">
+            </a>
+        </td>
+        <td th:text="${board.createdAt}"></td>
+    </tr>
+
+    <tr th:if="${#lists.isEmpty(boardList)}">
+        <td colspan="3">등록된 게시물이 없습니다.</td>
+    </tr>
+    </tbody>
+</table>
+</th:block>

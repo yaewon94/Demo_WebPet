@@ -1,10 +1,14 @@
 package com.example.demo_webPet.board.MissingAnimal;
 
 import com.example.demo_webPet.animal.Animal;
+import com.example.demo_webPet.board.BoardListResponse;
 import com.example.demo_webPet.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -31,5 +35,16 @@ class MissingAnimalBoardService {
 
     MissingAnimalBoard getBoard(Long id){
         return boardRepository.findById(id).orElseThrow();
+    }
+
+    List<BoardListResponse> getBoardList(){
+        return boardRepository.findAll(Sort.by("id").descending())
+                .stream()
+                .map(board -> new BoardListResponse(
+                        board.getId(),
+                        board.getTitle(),
+                        board.getCreatedAt()
+                ))
+                .toList();
     }
 }

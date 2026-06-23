@@ -3,15 +3,15 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <div layout:fragment="content">
-<!-- 링크 패널-->
-<div>
-    <a th:href="${url}">
-        실종동물 등록
-    </a>
-</div>
+    <!-- 링크 패널-->
+    <div>
+        <a th:href="${url}">
+            실종동물 등록
+        </a>
+    </div>
 
-<!-- 게시물 목록 패널-->
-<div>
-</div>
+    <!-- 게시물 목록 -->
+    <!-- TODO : 페이징 -->
+    <div th:replace="~{fragments/board_common :: board_list_table(${detailUrlPrefix})}"></div>
 </div>
 </html>

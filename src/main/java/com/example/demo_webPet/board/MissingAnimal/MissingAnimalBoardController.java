@@ -3,7 +3,7 @@ package com.example.demo_webPet.board.MissingAnimal;
 import com.example.demo_webPet.animal.AnimalSpecies;
 import com.example.demo_webPet.auth.LoginUserDto;
 import com.example.demo_webPet.common.constants.UrlConstants;
-import com.example.demo_webPet.common.output.view.ModelParamConstants;
+import com.example.demo_webPet.common.output.ModelParamConstants;
 import com.example.demo_webPet.common.util.ValidationCheck;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -28,6 +28,9 @@ final class MissingAnimalBoardController {
     @GetMapping(UrlConstants.URL_BOARD_MISSING_ANIMAL_LIST)
     public String showAnimalListPage(Model model){
         model.addAttribute(ModelParamConstants.URL, UrlConstants.URL_BOARD_MISSING_ANIMAL_ADD);
+        model.addAttribute("detailUrlPrefix", UrlConstants.URL_BOARD_MISSING_ANIMAL_DETAIL + "?id="
+        );
+        model.addAttribute("boardList", boardService.getBoardList());
         return UrlConstants.URL_BOARD_MISSING_ANIMAL_LIST;
     }
 
