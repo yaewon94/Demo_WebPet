@@ -34,6 +34,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns(
                         UrlConstants.URL_LOGOUT,
                         UrlConstants.URL_BOARD_MISSING_ANIMAL_ADD,
+                        UrlConstants.URL_BOARD_MISSING_ANIMAL_MODIFY,
+                        UrlConstants.URL_BOARD_MISSING_ANIMAL_DELETE,
                         UrlConstants.URL_BOARD_RESCUED_ANIMAL_ADD);
                 /*.excludePathPatterns(
                         UrlConstants.URL_LOGIN,
@@ -45,6 +47,8 @@ public class WebConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(normalUserOnlyInterceptor)
                 .addPathPatterns(
-                        UrlConstants.URL_BOARD_MISSING_ANIMAL_ADD);
+                        UrlConstants.URL_BOARD_MISSING_ANIMAL_ADD,
+                        UrlConstants.URL_BOARD_MISSING_ANIMAL_MODIFY,
+                        UrlConstants.URL_BOARD_MISSING_ANIMAL_DELETE);
     }
 }

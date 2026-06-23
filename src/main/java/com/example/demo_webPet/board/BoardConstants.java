@@ -10,6 +10,8 @@ public final class BoardConstants {
     public static final int PAGE_SIZE = 2;
     public static final Sort SORT = Sort.by("id").descending();
 
-    public static final String MODEL_PARAM_BOARD_TITLE_URL = "detailUrlPrefix";
     public static final String MODEL_PARAM_BOARD_LIST_RESPONSE = "boardListResponse";
+    public static final String MODEL_PARAM_BOARD_DETAIL_URL = "detail_url";
+    public static final String MODEL_PARAM_BOARD_MODIFY_URL = "modify_url";
+    public static final String MODEL_PARAM_BOARD_DELETE_URL = "delete_url";
 }

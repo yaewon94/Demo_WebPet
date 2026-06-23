@@ -3,32 +3,37 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <div layout:fragment="content" th:object="${board}">
-    <!-- TODO : 게시물 수정,삭제 버튼 -->
+    <!-- 수정,삭제 버튼 패널 -->
+    <div th:replace="~{fragments/board_common :: boardDetailButtonPanel}"></div>
+
+    <!-- 게시물 -->
     <div>
-        [<span th:text="*{animal.status}"></span>] <span th:text="*{title}"></span>
-    </div>
-    <div>
-        작성자 <span th:text="*{user.userName}"></span>
-    </div>
-    <div>
-        작성날짜 <span th:text="*{createdAt}"></span>
-    </div>
-    <div>
-        종류 <span th:text="*{animal.species}"></span>
-    </div>
-    <div>
-        실종날짜 <span th:text="*{animal.missingDate}"></span>
-    </div>
-    <div>
-        실종장소 <span th:text="*{animal.missingLocation}"></span>
-    </div>
-    <div>
-        <!-- TODO : 이미지 포함 -->
-        <!-- TODO : 이미지 - 글 - 이미지 - 글 가능하게-->
-        <span th:text="*{content}"></span>
-    </div>
-    <!-- TODO : 댓글 목록 -->
-    <div>
+        <div>
+            [<span th:text="*{animal.status}"></span>] <span th:text="*{title}"></span>
+        </div>
+        <div>
+            작성자 <span th:text="*{user.userName}"></span>
+        </div>
+        <div>
+            작성날짜 <span th:text="*{createdAt}"></span>
+        </div>
+        <div>
+            종류 <span th:text="*{animal.species}"></span>
+        </div>
+        <div>
+            실종날짜 <span th:text="*{animal.missingDate}"></span>
+        </div>
+        <div>
+            실종장소 <span th:text="*{animal.missingLocation}"></span>
+        </div>
+        <div>
+            <!-- TODO : 이미지 포함 -->
+            <!-- TODO : 이미지 - 글 - 이미지 - 글 가능하게-->
+            <span th:text="*{content}"></span>
+        </div>
+        <!-- TODO : 댓글 목록 -->
+        <div>
+        </div>
     </div>
 </div>
 </html>

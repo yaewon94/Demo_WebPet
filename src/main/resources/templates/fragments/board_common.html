@@ -1,3 +1,4 @@
+<!-- 게시물 목록 패널 -->
 <th:block th:fragment="list" th:object="${boardListResponse}">
     <table>
         <thead>
@@ -11,7 +12,7 @@
         <tr th:each="board : *{boardPage.content}">
             <td th:text="${board.id}"></td>
             <td>
-                <a th:href="${detailUrlPrefix + board.id}"
+                <a th:href="@{${detail_url}(id=${board.id})}"
                    th:text="${board.title}">
                 </a>
             </td>
@@ -25,6 +26,7 @@
     <div th:replace="~{fragments/board_common :: paging(${url})}"></div>
 </th:block>
 
+<!-- 게시물 목록 페이징 패널 -->
 <th:block th:fragment="paging(LIST_URL_PREFIX)">
     <a th:if="*{startPage > 0}"
        th:href="*{LIST_URL_PREFIX + '?page=' + (startPage - 1)}">
@@ -40,4 +42,10 @@
        th:href="*{LIST_URL_PREFIX + '?page=' + (endPage + 1)}">
         다음
     </a>
+</th:block>
+
+<!-- 게시물 detail 페이지 버튼 패널 -->
+<th:block th:fragment="boardDetailButtonPanel">
+    <a th:href="@{${modify_url}(id=${board.id})}">수정</a>
+    <a th:href="@{${delete_url}(id=${board.id})}">삭제</a>
 </th:block>
