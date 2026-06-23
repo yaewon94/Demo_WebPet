@@ -46,6 +46,7 @@ final class AuthController {
 
         // 리다이렉션 경로 체크
         String redirectUrl = (String) session.getAttribute(ModelParamConstants.REDIRECT_URL);
+        session.removeAttribute(ModelParamConstants.REDIRECT_URL);
         if (redirectUrl == null || redirectUrl.equals("null")) {
             redirectUrl = "/";
         }
