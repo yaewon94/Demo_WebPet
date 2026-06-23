@@ -6,7 +6,7 @@ public final class UrlConstants {
     public static final String URL_LOGIN = "/user/login";
     public static final String URL_LOGOUT = "/user/logout";
 
-    private static final String URL_BOARD_MISSING_ANIMAL_ROOT = "/board/missingAnimal";
+    public static final String URL_BOARD_MISSING_ANIMAL_ROOT = "/board/missingAnimal";
     public static final String URL_BOARD_MISSING_ANIMAL_LIST = URL_BOARD_MISSING_ANIMAL_ROOT + "/list";
     public static final String URL_BOARD_MISSING_ANIMAL_ADD = URL_BOARD_MISSING_ANIMAL_ROOT + "/add";
     public static final String URL_BOARD_MISSING_ANIMAL_DETAIL = URL_BOARD_MISSING_ANIMAL_ROOT + "/detail";

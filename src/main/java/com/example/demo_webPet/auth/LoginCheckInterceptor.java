@@ -1,6 +1,7 @@
 package com.example.demo_webPet.auth;
 
 import com.example.demo_webPet.common.constants.UrlConstants;
+import com.example.demo_webPet.common.output.ModelParamConstants;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +20,18 @@ public final class LoginCheckInterceptor implements HandlerInterceptor {
                              Object handler) throws Exception {
 
         if (authService.getLoginUser(request) == null) {
-            // 로그인 페이지로 리다이렉트
-            String redirectUri = request.getRequestURI();
+
+            String uri = request.getRequestURI();
+            String query = null;
             // 디렉토리 거슬러 올라가는 것 방지 (보안)
-            if (!redirectUri.startsWith("/") || redirectUri.contains("..")) {
-                redirectUri = "/";
+            if (!uri.startsWith("/") || uri.contains("..")) {
+                uri = "/";
             }
-            response.sendRedirect(UrlConstants.URL_LOGIN + "?redirect=" + redirectUri);
+            if(!uri.equals("/")) query = request.getQueryString();
+            String fullUrl = (query == null) ? uri : uri + "?" + query;
+
+            request.getSession().setAttribute(ModelParamConstants.REDIRECT_URL, fullUrl);
+            response.sendRedirect(UrlConstants.URL_LOGIN);
             return false;
         }
 

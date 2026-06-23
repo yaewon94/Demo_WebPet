@@ -7,10 +7,12 @@ import lombok.Getter;
 @Getter
 final class AuthCheckFailException extends BaseRuntimeException {
 
+    private final String urlPrefix;
     private final String redirectionUri;
 
-    AuthCheckFailException(ErrorCode code, String redirectionUri){
+    AuthCheckFailException(ErrorCode code, String urlPrefix, String redirectionUri){
         super(code);
+        this.urlPrefix = urlPrefix;
         this.redirectionUri = redirectionUri;
     }
 }

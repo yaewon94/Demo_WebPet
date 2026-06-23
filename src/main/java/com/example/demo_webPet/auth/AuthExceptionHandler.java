@@ -37,6 +37,7 @@ class AuthExceptionHandler {
 
         // 페이지 리다이렉션
         String uri = request.getRequestURI();
-        response.sendRedirect(uri.startsWith(e.getRedirectionUri()) ? e.getRedirectionUri() : "/");
+        if(e.getUrlPrefix() == null) response.sendRedirect("/");
+        else response.sendRedirect(uri.startsWith(e.getUrlPrefix()) ? e.getRedirectionUri() : "/");
     }
 }
