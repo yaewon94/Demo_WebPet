@@ -1,6 +1,6 @@
 package com.example.demo_webPet.auth;
 
-import com.example.demo_webPet.common.constants.UrlConstants;
+import com.example.demo_webPet.common.exception.ErrorCode;
 import com.example.demo_webPet.user.User;
 import com.example.demo_webPet.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,11 +40,11 @@ public class AuthService {
         User user = userRepository
                 .findByUserName(request.user_name())
                 .orElseThrow(() ->
-                        new AuthException(AuthCode.ERROR_USER_NAME_IS_NOT_EXIST, redirectPage));
+                        new LoginFailException(ErrorCode.ERROR_USER_NAME_IS_NOT_EXIST, redirectPage));
 
         // 비밀번호 일치 여부 체크
         if (!user.getPassword().equals(request.password())) {
-            throw new AuthException(AuthCode.ERROR_USER_PASSWORD_MISMATCH, redirectPage);
+            throw new LoginFailException(ErrorCode.ERROR_USER_PASSWORD_MISMATCH, redirectPage);
         }
 
         // 세션 저장

@@ -86,14 +86,7 @@ final class UserController {
         // TODO :
         // - REST로 바꿀때 RestControllerAdvice에서 에러(메세지 등) 정보 반환
         // - 기존 form 데이터 유지, 페이지 이동은 프론트가 하도록 변경
-        User user;
-        try {
-            user = userService.createUser(request);
-        }catch(UserException e){
-            ra.addFlashAttribute(ModelParamConstants.ERROR_MSG, e.getCode().getMessage());
-            ra.addFlashAttribute("request", request);
-            return "redirect:" + UrlConstants.URL_SIGNUP;
-        }
+        User user = userService.createUser(request);
 
         // 회원가입 성공 시, 로그인 정보 저장
         authService.createLoginSession(session, user);

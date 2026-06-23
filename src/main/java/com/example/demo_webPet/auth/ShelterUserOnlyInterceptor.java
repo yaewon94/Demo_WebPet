@@ -1,5 +1,5 @@
 package com.example.demo_webPet.auth;
-
+import com.example.demo_webPet.common.exception.ErrorCode;
 import com.example.demo_webPet.common.output.view.ModelParamConstants;
 import com.example.demo_webPet.common.constants.UrlConstants;
 import com.example.demo_webPet.user.UserType;
@@ -21,13 +21,7 @@ public final class ShelterUserOnlyInterceptor implements HandlerInterceptor {
                              Object handler) throws Exception {
 
         if (authService.getLoginUser(request).user_type()!= UserType.SHELTER) {
-            // 알림 메세지
-            request.getSession().setAttribute(ModelParamConstants.ALERT, AuthCode.ERROR_NOT_SHELTER_USER.getMessage());
-            // 페이지 리다이렉션
-            String uri = request.getRequestURI();
-            response.sendRedirect(uri.startsWith(UrlConstants.URL_BOARD_RESCUED_ANIMAL_ROOT) ?
-                    UrlConstants.URL_BOARD_RESCUED_ANIMAL_LIST : "/");
-            return false;
+            throw new AuthCheckFailException(ErrorCode.ERROR_NOT_SHELTER_USER, UrlConstants.URL_BOARD_RESCUED_ANIMAL_LIST);
         }
 
         return true;

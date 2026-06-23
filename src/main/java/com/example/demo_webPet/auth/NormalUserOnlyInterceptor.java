@@ -1,7 +1,7 @@
 package com.example.demo_webPet.auth;
 
 import com.example.demo_webPet.common.constants.UrlConstants;
-import com.example.demo_webPet.common.output.view.ModelParamConstants;
+import com.example.demo_webPet.common.exception.ErrorCode;
 import com.example.demo_webPet.user.UserType;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,13 +21,7 @@ public final class NormalUserOnlyInterceptor implements HandlerInterceptor {
                              Object handler) throws Exception{
 
         if (authService.getLoginUser(request).user_type() != UserType.NORMAL) {
-            // 알림 메세지
-            request.getSession().setAttribute(ModelParamConstants.ALERT, AuthCode.ERROR_NOT_NORMAL_USER.getMessage());
-            // 페이지 리다이렉션
-            String uri = request.getRequestURI();
-            response.sendRedirect(uri.startsWith(UrlConstants.URL_BOARD_MISSING_ANIMAL_ROOT) ?
-                    UrlConstants.URL_BOARD_MISSING_ANIMAL_LIST : "/");
-            return false;
+            throw new AuthCheckFailException(ErrorCode.ERROR_NOT_NORMAL_USER, UrlConstants.URL_BOARD_MISSING_ANIMAL_LIST);
         }
 
         return true;

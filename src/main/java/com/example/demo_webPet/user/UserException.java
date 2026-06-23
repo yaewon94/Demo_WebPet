@@ -1,14 +1,16 @@
 package com.example.demo_webPet.user;
 
+import com.example.demo_webPet.common.exception.BaseRuntimeException;
+import com.example.demo_webPet.common.exception.ErrorCode;
 import lombok.Getter;
 
 @Getter
-class UserException extends RuntimeException{
+class UserException extends BaseRuntimeException{
 
-    private final UserCode code;
+    private final CreateUserRequest request;
 
-    UserException(UserCode code) {
-        super(code.getMessage());
-        this.code = code;
+    UserException(ErrorCode code, CreateUserRequest request) {
+        super(code);
+        this.request = request;
     }
 }
