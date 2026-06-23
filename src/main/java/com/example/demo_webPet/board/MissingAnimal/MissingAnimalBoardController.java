@@ -3,12 +3,13 @@ package com.example.demo_webPet.board.MissingAnimal;
 import com.example.demo_webPet.animal.AnimalSpecies;
 import com.example.demo_webPet.auth.LoginUserDto;
 import com.example.demo_webPet.board.BoardConstants;
+import com.example.demo_webPet.board.BoardController;
 import com.example.demo_webPet.board.BoardListResponse;
+import com.example.demo_webPet.board.RescuedAnimal.BoardMode;
 import com.example.demo_webPet.common.constants.UrlConstants;
 import com.example.demo_webPet.common.output.ModelParamConstants;
 import com.example.demo_webPet.common.util.UriBuilder;
 import com.example.demo_webPet.common.util.ValidationCheck;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -16,13 +17,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Map;
 
+// TODO : 공통 ModelAttribute 부모클래스 만들어서 분리
 @Controller
 @RequiredArgsConstructor
-final class MissingAnimalBoardController {
+final class MissingAnimalBoardController extends BoardController {
 
+    private static final String VIEW_NAME_WRITE = "/board/missingAnimal/write";
     private final MissingAnimalBoardService boardService;
 
     @ModelAttribute("list_animalSpecies") // GET, POST 둘다 적용
@@ -35,10 +37,8 @@ final class MissingAnimalBoardController {
             @RequestParam(defaultValue = BoardConstants.DEFAULT_PAGE) int page,
             Model model){
 
-        model.addAttribute(ModelParamConstants.URL,
+        model.addAttribute("url",
                 UrlConstants.URL_BOARD_MISSING_ANIMAL_ADD);
-        model.addAttribute(BoardConstants.MODEL_PARAM_BOARD_DETAIL_URL,
-                UrlConstants.URL_BOARD_MISSING_ANIMAL_DETAIL);
         model.addAttribute(BoardConstants.MODEL_PARAM_BOARD_LIST_RESPONSE,
                 new BoardListResponse(page, boardService.getBoardList(page)));
 
@@ -53,23 +53,23 @@ final class MissingAnimalBoardController {
         if(!model.containsAttribute("request")){
             model.addAttribute("request", MissingAnimalBoardWriteRequest.getNewInstance());
         }
-        return UrlConstants.URL_BOARD_MISSING_ANIMAL_ADD;
+
+        return VIEW_NAME_WRITE;
     }
 
     // BindingResult 는 반드시 검증 대상 뒤에 와야함
     @PostMapping(UrlConstants.URL_BOARD_MISSING_ANIMAL_ADD)
-    public String processAnimalAddPage(
+    public String processBoardAdd(
             @Valid @ModelAttribute("request") MissingAnimalBoardWriteRequest request,
             BindingResult bindingResult,
             @ModelAttribute("loginUser") LoginUserDto loginUser,
-            Model model,
-            HttpSession session){
+            Model model){
 
         // BindingResult 검증
         ObjectError error = ValidationCheck.getFirstError(bindingResult);
         if(error != null){
             model.addAttribute(ModelParamConstants.ERROR_MSG, error.getDefaultMessage());
-            return UrlConstants.URL_BOARD_MISSING_ANIMAL_ADD;
+            return VIEW_NAME_WRITE;
         }
 
         // service
@@ -91,14 +91,68 @@ final class MissingAnimalBoardController {
 
         MissingAnimalBoard board = boardService.getBoard(id);
         model.addAttribute("board", board);
-        model.addAttribute(
-                BoardConstants.MODEL_PARAM_BOARD_MODIFY_URL,
-                UrlConstants.URL_BOARD_MISSING_ANIMAL_MODIFY);
-        model.addAttribute(
-                BoardConstants.MODEL_PARAM_BOARD_DELETE_URL,
-                UrlConstants.URL_BOARD_MISSING_ANIMAL_DELETE);
         return UrlConstants.URL_BOARD_MISSING_ANIMAL_DETAIL;
     }
 
-    // TODO : 수정,삭제 본인이 맞는지 체크
+    @GetMapping(UrlConstants.URL_BOARD_MISSING_ANIMAL_MODIFY)
+    public String showAnimalModifyPage(
+            @RequestParam Long id,
+            @ModelAttribute("loginUser") LoginUserDto loginUser,
+            Model model){
+
+        model.addAttribute("url", UrlConstants.URL_BOARD_MISSING_ANIMAL_MODIFY);
+        model.addAttribute("request",
+                MissingAnimalBoardWriteRequest.from(boardService.getBoard(id, loginUser.id()), BoardMode.MODIFY));
+
+        return VIEW_NAME_WRITE;
+    }
+
+    @PostMapping(UrlConstants.URL_BOARD_MISSING_ANIMAL_MODIFY)
+    public String processBoardModify(
+            @Valid @ModelAttribute("request") MissingAnimalBoardWriteRequest request,
+            BindingResult bindingResult,
+            @ModelAttribute("loginUser") LoginUserDto loginUser,
+            Model model){
+
+        System.out.println("request title = " + request.title());
+        System.out.println("request mode = " + request.mode());
+
+        // BindingResult 검증
+        ObjectError error = ValidationCheck.getFirstError(bindingResult);
+        if(error != null){
+            model.addAttribute(ModelParamConstants.ERROR_MSG, error.getDefaultMessage());
+            return VIEW_NAME_WRITE;
+        }
+
+        // service
+        boardService.modifyBoard(request, loginUser.id());
+
+        // 수정한 게시물 페이지로 리다이렉트
+        return "redirect:"
+                + UriBuilder.getUrl(
+                UrlConstants.URL_BOARD_MISSING_ANIMAL_DETAIL,
+                Map.of("id", String.valueOf(request.id())));
+    }
+
+    // TODO : 삭제 본인 게시물이 맞는지 체크
+
+    @Override
+    protected String getListUrl() {
+        return UrlConstants.URL_BOARD_MISSING_ANIMAL_LIST;
+    }
+
+    @Override
+    protected String getDetailUrl() {
+        return UrlConstants.URL_BOARD_MISSING_ANIMAL_DETAIL;
+    }
+
+    @Override
+    protected String getModifyUrl() {
+        return UrlConstants.URL_BOARD_MISSING_ANIMAL_MODIFY;
+    }
+
+    @Override
+    protected String getDeleteUrl() {
+        return UrlConstants.URL_BOARD_MISSING_ANIMAL_DELETE;
+    }
 }

@@ -22,4 +22,10 @@ final class MissingAnimalBoard extends Board {
     // TODO
     //@Column(nullable = false)
     private String imgUrl;
+
+    public void update(String title, String content, Animal animal, String imgUrl){
+        super.update(title, content);
+        setAnimal(animal);
+        setImgUrl(imgUrl);
+    }
 }

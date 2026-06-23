@@ -45,4 +45,9 @@ public abstract class Board
                 0,
                 Math.min(title.length(), CommonValidConstants.MAX_SIZE_TITLE));
     }
+
+    protected void update(String title, String content){
+        setTitle(title);
+        setContent(content);
+    }
 }

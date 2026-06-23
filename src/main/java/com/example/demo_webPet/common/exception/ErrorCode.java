@@ -12,7 +12,9 @@ public enum ErrorCode {
     ERROR_NOT_NORMAL_USER("E_Auth5", "일반회원만 이용 가능합니다"),
     ERROR_ALREADY_LOGGED_IN("E_Auth6", "이미 로그인 상태입니다"),
 
-    ERROR_DUPLICATED_USER_NAME("E_User1", "이미 존재하는 아이디 입니다");
+    ERROR_DUPLICATED_USER_NAME("E_User1", "이미 존재하는 아이디 입니다"),
+
+    ERROR_BOARD_ACCESS_DENIED("E_Board1", "해당 게시물에 접근할 수 없습니다");
 
     private final String code;
     private final String message;
