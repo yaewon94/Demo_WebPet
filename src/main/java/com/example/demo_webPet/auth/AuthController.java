@@ -1,7 +1,7 @@
 package com.example.demo_webPet.auth;
 
 import com.example.demo_webPet.common.constants.UrlConstants;
-import com.example.demo_webPet.common.output.view.ModelParamConstants;
+import com.example.demo_webPet.common.output.ModelParamConstants;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

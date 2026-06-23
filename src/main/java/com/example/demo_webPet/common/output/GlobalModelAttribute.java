@@ -1,4 +1,4 @@
-package com.example.demo_webPet.common.output.view;
+package com.example.demo_webPet.common.output;
 
 import com.example.demo_webPet.auth.AuthService;
 import com.example.demo_webPet.auth.LoginUserDto;

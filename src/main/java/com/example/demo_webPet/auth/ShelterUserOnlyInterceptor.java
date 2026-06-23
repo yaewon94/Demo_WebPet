@@ -1,6 +1,5 @@
 package com.example.demo_webPet.auth;
 import com.example.demo_webPet.common.exception.ErrorCode;
-import com.example.demo_webPet.common.output.view.ModelParamConstants;
 import com.example.demo_webPet.common.constants.UrlConstants;
 import com.example.demo_webPet.user.UserType;
 import jakarta.servlet.http.HttpServletRequest;

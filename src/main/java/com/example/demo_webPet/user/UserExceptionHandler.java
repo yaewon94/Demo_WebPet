@@ -1,7 +1,7 @@
 package com.example.demo_webPet.user;
 
 import com.example.demo_webPet.common.constants.UrlConstants;
-import com.example.demo_webPet.common.output.view.ModelParamConstants;
+import com.example.demo_webPet.common.output.ModelParamConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

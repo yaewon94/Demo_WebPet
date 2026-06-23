@@ -1,4 +1,4 @@
-package com.example.demo_webPet.common.output.view;
+package com.example.demo_webPet.common.output;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.ui.Model;

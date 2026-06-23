@@ -1,7 +1,7 @@
 package com.example.demo_webPet.user;
 
 import com.example.demo_webPet.auth.AuthService;
-import com.example.demo_webPet.common.output.view.ModelParamConstants;
+import com.example.demo_webPet.common.output.ModelParamConstants;
 import com.example.demo_webPet.common.constants.UrlConstants;
 import com.example.demo_webPet.common.util.ValidationCheck;
 import com.example.demo_webPet.shelter.ShelterDto;

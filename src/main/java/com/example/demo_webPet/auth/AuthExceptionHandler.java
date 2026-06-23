@@ -1,7 +1,7 @@
 package com.example.demo_webPet.auth;
 
 import com.example.demo_webPet.common.constants.UrlConstants;
-import com.example.demo_webPet.common.output.view.ModelParamConstants;
+import com.example.demo_webPet.common.output.ModelParamConstants;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
