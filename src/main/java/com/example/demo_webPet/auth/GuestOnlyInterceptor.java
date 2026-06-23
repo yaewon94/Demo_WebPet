@@ -1,6 +1,7 @@
 package com.example.demo_webPet.auth;
 
 import com.example.demo_webPet.common.constants.UrlConstants;
+import com.example.demo_webPet.common.exception.ErrorCode;
 import com.example.demo_webPet.common.output.view.ModelParamConstants;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,7 +23,7 @@ public final class GuestOnlyInterceptor implements HandlerInterceptor {
         // 로그인한 상태에서 회원가입, 로그인 페이지 접속한 경우 호출됨
         if (authService.getLoginUser(request) != null) {
             // 알림 메세지
-            request.getSession().setAttribute(ModelParamConstants.ALERT, AuthCode.ERROR_ALREADY_LOGGED_IN.getMessage());
+            request.getSession().setAttribute(ModelParamConstants.ALERT, ErrorCode.ERROR_ALREADY_LOGGED_IN.getMessage());
 
             // 직전 페이지로 이동
             String referer = request.getHeader("Referer");
