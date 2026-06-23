@@ -1,14 +1,15 @@
 package com.example.demo_webPet.board.MissingAnimal;
 
 import com.example.demo_webPet.animal.Animal;
-import com.example.demo_webPet.board.BoardListResponse;
+import com.example.demo_webPet.board.BoardConstants;
+import com.example.demo_webPet.board.BoardDto_forList;
 import com.example.demo_webPet.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -37,14 +38,19 @@ class MissingAnimalBoardService {
         return boardRepository.findById(id).orElseThrow();
     }
 
-    List<BoardListResponse> getBoardList(){
-        return boardRepository.findAll(Sort.by("id").descending())
-                .stream()
-                .map(board -> new BoardListResponse(
-                        board.getId(),
-                        board.getTitle(),
-                        board.getCreatedAt()
-                ))
-                .toList();
+    Page<BoardDto_forList> getBoardList(int page){
+
+        Pageable pageable = PageRequest.of(
+                page,
+                BoardConstants.PAGE_SIZE,
+                BoardConstants.SORT
+        );
+
+        return boardRepository.findAll(pageable)
+                        .map(board -> new BoardDto_forList(
+                                board.getId(),
+                                board.getTitle(),
+                                board.getCreatedAt()
+                        ));
     }
 }

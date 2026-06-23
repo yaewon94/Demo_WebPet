@@ -1,14 +1,23 @@
 package com.example.demo_webPet.board;
 
-import com.example.demo_webPet.common.output.FormatConstants;
-import java.time.LocalDateTime;
+import lombok.Getter;
+import org.springframework.data.domain.Page;
 
-public record BoardListResponse(
-        Long id,
-        String title,
-        String createdAt
-) {
-    public BoardListResponse(Long id, String title, LocalDateTime createdAt) {
-        this(id, title, createdAt.format(FormatConstants.YEAR_MONTH_DAY));
+@Getter
+public class BoardListResponse {
+
+    private static final int BOARD_GROUP_SIZE = 2;
+
+    private final int startPage;
+    private final int endPage;
+    private final Page<BoardDto_forList> boardPage;
+
+    public BoardListResponse(int currentPage, Page<BoardDto_forList> boardPage){
+        this.startPage = (currentPage / BOARD_GROUP_SIZE) * BOARD_GROUP_SIZE;
+        this.endPage = Math.min(
+                startPage + BOARD_GROUP_SIZE - 1,
+                boardPage.getTotalPages() - 1
+        );
+        this.boardPage = boardPage;
     }
 }

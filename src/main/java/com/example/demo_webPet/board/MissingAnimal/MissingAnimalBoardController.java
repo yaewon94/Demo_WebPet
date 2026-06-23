@@ -2,6 +2,8 @@ package com.example.demo_webPet.board.MissingAnimal;
 
 import com.example.demo_webPet.animal.AnimalSpecies;
 import com.example.demo_webPet.auth.LoginUserDto;
+import com.example.demo_webPet.board.BoardConstants;
+import com.example.demo_webPet.board.BoardListResponse;
 import com.example.demo_webPet.common.constants.UrlConstants;
 import com.example.demo_webPet.common.output.ModelParamConstants;
 import com.example.demo_webPet.common.util.ValidationCheck;
@@ -26,11 +28,17 @@ final class MissingAnimalBoardController {
     }
 
     @GetMapping(UrlConstants.URL_BOARD_MISSING_ANIMAL_LIST)
-    public String showAnimalListPage(Model model){
+    public String showAnimalListPage(
+            @RequestParam(defaultValue = BoardConstants.DEFAULT_PAGE) int page,
+            Model model){
         model.addAttribute(ModelParamConstants.URL, UrlConstants.URL_BOARD_MISSING_ANIMAL_ADD);
-        model.addAttribute("detailUrlPrefix", UrlConstants.URL_BOARD_MISSING_ANIMAL_DETAIL + "?id="
-        );
-        model.addAttribute("boardList", boardService.getBoardList());
+        model.addAttribute(
+                BoardConstants.MODEL_PARAM_BOARD_TITLE_URL,
+                UrlConstants.URL_BOARD_MISSING_ANIMAL_DETAIL + "?id=");
+        model.addAttribute(
+                BoardConstants.MODEL_PARAM_BOARD_LIST_RESPONSE,
+                new BoardListResponse(page,
+                        boardService.getBoardList(page)));
         return UrlConstants.URL_BOARD_MISSING_ANIMAL_LIST;
     }
 

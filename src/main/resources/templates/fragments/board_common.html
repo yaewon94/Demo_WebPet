@@ -1,26 +1,43 @@
-<th:block th:fragment="board_list_table(URL_PREFIX)">
-<table>
-    <thead>
-    <tr>
-        <th>번호</th>
-        <th>제목</th>
-        <th>작성날짜</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="board : ${boardList}">
-        <td th:text="${board.id}"></td>
-        <td>
-            <a th:href="${URL_PREFIX + board.id}"
-               th:text="${board.title}">
-            </a>
-        </td>
-        <td th:text="${board.createdAt}"></td>
-    </tr>
+<th:block th:fragment="list" th:object="${boardListResponse}">
+    <table>
+        <thead>
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성날짜</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="board : *{boardPage.content}">
+            <td th:text="${board.id}"></td>
+            <td>
+                <a th:href="${detailUrlPrefix + board.id}"
+                   th:text="${board.title}">
+                </a>
+            </td>
+            <td th:text="${board.createdAt}"></td>
+        </tr>
+        <tr th:if="*{boardPage.empty}">
+            <td colspan="3">등록된 게시물이 없습니다.</td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:replace="~{fragments/board_common :: paging(${url})}"></div>
+</th:block>
 
-    <tr th:if="${#lists.isEmpty(boardList)}">
-        <td colspan="3">등록된 게시물이 없습니다.</td>
-    </tr>
-    </tbody>
-</table>
+<th:block th:fragment="paging(LIST_URL_PREFIX)">
+    <a th:if="*{startPage > 0}"
+       th:href="*{LIST_URL_PREFIX + '?page=' + (startPage - 1)}">
+        이전
+    </a>
+
+    <a th:each="i : *{#numbers.sequence(startPage, endPage)}"
+       th:href="${LIST_URL_PREFIX + '?page=' + i}"
+       th:text="${i + 1}">
+    </a>
+
+    <a th:if="*{endPage < boardPage.totalPages - 1}"
+       th:href="*{LIST_URL_PREFIX + '?page=' + (endPage + 1)}">
+        다음
+    </a>
 </th:block>
