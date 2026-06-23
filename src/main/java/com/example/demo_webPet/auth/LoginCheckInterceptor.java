@@ -22,13 +22,16 @@ public final class LoginCheckInterceptor implements HandlerInterceptor {
         if (authService.getLoginUser(request) == null) {
 
             String uri = request.getRequestURI();
-            String query = null;
             // 디렉토리 거슬러 올라가는 것 방지 (보안)
             if (!uri.startsWith("/") || uri.contains("..")) {
                 uri = "/";
             }
-            if(!uri.equals("/")) query = request.getQueryString();
-            String fullUrl = (query == null) ? uri : uri + "?" + query;
+
+            String query = request.getQueryString();
+            String fullUrl = uri;
+            if (query != null && !query.isBlank()) {
+                fullUrl += "?" + query;
+            }
 
             request.getSession().setAttribute(ModelParamConstants.REDIRECT_URL, fullUrl);
             response.sendRedirect(UrlConstants.URL_LOGIN);

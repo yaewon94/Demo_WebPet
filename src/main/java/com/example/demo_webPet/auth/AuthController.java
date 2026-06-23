@@ -24,7 +24,6 @@ final class AuthController {
     public String loginPage(@RequestParam(required = false)String redirect, Model model){
         model.addAttribute(ModelParamConstants.URL, UrlConstants.URL_LOGIN);
         model.addAttribute("request", LoginRequest.getNewInstance());
-        model.addAttribute(ModelParamConstants.REDIRECT_URL, redirect);
         return UrlConstants.URL_LOGIN;
     }
 
@@ -47,6 +46,9 @@ final class AuthController {
 
         // 리다이렉션 경로 체크
         String redirectUrl = (String) session.getAttribute(ModelParamConstants.REDIRECT_URL);
+        if (redirectUrl == null || redirectUrl.equals("null")) {
+            redirectUrl = "/";
+        }
 
         // service 검증
         // 예외 발생할 경우 GlobalExceptionHandler 에서 처리
