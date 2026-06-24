@@ -1,0 +1,12 @@
+<th:block th:fragment="btn_board_delete" th:if="${loginUser != null}">
+    <form method="post"
+          th:action="@{${delete_url}(id=*{id})}"
+          onsubmit="return confirm('정말 삭제하시겠습니까?');">
+        <input type="hidden" name="id" th:value="*{id}">
+        <button type="submit">삭제</button>
+    </form>
+</th:block>
+
+<th:block th:fragment="btn_board_list">
+    <a th:href="@{${list_url}}">게시물 목록</a>
+</th:block>

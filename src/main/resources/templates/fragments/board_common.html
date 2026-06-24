@@ -46,13 +46,13 @@
 
 <!-- 게시물 detail 페이지 버튼 패널 -->
 <th:block th:fragment="boardDetailButtonPanel">
-    <a th:href="@{${modify_url}(id=${board.id})}">수정</a>
-    <a th:href="@{${delete_url}(id=${board.id})}">삭제</a>
-    <a th:href="@{${list_url}}">게시물 목록</a>
+    <a th:href="@{${modify_url}(id=*{id})}">수정</a>
+    <span th:replace="~{fragments/board_buttons :: btn_board_delete}"></span>
+    <span th:replace="~{fragments/board_buttons :: btn_board_list}"></span>
 </th:block>
 
 <!-- 게시물 write 페이지 버튼 패널 -->
 <th:block th:fragment="boardWriteButtonPanel">
-    <a th:if="${request.mode == 'modify'}" th:href="@{${delete_url}(id=${request.id})}">삭제</a>
-    <a th:href="@{${list_url}}">게시물 목록</a>
+    <span th:replace="~{fragments/board_buttons :: btn_board_delete}"></span>
+    <span th:replace="~{fragments/board_buttons :: btn_board_list}"></span>
 </th:block>

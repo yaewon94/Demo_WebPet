@@ -5,7 +5,6 @@ import com.example.demo_webPet.auth.LoginUserDto;
 import com.example.demo_webPet.board.BoardConstants;
 import com.example.demo_webPet.board.BoardController;
 import com.example.demo_webPet.board.BoardListResponse;
-import com.example.demo_webPet.board.RescuedAnimal.BoardMode;
 import com.example.demo_webPet.common.constants.UrlConstants;
 import com.example.demo_webPet.common.output.ModelParamConstants;
 import com.example.demo_webPet.common.util.UriBuilder;
@@ -89,8 +88,7 @@ final class MissingAnimalBoardController extends BoardController {
     @GetMapping(UrlConstants.URL_BOARD_MISSING_ANIMAL_DETAIL)
     public String detail(@RequestParam Long id, Model model){
 
-        MissingAnimalBoard board = boardService.getBoard(id);
-        model.addAttribute("board", board);
+        model.addAttribute("board", boardService.getBoard(id));
         return UrlConstants.URL_BOARD_MISSING_ANIMAL_DETAIL;
     }
 
@@ -101,8 +99,7 @@ final class MissingAnimalBoardController extends BoardController {
             Model model){
 
         model.addAttribute("url", UrlConstants.URL_BOARD_MISSING_ANIMAL_MODIFY);
-        model.addAttribute("request",
-                MissingAnimalBoardWriteRequest.from(boardService.getBoard(id, loginUser.id()), BoardMode.MODIFY));
+        model.addAttribute("request", boardService.getBoard(id, loginUser.id()));
 
         return VIEW_NAME_WRITE;
     }
@@ -113,9 +110,6 @@ final class MissingAnimalBoardController extends BoardController {
             BindingResult bindingResult,
             @ModelAttribute("loginUser") LoginUserDto loginUser,
             Model model){
-
-        System.out.println("request title = " + request.title());
-        System.out.println("request mode = " + request.mode());
 
         // BindingResult 검증
         ObjectError error = ValidationCheck.getFirstError(bindingResult);
@@ -134,7 +128,15 @@ final class MissingAnimalBoardController extends BoardController {
                 Map.of("id", String.valueOf(request.id())));
     }
 
-    // TODO : 삭제 본인 게시물이 맞는지 체크
+    @PostMapping(UrlConstants.URL_BOARD_MISSING_ANIMAL_DELETE)
+    public String deleteBoard(
+            @RequestParam Long id,
+            @ModelAttribute("loginUser") LoginUserDto loginUser){
+
+        boardService.deleteBoard(id, loginUser.id());
+        // 게시물 목록으로 이동
+        return "redirect:" + UrlConstants.URL_BOARD_MISSING_ANIMAL_LIST;
+    }
 
     @Override
     protected String getListUrl() {

@@ -7,10 +7,9 @@
     <div th:replace="~{fragments/board_common :: boardWriteButtonPanel}"></div>
 
     <!-- form -->
-    <form th:action="${url}" th:object="${request}" method="post">
+    <form th:action="${url}" th:object="${request}" th:with="IS_MODIFY=*{id != null}" method="post">
         <p th:if="${errorMsg}"  th:text="${errorMsg}"></p>
-        <input th:if="*{mode == 'modify'}" type="hidden" th:field="*{id}">
-        <input type="hidden" th:field="*{mode}">
+        <input th:if="${IS_MODIFY}" type="hidden" th:field="*{id}">
         <div>
             제목 <input type="text" th:field="*{title}">
         </div>
@@ -43,8 +42,8 @@
             <textarea th:field="*{content}"></textarea>
         </div>
         <div>
-            <button th:if="*{mode != 'modify'}" type="submit">등록</button>
-            <button th:if="*{mode == 'modify'}" type="submit">수정</button>
+            <button th:unless="${IS_MODIFY}" type="submit">등록</button>
+            <button th:if="${IS_MODIFY}" type="submit">수정</button>
         </div>
     </form>
 </div>

@@ -9,22 +9,22 @@
     <!-- 게시물 -->
     <div>
         <div>
-            [<span th:text="*{animal.status}"></span>] <span th:text="*{title}"></span>
+            [<span th:text="*{status}"></span>] <span th:text="*{title}"></span>
         </div>
         <div>
-            작성자 <span th:text="*{user.userName}"></span>
+            작성자 <span th:text="*{userName}"></span>
         </div>
         <div>
             작성날짜 <span th:text="*{createdAt}"></span>
         </div>
         <div>
-            종류 <span th:text="#{'animalSpecies.' + *{animal.species}}"></span>
+            종류 <span th:text="#{'animalSpecies.' + *{species}}"></span>
         </div>
         <div>
-            실종날짜 <span th:text="*{animal.missingDate}"></span>
+            실종날짜 <span th:text="*{missingDate}"></span>
         </div>
         <div>
-            실종장소 <span th:text="*{animal.missingLocation}"></span>
+            실종장소 <span th:text="*{missingLocation}"></span>
         </div>
         <div>
             <!-- TODO : 이미지 포함 -->

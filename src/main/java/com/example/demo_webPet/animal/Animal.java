@@ -35,6 +35,7 @@ public final class Animal {
     private AnimalStatus status;
 
     private LocalDate missingDate;
+
     private String missingLocation;
 
     private LocalDate rescuedDate;
@@ -66,5 +67,11 @@ public final class Animal {
         animal.missingDate = dto.missingDate();
         animal.missingLocation = dto.missingLocation();
         return animal;
+    }
+
+    public void update(AnimalSpecies species, LocalDate missingDate, String missingLocation){
+        this.species = species;
+        this.missingDate = missingDate;
+        this.missingLocation = missingLocation;
     }
 }

@@ -45,32 +45,44 @@ class MissingAnimalBoardService {
 
         MissingAnimalBoard board = boardRepository.findById(request.id()).orElseThrow();
 
-        // 다른 사람이 작성한 게시물에 수정,삭제 접근 하려는 경우
+        // 다른 사람이 작성한 게시물에 수정하려는 경우
         if(!Objects.equals(board.getUser().getId(), loginUserId)){
             throw new BoardDeniedException(ERROR_BOARD_ACCESS_DENIED);
         }
 
         // entity 변경하면 JPA가 영속성 객체 변경 감지해서 DB 자동 update
+        Animal animal = board.getAnimal();
+        animal.update(
+                request.species(),
+                request.missingDate(),
+                request.missingLocation()
+        );
         board.update(
                 request.title(),
                 request.content(),
-                Animal.from(request),
                 request.imageUrl());
     }
 
-    MissingAnimalBoard getBoard(Long boardId, Long loginUserId){
+    @Transactional
+    void deleteBoard(Long boardId, Long loginUserId){
 
-        // 다른 사람이 작성한 게시물에 수정,삭제 접근 하려는 경우
-        if(!Objects.equals(
-                boardRepository.findById(boardId).orElseThrow().getUser().getId(),
-                loginUserId)){
+        int deleted = boardRepository.deleteByIdAndUserId(boardId, loginUserId);
+        if (deleted == 0) {
+            // 삭제된 게시물이 없다 => 게시물 작성자 id != 현재 로그인 유저 id
             throw new BoardDeniedException(ERROR_BOARD_ACCESS_DENIED);
         }
-        return getBoard(boardId);
     }
 
-    MissingAnimalBoard getBoard(Long id){
-        return boardRepository.findById(id).orElseThrow();
+
+    MissingAnimalBoardWriteRequest getBoard(Long boardId, Long loginUserId){
+        // 수정할 게시물이 없다 => 게시물 작성자 id != 현재 로그인 유저 id
+        return boardRepository.findModifyDtoById(boardId, loginUserId)
+                .orElseThrow(() ->
+                        new BoardDeniedException(ERROR_BOARD_ACCESS_DENIED));
+    }
+
+    MissingAnimalBoardDetailResponse getBoard(Long id){
+        return boardRepository.findDetailById(id).orElseThrow();
     }
 
     Page<BoardDto_forList> getBoardList(int page){
@@ -81,11 +93,6 @@ class MissingAnimalBoardService {
                 BoardConstants.SORT
         );
 
-        return boardRepository.findAll(pageable)
-                        .map(board -> new BoardDto_forList(
-                                board.getId(),
-                                board.getTitle(),
-                                board.getCreatedAt()
-                        ));
+        return boardRepository.findBoardList(pageable);
     }
 }
