@@ -31,6 +31,8 @@ public class SecurityConfig {
                                 "/",
                                 UrlConstants.URL_SIGNUP,
                                 UrlConstants.URL_LOGIN,
+                                "/**/list",
+                                "/**/detail",
                                 "/css/**",
                                 "/js/**")
                         .permitAll()
