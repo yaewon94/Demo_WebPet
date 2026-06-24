@@ -6,9 +6,10 @@ import java.time.LocalDateTime;
 public record BoardDto_forList(
         Long id,
         String title,
-        String createdAt
+        String createdAt,
+        String userName
 ) {
-    public BoardDto_forList(Long id, String title, LocalDateTime createdAt) {
-        this(id, title, createdAt.format(FormatConstants.YEAR_MONTH_DAY));
+    public BoardDto_forList(Long id, String title, LocalDateTime createdAt, String userName) {
+        this(id, title, createdAt.format(FormatConstants.YEAR_MONTH_DAY), userName);
     }
 }

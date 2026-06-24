@@ -16,9 +16,11 @@ interface MissingAnimalBoardRepository extends JpaRepository<MissingAnimalBoard,
     select new com.example.demo_webPet.board.BoardDto_forList(
         b.id,
         b.title,
-        b.createdAt
+        b.createdAt,
+        u.userName
     )
     from MissingAnimalBoard b
+    join b.user u
     """)
     Page<BoardDto_forList> findBoardList(Pageable pageable);
 

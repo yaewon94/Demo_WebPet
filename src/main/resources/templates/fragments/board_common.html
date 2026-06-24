@@ -6,6 +6,7 @@
             <th>번호</th>
             <th>제목</th>
             <th>작성날짜</th>
+            <th>작성자</th>
         </tr>
         </thead>
         <tbody>
@@ -17,9 +18,10 @@
                 </a>
             </td>
             <td th:text="${board.createdAt}"></td>
+            <td th:text="${board.userName}"></td>
         </tr>
         <tr th:if="*{boardPage.empty}">
-            <td colspan="3">등록된 게시물이 없습니다.</td>
+            <td colspan="4">등록된 게시물이 없습니다.</td>
         </tr>
         </tbody>
     </table>
