@@ -19,7 +19,7 @@ public final class ShelterUserOnlyInterceptor implements HandlerInterceptor {
                              HttpServletResponse response,
                              Object handler) throws Exception {
 
-        if (authService.getLoginUser(request).user_type()!= UserType.SHELTER) {
+        if (authService.getUser().getUsertype() != UserType.SHELTER) {
             throw new AuthCheckFailException(
                     ErrorCode.ERROR_NOT_SHELTER_USER,
                     UrlConstants.URL_BOARD_RESCUED_ANIMAL_ROOT,

@@ -20,7 +20,7 @@ public final class NormalUserOnlyInterceptor implements HandlerInterceptor {
                              HttpServletResponse response,
                              Object handler) throws Exception{
 
-        if (authService.getLoginUser(request).user_type() != UserType.NORMAL) {
+        if (authService.getUser().getUsertype() != UserType.NORMAL) {
             throw new AuthCheckFailException(
                     ErrorCode.ERROR_NOT_NORMAL_USER,
                     UrlConstants.URL_BOARD_MISSING_ANIMAL_ROOT,

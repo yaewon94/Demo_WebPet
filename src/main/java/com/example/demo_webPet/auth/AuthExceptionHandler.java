@@ -15,22 +15,8 @@ import java.io.IOException;
 @Slf4j
 class AuthExceptionHandler {
 
-    @ExceptionHandler(LoginFailException.class)
-    public String handle(LoginFailException e, RedirectAttributes ra) {
-
-        log.error(e.getMessage(), e);
-
-        ra.addFlashAttribute("errorMsg", e.getMessage());
-
-        String redirect = e.getRedirectionPage();
-        if(redirect == null || redirect.isEmpty()) return "redirect:" + UrlConstants.URL_LOGIN;
-        else return "redirect:" + UrlConstants.URL_LOGIN + "?redirect=" + e.getRedirectionPage();
-    }
-
     @ExceptionHandler(AuthCheckFailException.class)
     public void handle(AuthCheckFailException e, HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-        log.error(e.getMessage(), e);
 
         // js alert 메세지 추가
         request.getSession().setAttribute(ModelParamConstants.ALERT, e.getMessage());

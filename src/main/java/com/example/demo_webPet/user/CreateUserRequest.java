@@ -12,7 +12,7 @@ record CreateUserRequest(
         @NotBlank(message = UserConstants.MSG_INPUT_ID_REQUIRED)
         @Size(min = VALUE_MIN_USER_NAME_SIZE, max= VALUE_MAX_USER_NAME_SIZE, message = MSG_USER_NAME_SIZE_REQUIRED)
         @Pattern(regexp = UserConstants.PATTERN_REGEXP_USER_NAME, message = MSG_USER_NAME_PATTERN_CONSTRAINT) // 영어, 숫자로만 제한
-        String user_name, // html로 들어오는건 숫자든 문자열이든 모두 자바의 문자열타입으로 받는다
+        String username, // html로 들어오는건 숫자든 문자열이든 모두 자바의 문자열타입으로 받는다
 
         @NotBlank(message = UserConstants.MSG_INPUT_PW_REQUIRED) // java, validation 레벨 검증
         @Size(min = VALUE_MIN_PASSWORD_SIZE, max=VALUE_MAX_PASSWORD_SIZE, message = MSG_PW_SIZE_REQUIRED)

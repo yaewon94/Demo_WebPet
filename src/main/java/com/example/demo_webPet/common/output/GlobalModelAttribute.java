@@ -1,9 +1,9 @@
 package com.example.demo_webPet.common.output;
 
 import com.example.demo_webPet.auth.AuthService;
+import com.example.demo_webPet.auth.LoginUserDetail;
 import com.example.demo_webPet.auth.LoginUserDto;
 import com.example.demo_webPet.common.constants.UrlConstants;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -22,8 +22,15 @@ public final class GlobalModelAttribute {
     }
 
     @ModelAttribute("loginUser")
-    public LoginUserDto getLoginUser(HttpSession session) {
-        return authService.getLoginUser(session);
+    public LoginUserDto getLoginUser() {
+
+        LoginUserDetail user = authService.getUser();
+
+        if (user == null) {
+            return null;
+        }
+
+        return user.getDto();
     }
 
     @ModelAttribute("url_login")

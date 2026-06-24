@@ -28,5 +28,10 @@ public class FlashAttributeAdvice {
             model.addAttribute(ModelParamConstants.ALERT, value);
             session.removeAttribute(ModelParamConstants.ALERT);
         }
+        value = (String)session.getAttribute(ModelParamConstants.ERROR_MSG);
+        if(value != null && !value.isEmpty()) {
+            model.addAttribute(ModelParamConstants.ERROR_MSG, value);
+            session.removeAttribute(ModelParamConstants.ERROR_MSG);
+        }
     }
 }

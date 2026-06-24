@@ -6,7 +6,6 @@ import com.example.demo_webPet.common.constants.UrlConstants;
 import com.example.demo_webPet.common.util.ValidationCheck;
 import com.example.demo_webPet.shelter.ShelterDto;
 import com.example.demo_webPet.shelter.ShelterService;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -50,9 +49,7 @@ final class UserController {
     @PostMapping(UrlConstants.URL_SIGNUP)
     public String createUser(@Valid @ModelAttribute("request") CreateUserRequest request
             , BindingResult bindingResult
-            , Model model
-            , RedirectAttributes ra
-            , HttpSession session) {
+            , Model model) {
 
         // 1. java validation 레벨에서 입력값 검증
         String errorMsg = null;
@@ -89,7 +86,7 @@ final class UserController {
         User user = userService.createUser(request);
 
         // 회원가입 성공 시, 로그인 정보 저장
-        authService.createLoginSession(session, user);
+        authService.autoLogin(user);
 
         // TODO : 프론트에서 회원가입 성공 메세지 출력
         return "redirect:/"; // redirect는 Get메소드 호출
