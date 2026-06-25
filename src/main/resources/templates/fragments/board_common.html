@@ -58,3 +58,16 @@
     <span th:replace="~{fragments/board_buttons :: btn_board_delete}"></span>
     <span th:replace="~{fragments/board_buttons :: btn_board_list}"></span>
 </th:block>
+
+<!-- 게시물 에디터 패널 -->
+<th:block th:fragment="contentEditorPanel">
+    <style>
+        #content + .ck-editor .ck-editor__editable_inline {
+            min-height: 700px;
+        }
+    </style>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+    <textarea id="content" th:field="*{content}"></textarea>
+    <script th:src="@{/js/ckeditor-upload-adapter.js}"></script>
+    <script th:src="@{/js/content-editor.js(v=${appVersion})}"></script>
+</th:block>

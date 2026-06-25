@@ -2,3 +2,19 @@
     <div id="alert" th:data-error-msg="${alert}"></div>
     <script th:src="@{/js/common.js(v=${appVersion})}"></script>
 </th:block>
+
+<th:block th:fragment="tokens">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <script>
+        const csrfToken =
+            document.querySelector(
+                'meta[name="_csrf"]'
+            ).content;
+
+        const csrfHeader =
+            document.querySelector(
+                'meta[name="_csrf_header"]'
+            ).content;
+    </script>
+</th:block>

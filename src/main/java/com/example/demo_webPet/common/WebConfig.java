@@ -4,9 +4,11 @@ import com.example.demo_webPet.auth.GuestOnlyInterceptor;
 import com.example.demo_webPet.auth.NormalUserOnlyInterceptor;
 import com.example.demo_webPet.auth.ShelterUserOnlyInterceptor;
 import com.example.demo_webPet.common.constants.UrlConstants;
+import com.example.demo_webPet.common.upload.FileConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -37,5 +39,15 @@ public class WebConfig implements WebMvcConfigurer {
                         UrlConstants.URL_BOARD_MISSING_ANIMAL_ADD,
                         UrlConstants.URL_BOARD_MISSING_ANIMAL_MODIFY,
                         UrlConstants.URL_BOARD_MISSING_ANIMAL_DELETE);
+    }
+
+    @Override
+    public void addResourceHandlers(
+            ResourceHandlerRegistry registry) {
+
+        registry.addResourceHandler(
+                        FileConstants.UPLOAD_URI + "**") // 요청 url
+                .addResourceLocations(
+                        "file:///" + FileConstants.UPLOAD_DIR);
     }
 }

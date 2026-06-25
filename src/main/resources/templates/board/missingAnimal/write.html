@@ -7,7 +7,8 @@
     <div th:replace="~{fragments/board_common :: boardWriteButtonPanel}"></div>
 
     <!-- form -->
-    <form th:action="${url}" th:object="${request}" th:with="IS_MODIFY=*{id != null}" method="post">
+    <form th:action="${url}" th:object="${request}"
+          th:with="IS_MODIFY=*{id != null}" method="post" enctype="multipart/form-data">
         <p th:if="${errorMsg}"  th:text="${errorMsg}"></p>
         <input th:if="${IS_MODIFY}" type="hidden" th:field="*{id}">
         <div>
@@ -33,14 +34,7 @@
             <!-- TODO : 지도 표시-->
             실종장소 <input type="text" th:field="*{missingLocation}">
         </div>
-        <div>
-            <!-- TODO : 이미지 표시-->
-            이미지 업로드
-        </div>
-        <div>
-            내용
-            <textarea th:field="*{content}"></textarea>
-        </div>
+        <div th:replace="~{fragments/board_common :: contentEditorPanel}"></div>
         <div>
             <button th:unless="${IS_MODIFY}" type="submit">등록</button>
             <button th:if="${IS_MODIFY}" type="submit">수정</button>
