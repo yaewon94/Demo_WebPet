@@ -7,7 +7,7 @@
     <div th:replace="~{fragments/board_common :: boardWriteButtonPanel}"></div>
 
     <!-- form -->
-    <form th:action="${url}" th:object="${request}"
+    <form th:action="@{${add_url}}" th:object="${request}"
           th:with="IS_MODIFY=*{id != null}" method="post" enctype="multipart/form-data">
         <p th:if="${errorMsg}"  th:text="${errorMsg}"></p>
         <input th:if="${IS_MODIFY}" type="hidden" th:field="*{id}">

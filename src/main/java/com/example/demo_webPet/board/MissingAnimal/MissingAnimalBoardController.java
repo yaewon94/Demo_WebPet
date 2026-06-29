@@ -18,7 +18,6 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
-// TODO : 공통 ModelAttribute 부모클래스 만들어서 분리
 @Controller
 @RequiredArgsConstructor
 final class MissingAnimalBoardController extends BoardController {
@@ -35,9 +34,6 @@ final class MissingAnimalBoardController extends BoardController {
     public String showAnimalListPage(
             @RequestParam(defaultValue = BoardConstants.DEFAULT_PAGE) int page,
             Model model){
-
-        model.addAttribute("url",
-                UrlConstants.URL_BOARD_MISSING_ANIMAL_ADD);
         model.addAttribute(BoardConstants.MODEL_PARAM_BOARD_LIST_RESPONSE,
                 new BoardListResponse(page, boardService.getBoardList(page)));
 
@@ -48,7 +44,7 @@ final class MissingAnimalBoardController extends BoardController {
     public String showAnimalAddPage(Model model){
         // 로그인 여부, 일반계정 여부는 interceptor에서 처리
 
-        model.addAttribute("url", UrlConstants.URL_BOARD_MISSING_ANIMAL_ADD);
+        // 기존 form에 작성한 값들 유지할 수 있도록
         if(!model.containsAttribute("request")){
             model.addAttribute("request", MissingAnimalBoardWriteRequest.getNewInstance());
         }
@@ -63,7 +59,6 @@ final class MissingAnimalBoardController extends BoardController {
             BindingResult bindingResult,
             @ModelAttribute("loginUser") LoginUserDto loginUser,
             Model model){
-
         // BindingResult 검증
         ObjectError error = ValidationCheck.getFirstError(bindingResult);
         if(error != null){
@@ -87,7 +82,6 @@ final class MissingAnimalBoardController extends BoardController {
     //public String detail(@PathVariable Long id, Model model)
     @GetMapping(UrlConstants.URL_BOARD_MISSING_ANIMAL_DETAIL)
     public String detail(@RequestParam Long id, Model model){
-
         model.addAttribute("board", boardService.getBoard(id));
         return UrlConstants.URL_BOARD_MISSING_ANIMAL_DETAIL;
     }
@@ -97,10 +91,7 @@ final class MissingAnimalBoardController extends BoardController {
             @RequestParam Long id,
             @ModelAttribute("loginUser") LoginUserDto loginUser,
             Model model){
-
-        model.addAttribute("url", UrlConstants.URL_BOARD_MISSING_ANIMAL_MODIFY);
         model.addAttribute("request", boardService.getBoard(id, loginUser.id()));
-
         return VIEW_NAME_WRITE;
     }
 
@@ -110,7 +101,6 @@ final class MissingAnimalBoardController extends BoardController {
             BindingResult bindingResult,
             @ModelAttribute("loginUser") LoginUserDto loginUser,
             Model model){
-
         // BindingResult 검증
         ObjectError error = ValidationCheck.getFirstError(bindingResult);
         if(error != null){
@@ -132,11 +122,13 @@ final class MissingAnimalBoardController extends BoardController {
     public String deleteBoard(
             @RequestParam Long id,
             @ModelAttribute("loginUser") LoginUserDto loginUser){
-
         boardService.deleteBoard(id, loginUser.id());
         // 게시물 목록으로 이동
         return "redirect:" + UrlConstants.URL_BOARD_MISSING_ANIMAL_LIST;
     }
+
+    @Override
+    protected String getAddUrl(){ return UrlConstants.URL_BOARD_MISSING_ANIMAL_ADD; }
 
     @Override
     protected String getListUrl() {

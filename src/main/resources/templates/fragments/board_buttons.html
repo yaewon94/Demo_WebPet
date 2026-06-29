@@ -1,4 +1,4 @@
-<th:block th:fragment="btn_board_delete" th:if="${loginUser != null}">
+<th:block th:fragment="btn_board_delete" th:if="*{id != null}">
     <form method="post"
           th:action="@{${delete_url}(id=*{id})}"
           onsubmit="return confirm('정말 삭제하시겠습니까?');">

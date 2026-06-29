@@ -6,6 +6,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 @Controller
 abstract public class BoardController {
 
+    @ModelAttribute("add_url")
+    public String addUrl() {
+        return getAddUrl();
+    }
+
     @ModelAttribute("list_url")
     public String listUrl() {
         return getListUrl();
@@ -26,6 +31,7 @@ abstract public class BoardController {
         return getDeleteUrl();
     }
 
+    protected abstract String getAddUrl();
     protected abstract String getListUrl();
     protected abstract String getDetailUrl();
     protected abstract String getModifyUrl();

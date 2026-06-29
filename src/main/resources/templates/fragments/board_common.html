@@ -25,23 +25,23 @@
         </tr>
         </tbody>
     </table>
-    <div th:replace="~{fragments/board_common :: paging(${url})}"></div>
+    <div th:replace="~{fragments/board_common :: paging}"></div>
 </th:block>
 
 <!-- 게시물 목록 페이징 패널 -->
-<th:block th:fragment="paging(LIST_URL_PREFIX)">
+<th:block th:fragment="paging">
     <a th:if="*{startPage > 0}"
-       th:href="*{LIST_URL_PREFIX + '?page=' + (startPage - 1)}">
+       th:href="@{${list_url}(page=${startPage - 1})}">
         이전
     </a>
 
     <a th:each="i : *{#numbers.sequence(startPage, endPage)}"
-       th:href="${LIST_URL_PREFIX + '?page=' + i}"
+       th:href="@{${list_url}(page=${i})}"
        th:text="${i + 1}">
     </a>
 
     <a th:if="*{endPage < boardPage.totalPages - 1}"
-       th:href="*{LIST_URL_PREFIX + '?page=' + (endPage + 1)}">
+       th:href="@{${list_url}(page=${endPage + 1})}">
         다음
     </a>
 </th:block>
