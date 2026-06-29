@@ -36,6 +36,9 @@ dependencies {
 	// lambok
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
+
+	// xss 방지
+	implementation("org.jsoup:jsoup:1.18.1")
 }
 
 tasks.withType<Test> {

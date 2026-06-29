@@ -2,6 +2,8 @@ package com.example.demo_webPet.common.constants;
 
 public final class UrlConstants {
 
+    public static final String BASE_URI = "http://localhost:8080";
+
     public static final String URL_SIGNUP = "/user/signup";
     public static final String URL_LOGIN = "/user/login";
     public static final String URL_LOGOUT = "/user/logout";

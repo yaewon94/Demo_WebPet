@@ -18,13 +18,4 @@ final class MissingAnimalBoard extends Board {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "animal_id", nullable = false)
     private Animal animal;
-
-    // TODO
-    //@Column(nullable = false)
-    private String imgUrl;
-
-    public void update(String title, String content, String imgUrl){
-        super.update(title, content);
-        setImgUrl(imgUrl);
-    }
 }

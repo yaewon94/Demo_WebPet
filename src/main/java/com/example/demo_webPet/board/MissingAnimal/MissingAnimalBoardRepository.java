@@ -50,7 +50,6 @@ interface MissingAnimalBoardRepository extends JpaRepository<MissingAnimalBoard,
           a.species,
           a.missingDate,
           a.missingLocation,
-          b.imgUrl,
           b.content)
      from MissingAnimalBoard b
      join b.animal a

@@ -46,7 +46,7 @@ public abstract class Board
                 Math.min(title.length(), CommonValidConstants.MAX_SIZE_TITLE));
     }
 
-    protected void update(String title, String content){
+    public final void update(String title, String content){
         setTitle(title);
         setContent(content);
     }

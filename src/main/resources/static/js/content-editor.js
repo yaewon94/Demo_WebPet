@@ -1,5 +1,10 @@
 const editorElement = document.querySelector('#content');
 
+document.querySelector("form")
+    .addEventListener("submit", () => {
+        document.querySelector("#content").value = window.editor.getData();
+    });
+
 if (editorElement) {
 
     ClassicEditor

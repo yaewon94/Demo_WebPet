@@ -4,6 +4,7 @@ import com.example.demo_webPet.animal.Animal;
 import com.example.demo_webPet.board.BoardConstants;
 import com.example.demo_webPet.board.BoardDeniedException;
 import com.example.demo_webPet.board.BoardDto_forList;
+import com.example.demo_webPet.common.output.HtmlUtils;
 import com.example.demo_webPet.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,8 +33,7 @@ class MissingAnimalBoardService {
         board.setUser(userRepository.getReferenceById(user_id));
         board.setTitle(request.title());
         board.setAnimal(Animal.from(request));
-        board.setImgUrl(request.imageUrl());
-        board.setContent(request.content());
+        board.setContent(HtmlUtils.sanitize(request.content()));
 
         boardRepository.save(board);
         return board.getId();
@@ -59,8 +59,7 @@ class MissingAnimalBoardService {
         );
         board.update(
                 request.title(),
-                request.content(),
-                request.imageUrl());
+                request.content());
     }
 
     @Transactional

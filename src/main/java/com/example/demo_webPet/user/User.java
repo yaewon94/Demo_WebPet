@@ -1,6 +1,7 @@
 package com.example.demo_webPet.user;
 
 import com.example.demo_webPet.shelter.Shelter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -9,6 +10,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import static com.example.demo_webPet.user.UserConstants.PATTERN_REGEXP_USER_NAME;
+
+// TODO : 쪽지 기능추가
 
 @Entity
 @Getter
@@ -40,6 +43,7 @@ public final class User {
     @NotBlank
     @Column(nullable = false)
     @Setter(AccessLevel.PACKAGE)
+    @JsonIgnore
     private String password;
 
     /*private String phone;

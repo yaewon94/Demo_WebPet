@@ -26,14 +26,8 @@
         <div>
             실종장소 <span th:text="*{missingLocation}"></span>
         </div>
-        <div>
-            <!-- TODO : 이미지 포함 -->
-            <!-- TODO : 이미지 - 글 - 이미지 - 글 가능하게-->
-            <span th:text="*{content}"></span>
-        </div>
+        <div class="board-content" th:utext="*{content}"></div>
         <!-- TODO : 댓글 목록 -->
-        <div>
-        </div>
     </div>
 </div>
 </html>
