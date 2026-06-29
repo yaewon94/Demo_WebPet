@@ -2,15 +2,14 @@ package com.example.demo_webPet.board.MissingAnimal;
 
 import com.example.demo_webPet.animal.AnimalSpecies;
 import com.example.demo_webPet.auth.LoginUserDto;
-import com.example.demo_webPet.board.BoardConstants;
-import com.example.demo_webPet.board.BoardController;
-import com.example.demo_webPet.board.BoardListResponse;
+import com.example.demo_webPet.board.*;
 import com.example.demo_webPet.common.constants.UrlConstants;
 import com.example.demo_webPet.common.output.ModelParamConstants;
 import com.example.demo_webPet.common.util.UriBuilder;
 import com.example.demo_webPet.common.util.ValidationCheck;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +23,7 @@ final class MissingAnimalBoardController extends BoardController {
 
     private static final String VIEW_NAME_WRITE = "/board/missingAnimal/write";
     private final MissingAnimalBoardService boardService;
+    private final BoardCommentService commentService;
 
     @ModelAttribute("list_animalSpecies") // GET, POST 둘다 적용
     private AnimalSpecies[] animalSpecies() {
@@ -34,8 +34,14 @@ final class MissingAnimalBoardController extends BoardController {
     public String showAnimalListPage(
             @RequestParam(defaultValue = BoardConstants.DEFAULT_PAGE) int page,
             Model model){
-        model.addAttribute(BoardConstants.MODEL_PARAM_BOARD_LIST_RESPONSE,
-                new BoardListResponse(page, boardService.getBoardList(page)));
+        String urlPrefix = UriBuilder.getUrl(
+                UrlConstants.URL_BOARD_MISSING_ANIMAL_LIST,
+                Map.of("page", ""));
+        Page<BoardDto_forList> boardList = boardService.getBoardList(page);
+        model.addAttribute(BoardConstants.MODEL_PARAM_BOARD_LIST, boardList);
+        model.addAttribute(
+                BoardConstants.MODEL_PARAM_PAGING,
+                new PagingResponse(urlPrefix, page, boardList.getTotalPages()));
 
         return UrlConstants.URL_BOARD_MISSING_ANIMAL_LIST;
     }
@@ -81,8 +87,20 @@ final class MissingAnimalBoardController extends BoardController {
     //@GetMapping("/{id}")
     //public String detail(@PathVariable Long id, Model model)
     @GetMapping(UrlConstants.URL_BOARD_MISSING_ANIMAL_DETAIL)
-    public String detail(@RequestParam Long id, Model model){
+    public String detail(@RequestParam Long id,
+                         @RequestParam(defaultValue = BoardConstants.DEFAULT_PAGE) int page,
+                         Model model){
+        Page<BoardCommentResponse> commentList = commentService.getCommentList(BoardType.MISSING_ANIMAL, id, page);
+        String urlPrefix = UriBuilder.getUrl(
+                UrlConstants.URL_BOARD_MISSING_ANIMAL_DETAIL,
+                Map.of("id", id.toString(), "commentPage", ""));
+
         model.addAttribute("board", boardService.getBoard(id));
+        model.addAttribute(BoardConstants.MODEL_PARAM_BOARD_COMMENT_LIST, commentList);
+        model.addAttribute(
+                BoardConstants.MODEL_PARAM_PAGING,
+                new PagingResponse(urlPrefix, page, commentList.getTotalPages()));
+
         return UrlConstants.URL_BOARD_MISSING_ANIMAL_DETAIL;
     }
 

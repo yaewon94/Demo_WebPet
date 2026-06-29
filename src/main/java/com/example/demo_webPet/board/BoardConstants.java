@@ -7,8 +7,10 @@ public final class BoardConstants {
     private BoardConstants(){}
 
     public static final String DEFAULT_PAGE = "0";
-    public static final int PAGE_SIZE = 2;
+    public static final int PAGE_SIZE = 5;
     public static final Sort SORT = Sort.by("id").descending();
 
-    public static final String MODEL_PARAM_BOARD_LIST_RESPONSE = "boardListResponse";
+    public static final String MODEL_PARAM_BOARD_LIST = "boardList";
+    public static final String MODEL_PARAM_BOARD_COMMENT_LIST = "commentList";
+    public static final String MODEL_PARAM_PAGING = "paging";
 }

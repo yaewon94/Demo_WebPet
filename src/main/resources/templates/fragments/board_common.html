@@ -1,5 +1,5 @@
 <!-- 게시물 목록 패널 -->
-<th:block th:fragment="list" th:object="${boardListResponse}">
+<th:block th:fragment="list">
     <table>
         <thead>
         <tr>
@@ -10,7 +10,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="board : *{boardPage.content}">
+        <tr th:each="board : ${boardList.content}">
             <td th:text="${board.id}"></td>
             <td>
                 <a th:href="@{${detail_url}(id=${board.id})}"
@@ -20,28 +20,42 @@
             <td th:text="${board.createdAt}"></td>
             <td th:text="${board.userName}"></td>
         </tr>
-        <tr th:if="*{boardPage.empty}">
+        <tr th:if="${boardList.empty}">
             <td colspan="4">등록된 게시물이 없습니다.</td>
         </tr>
         </tbody>
     </table>
-    <div th:replace="~{fragments/board_common :: paging}"></div>
+    <div th:replace="~{fragments/board_common :: paging(${boardList})}"></div>
 </th:block>
 
-<!-- 게시물 목록 페이징 패널 -->
-<th:block th:fragment="paging">
-    <a th:if="*{startPage > 0}"
-       th:href="@{${list_url}(page=*{startPage - 1})}">
+<!-- 게시물 댓글 패널 -->
+<th:block th:fragment="commentsPanel">
+    <div th:each="comment : ${commentList}">
+        <div class="comment-header">
+            <span th:text="${comment.userName}"></span>
+            <span th:text="${comment.createdAt}"></span>
+        </div>
+        <div class="comment-body">
+            <span th:text="${comment.content}"></span>
+        </div>
+    </div>
+    <div th:replace="~{fragments/board_common :: paging(${commentList})}"></div>
+</th:block>
+
+<!-- 페이징 패널 -->
+<th:block th:fragment="paging(listObj)" th:unless="${listObj.empty}">
+    <a th:if="${paging.startPage > 0}"
+       th:href="${paging.urlPrefix + paging.startPage - 1}">
         이전
     </a>
 
-    <a th:each="i : *{#numbers.sequence(startPage, endPage)}"
-       th:href="@{${list_url}(page=${i})}"
+    <a th:each="i : ${#numbers.sequence(paging.startPage, paging.endPage)}"
+       th:href="${paging.urlPrefix + i}"
        th:text="${i + 1}">
     </a>
 
-    <a th:if="*{endPage < boardPage.totalPages - 1}"
-       th:href="@{${list_url}(page=*{endPage + 1})}">
+    <a th:if="${paging.endPage} < ${listObj.totalPages - 1}"
+       th:href="${paging.urlPrefix + paging.endPage + 1}">
         다음
     </a>
 </th:block>

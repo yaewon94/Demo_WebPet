@@ -34,8 +34,6 @@ public abstract class Board
     @Setter(AccessLevel.PUBLIC)
     private String content;
 
-    // TODO : 댓글 리스트
-
     protected Board(){}
 
     public void setTitle(String title){
