@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 @Getter
 public class BoardListResponse {
 
-    private static final int BOARD_GROUP_SIZE = 2;
+    private static final int BOARD_GROUP_SIZE = 10;
 
     private final int startPage;
     private final int endPage;

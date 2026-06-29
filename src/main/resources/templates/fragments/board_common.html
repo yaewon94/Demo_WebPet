@@ -31,7 +31,7 @@
 <!-- 게시물 목록 페이징 패널 -->
 <th:block th:fragment="paging">
     <a th:if="*{startPage > 0}"
-       th:href="@{${list_url}(page=${startPage - 1})}">
+       th:href="@{${list_url}(page=*{startPage - 1})}">
         이전
     </a>
 
@@ -41,7 +41,7 @@
     </a>
 
     <a th:if="*{endPage < boardPage.totalPages - 1}"
-       th:href="@{${list_url}(page=${endPage + 1})}">
+       th:href="@{${list_url}(page=*{endPage + 1})}">
         다음
     </a>
 </th:block>
