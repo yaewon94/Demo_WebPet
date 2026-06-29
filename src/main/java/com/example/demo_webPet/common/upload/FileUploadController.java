@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+// TODO : 대량요청, 핫링크 등 악의적 이용 방지 코드 추가
 @RestController
 @RequiredArgsConstructor
 public class FileUploadController {
@@ -15,7 +16,6 @@ public class FileUploadController {
     @PostMapping("/upload/image")
     @ResponseBody
     public ImageUploadResponse uploadImage(@RequestParam("file") MultipartFile file) throws IOException {
-        // TODO : 직접 URL 쳐서 들어올 경우 막아버리기
         return fileUploadService.uploadImage(file);
     }
 }
