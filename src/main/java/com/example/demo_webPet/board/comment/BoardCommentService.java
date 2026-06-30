@@ -20,7 +20,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class BoardCommentService {
+class BoardCommentService {
 
     private static final int MAX_SIZE_GUEST_USERNAME = 10;
     private static final int MAX_SIZE_GUEST_PASSWORD = 10;
@@ -31,7 +31,7 @@ public class BoardCommentService {
     private final BoardQueryService boardQueryService;
 
     @Transactional(readOnly = true)
-    public Page<BoardCommentResponse> getCommentList(BoardType boardType, Long boardId, int page){
+    Page<BoardCommentResponse> getCommentList(BoardType boardType, Long boardId, int page){
         Pageable pageable = PageRequest.of(page, BoardConstants.PAGE_SIZE);
         return commentRepository.findCommentList(boardType, boardId, pageable);
     }

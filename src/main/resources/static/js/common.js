@@ -15,3 +15,10 @@ async function postJson(url, data) {
         body: JSON.stringify(data)
     });
 }
+
+async function getJson(url, params) {
+    const query = new URLSearchParams(params);
+    return fetch(`${url}?${query}`, {
+        method: "GET"
+    });
+}

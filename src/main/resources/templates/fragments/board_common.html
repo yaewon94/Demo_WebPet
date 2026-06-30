@@ -31,16 +31,10 @@
 <!-- 게시물 댓글 패널 -->
 <th:block th:fragment="commentsPanel">
     <div th:replace="~{fragments/board_common :: commentWritePanel}"></div>
-    <div th:each="comment : ${commentList}">
-        <div class="comment-header">
-            <span th:text="${comment.userName}"></span>
-            <span th:text="${comment.createdAt}"></span>
-        </div>
-        <div class="comment-body">
-            <span th:text="${comment.content}"></span>
-        </div>
-    </div>
-    <div th:replace="~{fragments/board_common :: paging(${commentList})}"></div>
+    <p id="comment-list-error-msg"></p>
+    <div id="comment-list"></div>
+    <div id="comment-paging"></div>
+    <script th:src="@{/js/board-comment.js(v=${appVersion})}"></script>
 </th:block>
 
 <!-- 게시물 댓글 작성 패널 -->
@@ -48,7 +42,7 @@
     <div>
         댓글 작성
     </div>
-    <p class="error-msg"  id="error-msg"></p>
+    <p class="error-msg"  id="comment-write-error-msg"></p>
     <form action="/board/comment/add" th:object="${commentWriteRequest}" method="post" id="board-comment-add-form">
         <div th:if="${loginUser == null}">
             <input type="text" th:field="*{userName}" placeholder="이름">
@@ -61,7 +55,6 @@
         <input type="hidden" th:field="*{boardType}">
         <input type="hidden" th:field="*{boardId}">
     </form>
-    <script th:src="@{/js/board-comment.js(v=${appVersion})}"></script>
 </th:block>
 
 <!-- 페이징 패널 -->

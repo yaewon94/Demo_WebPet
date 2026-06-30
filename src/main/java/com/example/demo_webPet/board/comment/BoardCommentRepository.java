@@ -13,15 +13,15 @@ interface BoardCommentRepository extends JpaRepository<BoardComment, Long> {
     @Query("""
     select new com.example.demo_webPet.board.comment.BoardCommentResponse(
         c.id,
-        u.userName,
+        coalesce(u.userName, c.guestUserName),
         c.content,
         c.createdAt
         )
-    from BoardComment c
-    join c.user u
-    where c.boardType = :boardType
-    and c.boardId = :boardId
-    order by c.createdAt asc
+     from BoardComment c
+     left join c.user u
+     where c.boardType = :boardType
+     and c.boardId = :boardId
+     order by c.createdAt asc
     """)
     Page<BoardCommentResponse> findCommentList(
             @Param("boardType") BoardType boardType,
