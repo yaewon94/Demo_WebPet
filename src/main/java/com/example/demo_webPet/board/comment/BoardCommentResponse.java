@@ -1,4 +1,4 @@
-package com.example.demo_webPet.board;
+package com.example.demo_webPet.board.comment;
 
 import com.example.demo_webPet.common.output.FormatConstants;
 

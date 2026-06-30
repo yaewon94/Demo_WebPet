@@ -16,6 +16,7 @@ public enum ErrorCode {
     ERROR_DUPLICATED_USER_NAME("E_User1", "이미 존재하는 아이디 입니다"),
 
     ERROR_BOARD_ACCESS_DENIED("E_Board1", "해당 게시물에 접근할 수 없습니다"),
+    BOARD_NOT_EXIST("E_Board2", "존재하지 않는 게시물입니다"),
 
     ERROR_FILE_REQUIRED("E_File1", "파일을 업로드 해주세요"),
     ERROR_ONLY_IMAGE_FILE_REQUIRED("E_File2", "이미지 파일만 업로드 가능합니다"),

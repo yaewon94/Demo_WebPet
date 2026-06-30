@@ -49,7 +49,7 @@ final class UserController {
     @PostMapping(UrlConstants.URL_SIGNUP)
     public String createUser(@Valid @ModelAttribute("request") CreateUserRequest request
             , BindingResult bindingResult
-            , Model model) {
+            , Model model) throws IllegalAccessException {
 
         // 1. java validation 레벨에서 입력값 검증
         String errorMsg = null;

@@ -12,5 +12,6 @@ public final class BoardConstants {
 
     public static final String MODEL_PARAM_BOARD_LIST = "boardList";
     public static final String MODEL_PARAM_BOARD_COMMENT_LIST = "commentList";
+    public static final String MODEL_PARAM_BOARD_COMMENT_WRITE_REQUEST = "commentWriteRequest";
     public static final String MODEL_PARAM_PAGING = "paging";
 }

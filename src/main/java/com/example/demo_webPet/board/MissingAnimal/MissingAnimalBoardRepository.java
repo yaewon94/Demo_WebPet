@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-interface MissingAnimalBoardRepository extends JpaRepository<MissingAnimalBoard, Long> {
+public interface MissingAnimalBoardRepository extends JpaRepository<MissingAnimalBoard, Long> {
 
     @Query("""
     select new com.example.demo_webPet.board.BoardDto_forList(

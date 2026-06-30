@@ -20,7 +20,7 @@ public final class GuestOnlyInterceptor implements HandlerInterceptor {
                              Object handler) throws Exception {
 
         // 로그인한 상태에서 회원가입, 로그인 페이지 접속한 경우 호출됨
-        if (authService.isLogin()) {
+        if (authService.getUser() != null) {
 
             // 알림 메세지
             request.getSession().setAttribute(ModelParamConstants.ALERT, ErrorCode.ERROR_ALREADY_LOGGED_IN.getMessage());
