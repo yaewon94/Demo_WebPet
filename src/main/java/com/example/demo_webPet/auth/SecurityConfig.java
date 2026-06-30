@@ -31,6 +31,7 @@ public class SecurityConfig {
                                 "/",
                                 UrlConstants.URL_SIGNUP,
                                 UrlConstants.URL_LOGIN,
+                                "/board/comment/**",
                                 "/upload/**",
                                 "/**/list",
                                 "/**/detail",

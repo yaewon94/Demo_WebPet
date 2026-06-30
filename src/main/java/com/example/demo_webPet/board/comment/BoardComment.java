@@ -25,9 +25,17 @@ class BoardComment {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false, updatable = false)
+    @JoinColumn(name = "user_id", updatable = false)
     @Setter(AccessLevel.PACKAGE)
     private User user;
+
+    @Column(updatable = false)
+    @Setter(AccessLevel.PACKAGE)
+    private String guestUserName;
+
+    @Column(updatable = false)
+    @Setter(AccessLevel.PACKAGE)
+    private String guestPassword;
 
     @Column(nullable = false, updatable = false)
     @Enumerated(EnumType.STRING)

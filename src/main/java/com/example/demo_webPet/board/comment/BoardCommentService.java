@@ -20,37 +20,37 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class BoardCommentService {
+
+    private static final int MAX_SIZE_GUEST_USERNAME = 10;
+    private static final int MAX_SIZE_GUEST_PASSWORD = 10;
 
     private final BoardCommentRepository commentRepository;
     private final UserRepository userRepository;
     private final AuthService authService;
     private final BoardQueryService boardQueryService;
 
+    @Transactional(readOnly = true)
     public Page<BoardCommentResponse> getCommentList(BoardType boardType, Long boardId, int page){
         Pageable pageable = PageRequest.of(page, BoardConstants.PAGE_SIZE);
         return commentRepository.findCommentList(boardType, boardId, pageable);
     }
 
-    @Transactional
     BoardCommentResponse addComment(BoardCommentWriteRequest request){
-
         LoginUserDetail loginUser = authService.getUser();
-
-        // guest인 경우 일부 dto 필드 validation 체크
         if(loginUser == null){
-            if(request.userName().isBlank()){
-                throw new CustomNotValidException(Map.of("userName", "작성자 이름을 입력하세요"));
-            }else if(request.password().isBlank()){
-                throw new CustomNotValidException(Map.of("password", "비밀번호를 입력하세요"));
-            }
+            return addCommentGuest(request);
+        }else{
+            return addCommentLoginUser(request, loginUser.getDto().id());
         }
+    }
 
+    @Transactional
+    private BoardCommentResponse addCommentLoginUser(BoardCommentWriteRequest request, Long userId){
         // DB 저장
         if(boardQueryService.existsBoard(request.boardType(), request.boardId())){
             BoardComment comment = new BoardComment();
-            comment.setUser(userRepository.getReferenceById(loginUser.getDto().id()));
+            comment.setUser(userRepository.getReferenceById(userId));
             comment.setBoardType(request.boardType());
             comment.setBoardId(request.boardId());
             comment.setContent(request.content());
@@ -59,6 +59,41 @@ public class BoardCommentService {
             return new BoardCommentResponse(
                     comment.getId(),
                     comment.getUser().getUserName(),
+                    comment.getContent(),
+                    comment.getCreatedAt());
+        }else{
+            throw new BoardDeniedException(ErrorCode.BOARD_NOT_EXIST);
+        }
+    }
+
+    @Transactional
+    private BoardCommentResponse addCommentGuest(BoardCommentWriteRequest request){
+        // validation 체크
+        if(request.userName().isBlank()){
+            throw new CustomNotValidException(Map.of("userName", "작성자 이름을 입력하세요"));
+        }else if(request.userName().length() > MAX_SIZE_GUEST_USERNAME){
+            String errorMsg = "작성자 이름은 " + MAX_SIZE_GUEST_USERNAME + "글자 이하만 가능합니다";
+            throw new CustomNotValidException(Map.of("userName", errorMsg));
+        }else if(request.password().isBlank()){
+            throw new CustomNotValidException(Map.of("password", "비밀번호를 입력하세요"));
+        }else if(request.password().length() > MAX_SIZE_GUEST_PASSWORD){
+            String errorMsg = "비밀번호는 " + MAX_SIZE_GUEST_PASSWORD + "글자 이하만 가능합니다";
+            throw new CustomNotValidException(Map.of("password", errorMsg));
+        }
+
+        // DB 저장
+        if(boardQueryService.existsBoard(request.boardType(), request.boardId())){
+            BoardComment comment = new BoardComment();
+            comment.setGuestUserName(request.userName());
+            comment.setGuestPassword(request.password());
+            comment.setBoardType(request.boardType());
+            comment.setBoardId(request.boardId());
+            comment.setContent(request.content());
+            commentRepository.save(comment);
+
+            return new BoardCommentResponse(
+                    comment.getId(),
+                    comment.getGuestUserName(),
                     comment.getContent(),
                     comment.getCreatedAt());
         }else{

@@ -48,8 +48,8 @@
     <div>
         댓글 작성
     </div>
+    <p class="error-msg"  id="error-msg"></p>
     <form action="/board/comment/add" th:object="${commentWriteRequest}" method="post" id="board-comment-add-form">
-        <p class="error-msg" th:if="${errorMsg}" th:text="${errorMsg}" id="error-msg"></p>
         <div th:if="${loginUser == null}">
             <input type="text" th:field="*{userName}" placeholder="이름">
             <input type="password" th:field="*{password}" placeholder="비밀번호">
