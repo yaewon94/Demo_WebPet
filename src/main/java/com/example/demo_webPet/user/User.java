@@ -24,7 +24,7 @@ public final class User {
     //private USER_ID_TYPE id;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @NotBlank
     @Pattern(regexp = PATTERN_REGEXP_USER_NAME)

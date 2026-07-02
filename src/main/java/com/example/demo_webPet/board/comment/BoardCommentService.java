@@ -13,10 +13,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -32,8 +34,34 @@ class BoardCommentService {
 
     @Transactional(readOnly = true)
     Page<BoardCommentResponse> getCommentList(BoardType boardType, Long boardId, int page){
-        Pageable pageable = PageRequest.of(page, BoardConstants.PAGE_SIZE);
-        return commentRepository.findCommentList(boardType, boardId, pageable);
+        Pageable pageable = PageRequest.of(
+                page,
+                BoardConstants.PAGE_SIZE,
+                Sort.by("createdAt").ascending());
+        Page<BoardComment> comments = commentRepository.findByBoardTypeAndBoardId(boardType, boardId, pageable);
+        LoginUserDetail loginUser = authService.getUser();
+        Long loginUserId = loginUser != null? loginUser.getDto().id() : null;
+
+        return comments.map(comment -> {
+            // 비회원 댓글
+            if (comment.getUser() == null) {
+                return new BoardCommentResponse(
+                        comment.getId(),
+                        comment.getGuestUserName(),
+                        comment.getContent(),
+                        comment.getCreatedAt(),
+                        true
+                );
+            }
+            // 회원 댓글
+            return new BoardCommentResponse(
+                    comment.getId(),
+                    comment.getUser().getUserName(),
+                    comment.getContent(),
+                    comment.getCreatedAt(),
+                    Objects.equals(loginUserId, comment.getUser().getId())
+            );
+        });
     }
 
     BoardCommentResponse addComment(BoardCommentWriteRequest request){
@@ -60,7 +88,8 @@ class BoardCommentService {
                     comment.getId(),
                     comment.getUser().getUserName(),
                     comment.getContent(),
-                    comment.getCreatedAt());
+                    comment.getCreatedAt(),
+                    true);
         }else{
             throw new BoardDeniedException(ErrorCode.BOARD_NOT_EXIST);
         }
@@ -95,7 +124,8 @@ class BoardCommentService {
                     comment.getId(),
                     comment.getGuestUserName(),
                     comment.getContent(),
-                    comment.getCreatedAt());
+                    comment.getCreatedAt(),
+                    true);
         }else{
             throw new BoardDeniedException(ErrorCode.BOARD_NOT_EXIST);
         }

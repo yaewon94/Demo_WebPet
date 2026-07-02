@@ -63,20 +63,30 @@ async function showCommentList(commentPage=0){
 
 function createCommentListHTML(comments){
     const commentList = document.getElementById("comment-list");
-    commentList.innerHTML = "";
+    let html = "";
+
     comments.forEach(comment => {
-        commentList.innerHTML += `
+        html += `
         <div class="comment">
             <div>
-                <span>${comment.userName}</span>
-                <span>${comment.createdAt}</span>
+               <span>${comment.userName}</span>
+               <span>${comment.createdAt}</span>
             </div>
             <div>
                 <span>${comment.content}</span>
-            </div>
-        </div>
-    `;
+            </div>`;
+
+        if (comment.canUpdate) {
+            html += `
+                <div>
+                   수정, 삭제 버튼 공간
+                </div>`;
+        }
+
+        html += `</div>`;
     })
+
+    commentList.innerHTML += html;
 }
 
 // 댓글 페이징 처리

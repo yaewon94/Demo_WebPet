@@ -8,9 +8,10 @@ record BoardCommentResponse(
         Long id,
         String userName,
         String content,
-        String createdAt
+        String createdAt,
+        boolean canUpdate
 ) {
-    BoardCommentResponse(Long id, String userName, String content, LocalDateTime createdAt){
-        this(id, userName, content, createdAt.format(FormatConstants.YMD_HMS));
+    BoardCommentResponse(Long id, String userName, String content, LocalDateTime createdAt, boolean canUpdate){
+        this(id, userName, content, createdAt.format(FormatConstants.YMD_HMS), canUpdate);
     }
 }

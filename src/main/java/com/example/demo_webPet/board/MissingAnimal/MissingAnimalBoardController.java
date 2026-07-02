@@ -3,6 +3,7 @@ package com.example.demo_webPet.board.MissingAnimal;
 import com.example.demo_webPet.animal.AnimalSpecies;
 import com.example.demo_webPet.auth.LoginUserDto;
 import com.example.demo_webPet.board.*;
+import com.example.demo_webPet.board.comment.BoardCommentWriteRequest;
 import com.example.demo_webPet.common.constants.UrlConstants;
 import com.example.demo_webPet.common.output.ModelParamConstants;
 import com.example.demo_webPet.common.util.UriBuilder;
@@ -23,7 +24,6 @@ final class MissingAnimalBoardController extends BoardController {
 
     private static final String VIEW_NAME_WRITE = "/board/missingAnimal/write";
     private final MissingAnimalBoardService boardService;
-    private final BoardCommentService commentService;
 
     @ModelAttribute("list_animalSpecies") // GET, POST 둘다 적용
     private AnimalSpecies[] animalSpecies() {
@@ -90,16 +90,14 @@ final class MissingAnimalBoardController extends BoardController {
     public String detail(@RequestParam Long id,
                          @RequestParam(defaultValue = BoardConstants.DEFAULT_PAGE) int page,
                          Model model){
-        Page<BoardCommentResponse> commentList = commentService.getCommentList(BoardType.MISSING_ANIMAL, id, page);
         String urlPrefix = UriBuilder.getUrl(
                 UrlConstants.URL_BOARD_MISSING_ANIMAL_DETAIL,
                 Map.of("id", id.toString(), "commentPage", ""));
 
         model.addAttribute("board", boardService.getBoard(id));
-        model.addAttribute(BoardConstants.MODEL_PARAM_BOARD_COMMENT_LIST, commentList);
         model.addAttribute(
-                BoardConstants.MODEL_PARAM_PAGING,
-                new PagingResponse(urlPrefix, page, commentList.getTotalPages()));
+                BoardConstants.MODEL_PARAM_BOARD_COMMENT_WRITE_REQUEST,
+                BoardCommentWriteRequest.getNewInstance(BoardType.MISSING_ANIMAL, id));
 
         return UrlConstants.URL_BOARD_MISSING_ANIMAL_DETAIL;
     }
