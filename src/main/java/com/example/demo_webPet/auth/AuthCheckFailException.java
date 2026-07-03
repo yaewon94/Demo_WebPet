@@ -1,7 +1,7 @@
 package com.example.demo_webPet.auth;
 
 import com.example.demo_webPet.common.exception.BaseRuntimeException;
-import com.example.demo_webPet.common.exception.ErrorCode;
+import com.example.demo_webPet.common.error.ErrorCode;
 import lombok.Getter;
 
 @Getter

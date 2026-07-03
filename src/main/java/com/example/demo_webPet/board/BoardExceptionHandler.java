@@ -12,7 +12,12 @@ public class BoardExceptionHandler {
 
     @ExceptionHandler(BoardDeniedException.class)
     public String handle(BoardDeniedException e, RedirectAttributes ra) {
+        // TODO : 리다이렉션 메소드 만들어서 분리
+        String redirectUrl = "";
+        String prevUrl = e.getPrevUrl();
+
         ra.addFlashAttribute(ModelParamConstants.ALERT, e.getMessage());
-        return "redirect:/";
+        if(prevUrl != null && prevUrl.isBlank()) redirectUrl = e.getPrevUrl();
+        return "redirect:/" + redirectUrl;
     }
 }

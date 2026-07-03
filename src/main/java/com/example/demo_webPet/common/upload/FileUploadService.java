@@ -1,9 +1,8 @@
 package com.example.demo_webPet.common.upload;
 
-import com.example.demo_webPet.common.exception.ErrorCode;
+import com.example.demo_webPet.common.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

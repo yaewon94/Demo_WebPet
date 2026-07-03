@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
-import static com.example.demo_webPet.common.exception.ErrorCode.ERROR_BOARD_ACCESS_DENIED;
+import static com.example.demo_webPet.common.error.ErrorCode.ERROR_BOARD_ACCESS_DENIED;
 
 @Service
 @RequiredArgsConstructor
@@ -64,12 +64,12 @@ class MissingAnimalBoardService {
 
     @Transactional
     void deleteBoard(Long boardId, Long loginUserId){
-
         int deleted = boardRepository.deleteByIdAndUserId(boardId, loginUserId);
         if (deleted == 0) {
             // 삭제된 게시물이 없다 => 게시물 작성자 id != 현재 로그인 유저 id
             throw new BoardDeniedException(ERROR_BOARD_ACCESS_DENIED);
         }
+        // TODO : 해당 게시물에 딸린 댓글들도 삭제
     }
 
 

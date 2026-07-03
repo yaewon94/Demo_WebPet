@@ -1,6 +1,6 @@
 package com.example.demo_webPet.auth;
 
-import com.example.demo_webPet.common.exception.ErrorCode;
+import com.example.demo_webPet.common.error.ErrorCode;
 import com.example.demo_webPet.user.User;
 import com.example.demo_webPet.user.UserRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,5 +1,5 @@
 package com.example.demo_webPet.user;
-import com.example.demo_webPet.common.exception.ErrorCode;
+import com.example.demo_webPet.common.error.ErrorCode;
 import com.example.demo_webPet.shelter.ShelterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
