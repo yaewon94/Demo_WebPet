@@ -27,7 +27,9 @@
             실종장소 <span th:text="*{missingLocation}"></span>
         </div>
         <div class="board-content" th:utext="*{content}"></div>
-        <div th:replace="~{fragments/board_common :: commentsPanel}"></div>
     </div>
+
+    <!-- 댓글 패널 -->
+    <div th:replace="~{fragments/board_common :: commentsPanel}"></div>
 </div>
 </html>

@@ -2,6 +2,7 @@ package com.example.demo_webPet.board.MissingAnimal;
 
 import com.example.demo_webPet.animal.Animal;
 import com.example.demo_webPet.board.Board;
+import com.example.demo_webPet.board.BoardType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,4 +19,8 @@ final class MissingAnimalBoard extends Board {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "animal_id", nullable = false)
     private Animal animal;
+
+    MissingAnimalBoard(){
+        super(BoardType.MISSING_ANIMAL);
+    }
 }

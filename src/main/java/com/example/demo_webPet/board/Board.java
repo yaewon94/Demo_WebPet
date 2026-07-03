@@ -18,6 +18,9 @@ public abstract class Board
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Transient // DB에 저장하지 않는 필드
+    private final BoardType type;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     @Setter(AccessLevel.PUBLIC)
@@ -34,7 +37,9 @@ public abstract class Board
     @Setter(AccessLevel.PUBLIC)
     private String content;
 
-    protected Board(){}
+    protected Board(BoardType type){
+        this.type = type;
+    }
 
     public void setTitle(String title){
         // 최대 글자수를 넘으면 잘라서 db에 저장

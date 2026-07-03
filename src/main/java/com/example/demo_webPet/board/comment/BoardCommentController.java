@@ -15,9 +15,9 @@ final class BoardCommentController {
     private final BoardCommentService commentService;
 
     @PostMapping("/add")
-    public BoardCommentResponse addComment(@RequestBody @Valid BoardCommentWriteRequest request){
+    public void addComment(@RequestBody @Valid BoardCommentWriteRequest request){
         // dto validation 오류는 GlobalExceptionRestApiExceptionHandler에서 처리
-        return commentService.addComment(request);
+        commentService.addComment(request);
     }
 
     @GetMapping("/{boardType}/{boardId}")
@@ -33,5 +33,11 @@ final class BoardCommentController {
         return new BoardCommentListResponse(
                 comments,
                 new PagingResponse(urlPrefix, commentPage, comments.getTotalPages()));
+    }
+
+    @PostMapping("/modify")
+    public void modifyComment(@RequestBody @Valid BoardCommentWriteRequest request) throws IllegalAccessException {
+        // dto validation 오류는 GlobalExceptionRestApiExceptionHandler에서 처리
+        commentService.modifyComment(request);
     }
 }

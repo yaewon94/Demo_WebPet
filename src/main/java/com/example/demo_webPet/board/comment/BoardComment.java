@@ -29,7 +29,6 @@ class BoardComment {
     @Setter(AccessLevel.PACKAGE)
     private User user;
 
-    @Column(updatable = false)
     @Setter(AccessLevel.PACKAGE)
     private String guestUserName;
 

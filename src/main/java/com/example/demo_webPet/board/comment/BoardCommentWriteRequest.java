@@ -8,6 +8,8 @@ public record BoardCommentWriteRequest(
         BoardType boardType,
         Long boardId,
 
+        Long commentId,
+
         // guest 인 경우에만 사용
         String userName,
         String password,
@@ -15,7 +17,7 @@ public record BoardCommentWriteRequest(
         @NotBlank(message = CommonValidConstants.MSG_INPUT_CONTENT)
         String content
 ) {
-    public static BoardCommentWriteRequest getNewInstance(BoardType boardType, Long boardId){
-        return new BoardCommentWriteRequest(boardType, boardId, null, null, null);
+    public static BoardCommentWriteRequest getNewInstance(BoardType type, Long boardId){
+        return new BoardCommentWriteRequest(type, boardId, null, null, null, null);
     }
 }

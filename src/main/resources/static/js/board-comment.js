@@ -1,6 +1,8 @@
+// <th:block th:fragment="commentWritePanel"> 에 boardType, boardId 있음
 const boardType = document.getElementById("boardType").value;
 const boardId = Number(document.getElementById("boardId").value);
 const commentPaging = document.getElementById("comment-paging");
+let currentComments = []; // @ Page<CommentResponse>
 
 (async () => {
     try {
@@ -12,21 +14,34 @@ const commentPaging = document.getElementById("comment-paging");
 
 // 초기화
 async function init() {
-    // 댓글 등록 이벤트 초기화
-    const addForm = document.getElementById("board-comment-add-form");
-    addForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const formData = new FormData(addForm);
-        const comment = Object.fromEntries(formData.entries());
-        const response = await postJson("/board/comment/add", comment);
-
-        if (!response.ok) {
-            const errors = await response.json();
-            document.getElementById("comment-write-error-msg").textContent = Object.values(errors)[0]; // map의 첫번째 오류 메세지 출력
-            return;
+    // submit 이벤트 초기화
+    // e.preventDefault() => 브라우저에게 form 제출을 맡기지 않고, 개발자가 직접 js로 처리
+    document.addEventListener("submit", async (e) => {
+        // 댓글 등록
+        if (e.target.matches("#board-comment-add-form")){
+            e.preventDefault();
+            await addComment(e.target);
         }
+        // 댓글 수정
+        if (e.target.classList.contains("comment-modify-form")) {
+            e.preventDefault();
+            await modifyComment(e.target);
+        }
+    });
 
-        await showCommentList();
+    // 클릭 이벤트 초기화
+    document.addEventListener("click", (e) => {
+        // 댓글 수정
+        if (e.target.classList.contains("comment-modify")) {
+            const commentDiv = e.target.closest(".comment");
+            const comment = currentComments.find(c => c.id == commentDiv.dataset.id);
+            showModifyForm(comment);
+        }
+        // 댓글 수정 취소
+        if (e.target.classList.contains("modify-cancel")){
+            const commentDiv = e.target.closest(".comment");
+            commentDiv.querySelector(".comment-modify-area").innerHTML = "";
+        }
     });
 
     // 페이지 클릭 이벤트 초기화
@@ -43,10 +58,25 @@ async function init() {
     await showCommentList();
 }
 
+// 댓글 등록
+async function addComment(form){
+    // @ CommentWriteRequest
+    const comment = Object.fromEntries(new FormData(form).entries());
+    const response = await postJson("/board/comment/add", comment);
+    form.reset();
+
+    if (!response.ok) {
+        const errors = await response.json();
+        document.getElementById("comment-write-error-msg").textContent = Object.values(errors)[0]; // map의 첫번째 오류 메세지 출력
+        return;
+    }
+
+    await showCommentList();
+}
 
 // 댓글 리스트 가져오기
 async function showCommentList(commentPage=0){
-
+    // @ CommentListResponse (Page<BoardCommentResponse>, PagingResponse)
     const response = await getJson(
         `/board/comment/${boardType}/${boardId}`,
         { commentPage: commentPage });
@@ -57,17 +87,20 @@ async function showCommentList(commentPage=0){
     }
 
     const result = await response.json();
-    createCommentListHTML(result.comments.content);
+    currentComments = result.comments.content; // @ Page<BoardCommentResponse>
+    createCommentListHTML();
     createCommentPagingHTML(result.paging, result.comments.totalPages);
 }
 
-function createCommentListHTML(comments){
+function createCommentListHTML(){
     const commentList = document.getElementById("comment-list");
     let html = "";
+    commentList.innerHTML = "";
 
-    comments.forEach(comment => {
+    //@ Page<BoardCommentResponse>
+    currentComments.forEach(comment => {
         html += `
-        <div class="comment">
+        <div class="comment" data-id="${comment.id}">
             <div>
                <span>${comment.userName}</span>
                <span>${comment.createdAt}</span>
@@ -79,8 +112,10 @@ function createCommentListHTML(comments){
         if (comment.canUpdate) {
             html += `
                 <div>
-                   수정, 삭제 버튼 공간
-                </div>`;
+                   <button class="comment-modify">수정</button>
+                   <button>삭제</button>
+                </div>
+                <div class="comment-modify-area"></div>`;
         }
 
         html += `</div>`;
@@ -107,4 +142,66 @@ function createCommentPagingHTML(paging, totalPageCount){
         commentPaging.innerHTML += `
         <a href="#" data-page="${paging.endPage + 1}" class="comment-page">다음</a>`;
     }
+}
+
+// 댓글 수정 form 보여주기
+// @ param : comment (type : CommentResponse)
+function showModifyForm(comment){
+    const area = document.querySelector(
+        `.comment[data-id="${comment.id}"] .comment-modify-area`
+    );
+
+    if (comment.isGuestComment) {
+        area.innerHTML = `
+        <form class="comment-modify-form" data-id="${comment.id}" 
+            action="/board/comment/modify" method="post">
+            <p class="error-msg comment-modify-error-msg"></p>
+            <input type="hidden" name="commentId" value=${comment.id}>
+            <input type="hidden" name="boardType" value=${boardType}>
+            <input type="hidden" name="boardId" value=${boardId}>
+            <div>
+                <input name="userName" value="${comment.userName}">
+                <input type="password" name="password" placeholder="비밀번호">
+            </div>
+            <textarea name="content">${comment.content}</textarea>
+            <div>
+                <button type="submit">저장</button>
+                <button class="modify-cancel">취소</button>
+            </div>
+        </form>
+        `;
+    }else {
+        area.innerHTML = `
+        <form id="comment-modify-form">
+            <textarea name="content">${comment.content}</textarea>
+            <div>
+                <button type="submit">저장</button>
+                <button class="modify-cancel">취소</button>      
+            </div>
+        </form>
+        `;
+    }
+}
+
+// 댓글 수정
+async function modifyComment(form){
+    // @ CommentWriteRequest
+    const comment = Object.fromEntries(new FormData(form).entries());
+    const response = await postJson(`/board/comment/modify`, comment);
+
+    if(response == null) return;
+    if (!response.ok) {
+        const errorRes = await response.json();
+        const errorType = errorRes.type;
+        if(errorType === "VALIDATION_ERROR"){
+            form.querySelector(".comment-modify-error-msg").textContent =
+                errorRes.errorMessages?.[0] ?? "입력값 오류";
+        }else if(errorType === "ACCESS_DENIED"){
+            alert(errorRes.errorMsg);
+            location.href = errorRes.redirectUrl;
+        }
+        return;
+    }
+
+    await showCommentList();
 }
