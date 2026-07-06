@@ -4,6 +4,8 @@ import com.example.demo_webPet.animal.Animal;
 import com.example.demo_webPet.board.BoardConstants;
 import com.example.demo_webPet.board.BoardDeniedException;
 import com.example.demo_webPet.board.BoardDto_forList;
+import com.example.demo_webPet.board.BoardType;
+import com.example.demo_webPet.board.comment.BoardCommentRepository;
 import com.example.demo_webPet.common.output.HtmlUtils;
 import com.example.demo_webPet.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ import static com.example.demo_webPet.common.error.ErrorCode.ERROR_BOARD_ACCESS_
 class MissingAnimalBoardService {
 
     private final MissingAnimalBoardRepository boardRepository;
+    private final BoardCommentRepository boardCommentRepository;
     private final UserRepository userRepository;
 
     // @ return : board id(pk)
@@ -64,12 +67,15 @@ class MissingAnimalBoardService {
 
     @Transactional
     void deleteBoard(Long boardId, Long loginUserId){
+        // 해당 게시물에 포함된 댓글들 삭제
+        boardCommentRepository.deleteCommentsAll(BoardType.MISSING_ANIMAL, boardId);
+
+        // 게시물 삭제
         int deleted = boardRepository.deleteByIdAndUserId(boardId, loginUserId);
         if (deleted == 0) {
             // 삭제된 게시물이 없다 => 게시물 작성자 id != 현재 로그인 유저 id
             throw new BoardDeniedException(ERROR_BOARD_ACCESS_DENIED);
         }
-        // TODO : 해당 게시물에 딸린 댓글들도 삭제
     }
 
 

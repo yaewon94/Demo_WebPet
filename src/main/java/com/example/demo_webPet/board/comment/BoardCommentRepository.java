@@ -4,14 +4,26 @@ import com.example.demo_webPet.board.BoardType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-interface BoardCommentRepository extends JpaRepository<BoardComment, Long> {
+public interface BoardCommentRepository extends JpaRepository<BoardComment, Long> {
 
+    // package 안에서만 사용
     Page<BoardComment> findByBoardTypeAndBoardId(
             @Param("boardType") BoardType boardType,
             @Param("boardId") Long boardId,
             Pageable pageable);
+
+    @Modifying
+    @Query("""
+    delete from BoardComment c
+    where c.boardType = :boardType
+      and c.boardId = :boardId
+    """)
+    void deleteCommentsAll(@Param("boardType") BoardType boardType,
+                           @Param("boardId") Long boardId);
 
     /*@Query("""
     select count(b)
