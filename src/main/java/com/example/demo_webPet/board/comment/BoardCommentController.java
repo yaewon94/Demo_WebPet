@@ -40,4 +40,10 @@ final class BoardCommentController {
         // dto validation 오류는 GlobalExceptionRestApiExceptionHandler에서 처리
         commentService.modifyComment(request);
     }
+
+    @PostMapping("/delete")
+    public void deleteComment(@RequestBody @Valid BoardCommentDeleteRequest request) throws IllegalAccessException {
+        // dto validation 오류는 GlobalExceptionRestApiExceptionHandler에서 처리
+        commentService.deleteComment(request);
+    }
 }

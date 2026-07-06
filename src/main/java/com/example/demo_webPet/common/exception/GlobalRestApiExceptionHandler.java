@@ -45,7 +45,12 @@ public class GlobalRestApiExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<AccessDeniedResponse> handle(AccessDeniedException e){
+        String redirectionUrl = e.getRedirectUrl();
+        if(redirectionUrl == null || redirectionUrl.isBlank()){
+            redirectionUrl = "/";
+        }
+
         return ResponseEntity.badRequest().body(
-                new AccessDeniedResponse(e.getMessage(), e.getRedirectUrl()));
+                new AccessDeniedResponse(e.getMessage(), redirectionUrl));
     }
 }

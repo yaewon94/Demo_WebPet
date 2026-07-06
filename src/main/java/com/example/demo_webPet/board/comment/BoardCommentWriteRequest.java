@@ -16,7 +16,7 @@ public record BoardCommentWriteRequest(
 
         @NotBlank(message = CommonValidConstants.MSG_INPUT_CONTENT)
         String content
-) {
+) implements BoardCommentRequest{
     public static BoardCommentWriteRequest getNewInstance(BoardType type, Long boardId){
         return new BoardCommentWriteRequest(type, boardId, null, null, null, null);
     }

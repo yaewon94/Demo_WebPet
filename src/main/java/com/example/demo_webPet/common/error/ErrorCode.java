@@ -24,6 +24,7 @@ public enum ErrorCode{
     BOARD_COMMENT_USERNAME_NOT_VALID("E_Board6", "작성자 이름은 " + CommonValidConstants.MAX_SIZE_BOARD_COMMENT_GUEST_USERNAME + "글자 이하만 가능합니다"),
     BOARD_COMMENT_PASSWORD_REQUIRED("E_Board7", "비밀번호를 입력하세요"),
     BOARD_COMMENT_PASSWORD_NOT_VALID("E_Board8", CommonValidConstants.MAX_SIZE_BOARD_COMMENT_GUEST_PASSWORD + "글자 이하만 가능합니다"),
+    BOARD_COMMENT_ACCESS_DENIED("E_Board9", "접근 권한이 없습니다"),
 
     ERROR_FILE_REQUIRED("E_File1", "파일을 업로드 해주세요"),
     ERROR_ONLY_IMAGE_FILE_REQUIRED("E_File2", "이미지 파일만 업로드 가능합니다"),

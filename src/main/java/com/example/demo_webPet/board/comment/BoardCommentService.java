@@ -64,6 +64,10 @@ class BoardCommentService {
     }
 
     void addComment(BoardCommentWriteRequest request){
+        // 게시물 존재 여부 확인
+        checkBoardExist(request);
+
+        // 로그인 여부에 따라 DB 저장 메소드 호출
         LoginUserDetail loginUser = authService.getUser();
         if(loginUser == null){
             addCommentGuest(request);
@@ -72,48 +76,22 @@ class BoardCommentService {
         }
     }
 
-    // @ [param] redirectionUrl : 오류 발생시 redirect할 url
     @Transactional
-    void modifyComment(BoardCommentWriteRequest request) throws IllegalAccessException {
-        // 댓글이 존재하지 않는 경우 boardType, boardId를 DB로 알아낼수가 없어서
-        // 댓글 자체가 존재하지 않는건지, 댓글이 포함된 게시물이 지워져서 없어진건지 알수가 없으므로
-        // DTO에 boardType, boardId를 넣었음
-
-        // 게시물 존재 여부 확인
-        if(!boardService.existsBoard(request.boardType(), request.boardId())){
-            throw new AccessDeniedException(
-                    ErrorCode.BOARD_NOT_EXIST,
-                    boardService.getBoardListUrl(request.boardType()));
-        }
-
-        // 댓글 존재 여부 확인
-        BoardComment comment = commentRepository.findById(request.commentId())
-                .orElseThrow(() ->
-                        new AccessDeniedException(
-                                ErrorCode.BOARD_COMMENT_NOT_EXIST,
-                                boardService.getBoardDetailUrl(request.boardType(), request.boardId())));
-
-        // 비회원 댓글
-        if(comment.getUser() == null){
-            validationCheckGuestComment(request);
-            // 비밀번호 일치하는지
-            if(!passwordEncoder.matches(
-                    request.password(),
-                    comment.getGuestPassword())){
-                throw new CustomNotValidException(ErrorCode.BOARD_COMMENT_PASSWORD_MISMATCH);
-            }
-
-            comment.setGuestUserName(request.userName());
-        }
-        // 회원 댓글
-        else{
-            LoginUserDetail loginUserDetail = authService.getUser();
-            if(loginUserDetail == null
-                    || !loginUserDetail.getDto().id().equals(comment.getUser().getId())){
-                throw new IllegalAccessException("접근 권한이 없습니다");
-            }
-        }
+    void modifyComment(BoardCommentWriteRequest request) {
+        // 게시물, 댓글 존재 여부 확인, 권한 체크
+        BoardComment comment = checkConditionForModifyDelete(request);
+        // DB 변경 (영속성 변화 감지)
+        comment.setGuestUserName(request.userName());
         comment.setContent(request.content());
+    }
+
+    @Transactional
+    void deleteComment(BoardCommentDeleteRequest request) {
+        // 게시물, 댓글 존재 여부 확인, 권한 체크
+        BoardComment comment = checkConditionForModifyDelete(request);
+        // DB에서 삭제
+        commentRepository.deleteById(request.commentId());
+        // TODO : 게시물 삭제시 댓글도 삭제
     }
 
     @Transactional
@@ -160,10 +138,57 @@ class BoardCommentService {
             throw new CustomNotValidException(ErrorCode.BOARD_COMMENT_USERNAME_REQUIRED);
         }else if(request.userName().length() > CommonValidConstants.MAX_SIZE_BOARD_COMMENT_GUEST_USERNAME){
             throw new CustomNotValidException(ErrorCode.BOARD_COMMENT_USERNAME_NOT_VALID);
-        }else if(request.password().isBlank()){
+        }
+        validationCheckGuestComment((BoardCommentRequest) request);
+    }
+
+    private void validationCheckGuestComment(BoardCommentRequest request){
+        if(request.password().isBlank()){
             throw new CustomNotValidException(ErrorCode.BOARD_COMMENT_PASSWORD_REQUIRED);
         }else if(request.password().length() > CommonValidConstants.MAX_SIZE_BOARD_COMMENT_GUEST_PASSWORD){
             throw new CustomNotValidException(ErrorCode.BOARD_COMMENT_PASSWORD_NOT_VALID);
         }
+    }
+
+    private void checkBoardExist(BoardCommentRequest request){
+        // 댓글이 존재하지 않는 경우 boardType, boardId를 DB로 알아낼수가 없어서
+        // 댓글 자체가 존재하지 않는건지, 댓글이 포함된 게시물이 지워져서 없어진건지 알수가 없으므로
+        // DTO에 boardType, boardId를 넣었음
+        if(!boardService.existsBoard(request.boardType(), request.boardId())){
+            throw new AccessDeniedException(
+                    ErrorCode.BOARD_NOT_EXIST,
+                    boardService.getBoardListUrl(request.boardType()));
+        }
+    }
+
+    private BoardComment checkConditionForModifyDelete(BoardCommentRequest request) {
+        // 게시물 존재 여부 체크
+        checkBoardExist(request);
+        // 댓글 존재 여부 체크
+        BoardComment comment = commentRepository.findById(request.commentId())
+                .orElseThrow(() ->
+                        new AccessDeniedException(
+                                ErrorCode.BOARD_COMMENT_NOT_EXIST,
+                                boardService.getBoardDetailUrl(request.boardType(), request.boardId())));
+
+        // 비회원 댓글일 경우 form validation, 비밀번호 일치하는지
+        if(comment.getUser() == null){
+            validationCheckGuestComment(request);
+            if(!passwordEncoder.matches(
+                    request.password(),
+                    comment.getGuestPassword())){
+                throw new CustomNotValidException(ErrorCode.BOARD_COMMENT_PASSWORD_MISMATCH);
+            }
+        }
+        // 회원 댓글일 경우 본인이 쓴 글이 맞는지
+        else{
+            LoginUserDetail loginUserDetail = authService.getUser();
+            if(loginUserDetail == null
+                    || !loginUserDetail.getDto().id().equals(comment.getUser().getId())){
+                throw new AccessDeniedException(ErrorCode.BOARD_COMMENT_ACCESS_DENIED);
+            }
+        }
+
+        return comment;
     }
 }

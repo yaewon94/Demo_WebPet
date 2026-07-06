@@ -8,6 +8,11 @@ public final class AccessDeniedException extends BaseRuntimeException{
 
     private final String redirectUrl;
 
+    public AccessDeniedException(ErrorCode code){
+        super(code);
+        this.redirectUrl = null;
+    }
+
     public AccessDeniedException(ErrorCode code, String redirectUrl){
         super(code);
         this.redirectUrl = redirectUrl;

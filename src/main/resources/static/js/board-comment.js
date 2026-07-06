@@ -27,6 +27,11 @@ async function init() {
             e.preventDefault();
             await modifyComment(e.target);
         }
+        // 댓글 삭제
+        if (e.target.classList.contains("comment-delete-form")) {
+            e.preventDefault();
+            await deleteGuestComment(e.target);
+        }
     });
 
     // 클릭 이벤트 초기화
@@ -37,21 +42,32 @@ async function init() {
             const comment = currentComments.find(c => c.id == commentDiv.dataset.id);
             showModifyForm(comment);
         }
-        // 댓글 수정 취소
-        if (e.target.classList.contains("modify-cancel")){
-            const commentDiv = e.target.closest(".comment");
-            commentDiv.querySelector(".comment-modify-area").innerHTML = "";
+        // 댓글 수정,삭제 취소
+        if (e.target.classList.contains("modify-cancel")
+            || e.target.classList.contains("delete-cancel")){
+            hideModifyDeleteForm(e.target);
         }
     });
 
-    // 페이지 클릭 이벤트 초기화
-    commentPaging.addEventListener("click", async (e) => {
-        if (!e.target.classList.contains("comment-page")) {
-            return;
-        }
-        e.preventDefault();
+    document.addEventListener("click", async(e) => {
+        // 댓글 삭제
+        if (e.target.classList.contains("comment-delete")){
+            const commentDiv = e.target.closest(".comment");
+            const comment = currentComments.find(c => c.id == commentDiv.dataset.id);
 
-        await showCommentList(Number(e.target.dataset.page));
+            if(comment.isGuestComment){
+                showDeleteForm(comment);
+            }else{
+                e.preventDefault();
+                await deleteLoginUserComment(comment);
+            }
+        }
+
+        // 페이지 클릭 이벤트 초기화
+        if (e.target.classList.contains("comment-page")){
+            e.preventDefault();
+            await showCommentList(Number(e.target.dataset.page));
+        }
     });
 
     // 댓글 목록 보여주기
@@ -113,9 +129,9 @@ function createCommentListHTML(){
             html += `
                 <div>
                    <button class="comment-modify">수정</button>
-                   <button>삭제</button>
+                   <button class="comment-delete">삭제</button>
                 </div>
-                <div class="comment-modify-area"></div>`;
+                <div class="comment-modify-delete-area"></div>`;
         }
 
         html += `</div>`;
@@ -148,7 +164,7 @@ function createCommentPagingHTML(paging, totalPageCount){
 // @ param : comment (type : CommentResponse)
 function showModifyForm(comment){
     const area = document.querySelector(
-        `.comment[data-id="${comment.id}"] .comment-modify-area`
+        `.comment[data-id="${comment.id}"] .comment-modify-delete-area`
     );
 
     if (comment.isGuestComment) {
@@ -184,24 +200,73 @@ function showModifyForm(comment){
 }
 
 // 댓글 수정
+// @ form (CommentWriteRequest)
 async function modifyComment(form){
-    // @ CommentWriteRequest
-    const comment = Object.fromEntries(new FormData(form).entries());
-    const response = await postJson(`/board/comment/modify`, comment);
+    if(await processSubmit(
+        form,
+        `/board/comment/modify`,
+        form.querySelector(".comment-modify-error-msg"))
+    ){
+        await showCommentList();
+    }
+}
 
-    if(response == null) return;
-    if (!response.ok) {
-        const errorRes = await response.json();
-        const errorType = errorRes.type;
-        if(errorType === "VALIDATION_ERROR"){
-            form.querySelector(".comment-modify-error-msg").textContent =
-                errorRes.errorMessages?.[0] ?? "입력값 오류";
-        }else if(errorType === "ACCESS_DENIED"){
-            alert(errorRes.errorMsg);
-            location.href = errorRes.redirectUrl;
-        }
+// 댓글 삭제 form 보여주기
+// @ param : comment (type : CommentResponse)
+function showDeleteForm(comment){
+    const area = document.querySelector(
+        `.comment[data-id="${comment.id}"] .comment-modify-delete-area`);
+
+    area.innerHTML = `
+    <form class="comment-delete-form" data-id="${comment.id}" 
+        action="/board/comment/delete" method="post">
+        <p class="error-msg comment-delete-error-msg"></p>
+        <input type="hidden" name="commentId" value=${comment.id}>
+        <input type="hidden" name="boardType" value=${boardType}>
+        <input type="hidden" name="boardId" value=${boardId}>
+        <input type="password" name="password" placeholder="비밀번호">
+        <div>
+            <button type="submit">확인</button>
+            <button class="delete-cancel">취소</button>
+        </div>
+    </form>`;
+}
+
+// 댓글 삭제
+// @ form (CommentWriteRequest)
+async function deleteGuestComment(form){
+    if (!confirm("정말 삭제하시겠습니까?")) {
+        hideModifyDeleteForm(form);
         return;
     }
 
-    await showCommentList();
+    if(await processSubmit(
+        form,
+        `/board/comment/delete`,
+        form.querySelector(".comment-delete-error-msg"))
+    ){
+        await showCommentList();
+    }
+}
+
+// @ comment (type : commentResponse)
+async function deleteLoginUserComment(comment){
+    if (!confirm("정말 삭제하시겠습니까?")) {
+        return;
+    }
+
+    if(await processSubmit({
+        commentId : comment.id,
+        boardType : boardType,
+        boardId : boardId
+        }
+        ,
+        `/board/comment/delete`)
+    ){
+        await showCommentList();
+    }
+}
+
+function hideModifyDeleteForm(form){
+    hideForm(form, ".comment", ".comment-modify-delete-area");
 }
