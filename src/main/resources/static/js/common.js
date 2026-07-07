@@ -31,8 +31,9 @@ async function postJson(url, data) {
 }
 
 async function getJson(url, params) {
-    const query = new URLSearchParams(params);
-    return fetch(`${url}?${query}`, {
+    const query = new URLSearchParams(params).toString();
+    const requestUrl = query ? `${url}?${query}` : url;
+    return fetch(requestUrl, {
         method: "GET"
     });
 }

@@ -30,9 +30,9 @@
             실종날짜 <input type="date" th:field="*{missingDate}">
         </div>
         <div>
-            <!-- TODO : 도/시/군 으로 나눠서 표시되게 변경 -->
-            <!-- TODO : 지도 표시-->
-            실종장소 <input type="text" th:field="*{missingLocation}">
+            실종장소
+            <select th:field="*{address1}"></select>
+            <select th:field="*{address2}"></select>
         </div>
         <div th:replace="~{fragments/board_common :: contentEditorPanel}"></div>
         <div>
@@ -41,4 +41,8 @@
         </div>
     </form>
 </div>
+<!-- js -->
+<th:block layout:fragment="script">
+    <script th:src="@{/js/util-address.js(v=${appVersion})}"></script>
+</th:block>
 </html>

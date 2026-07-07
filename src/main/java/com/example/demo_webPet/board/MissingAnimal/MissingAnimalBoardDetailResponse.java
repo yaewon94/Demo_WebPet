@@ -14,15 +14,16 @@ record MissingAnimalBoardDetailResponse(
         String createdAt,
         AnimalSpecies species,
         String missingDate,
-        String missingLocation,
+        String address1,
+        String address2,
         String content) {
 
     MissingAnimalBoardDetailResponse(
-            Long id, AnimalStatus status, String title, String userName,
-            LocalDateTime createdAt, AnimalSpecies species,
-            LocalDate missingDate, String missingLocation, String content){
-        this(id, status, title, userName,
-                createdAt.format(FormatConstants.YMD_HMS), species,
-                missingDate.format(FormatConstants.YEAR_MONTH_DAY), missingLocation, content);
+            Long id, AnimalStatus status, String title, String userName, LocalDateTime createdAt,
+            AnimalSpecies species, LocalDate missingDate,
+            String address1, String address2, String content){
+        this(id, status, title, userName, createdAt.format(FormatConstants.YMD_HMS),
+                species, missingDate.format(FormatConstants.YEAR_MONTH_DAY),
+                address1, address2, content);
     }
 }

@@ -12,22 +12,25 @@ import java.time.LocalDate;
 public record MissingAnimalBoardWriteRequest(
         Long id,
 
-        @NotBlank(message = CommonValidConstants.MSG_INPUT_TITLE)
+        @NotBlank(message = "제목을 입력하세요")
         String title,
 
-        @NotNull(message = AnimalConstants.INPUT_SPECIES_REQUIRED)
+        @NotNull(message = "동물 종류를 선택해주세요")
         AnimalSpecies species,
 
-        @NotNull(message = AnimalConstants.INPUT_MISSING_DATE_REQUIRED)
-        @PastOrPresent(message = AnimalConstants.ERROR_MISSING_DATE)
+        @NotNull(message = "실종날짜를 입력해주세요")
+        @PastOrPresent(message = "실종날짜를 제대로 입력해주세요")
         LocalDate missingDate,
 
-        @NotNull(message = AnimalConstants.INPUT_MISSING_LOCATION_REQUIRED)
-        String missingLocation,
+        @NotBlank(message = "실종장소를 선택해주세요")
+        String address1,
+
+        @NotBlank(message = "실종장소를 선택해주세요")
+        String address2,
 
         String content
 ) {
     static MissingAnimalBoardWriteRequest getNewInstance(){
-        return new MissingAnimalBoardWriteRequest(null,  null, null, null, null, null);
+        return new MissingAnimalBoardWriteRequest(null,  null, null, null, null, null, null);
     }
 }

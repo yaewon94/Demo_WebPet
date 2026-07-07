@@ -36,7 +36,10 @@ public final class Animal {
 
     private LocalDate missingDate;
 
-    private String missingLocation;
+    // 특별시,광역시,도
+    private String missingAdrs1;
+    // 시,구
+    private String missingAdrs2;
 
     private LocalDate rescuedDate;
     private String foundLocation;
@@ -65,13 +68,15 @@ public final class Animal {
         animal.species = dto.species();
         animal.status = AnimalStatus.MISSING;
         animal.missingDate = dto.missingDate();
-        animal.missingLocation = dto.missingLocation();
+        animal.missingAdrs1 = dto.address1();
+        animal.missingAdrs2 = dto.address2();
         return animal;
     }
 
-    public void update(AnimalSpecies species, LocalDate missingDate, String missingLocation){
+    public void update(AnimalSpecies species, LocalDate missingDate, String missingAdrs1, String missingAdrs2){
         this.species = species;
         this.missingDate = missingDate;
-        this.missingLocation = missingLocation;
+        this.missingAdrs1 = missingAdrs1;
+        this.missingAdrs2 = missingAdrs2;
     }
 }

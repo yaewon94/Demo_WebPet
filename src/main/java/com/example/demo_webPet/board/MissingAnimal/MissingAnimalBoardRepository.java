@@ -33,7 +33,8 @@ public interface MissingAnimalBoardRepository extends JpaRepository<MissingAnima
             b.createdAt,
             a.species,
             a.missingDate,
-            a.missingLocation,
+            a.missingAdrs1,
+            a.missingAdrs2,
             b.content
     )
     from MissingAnimalBoard b
@@ -49,7 +50,8 @@ public interface MissingAnimalBoardRepository extends JpaRepository<MissingAnima
           b.title,
           a.species,
           a.missingDate,
-          a.missingLocation,
+          a.missingAdrs1,
+          a.missingAdrs2,
           b.content)
      from MissingAnimalBoard b
      join b.animal a

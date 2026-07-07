@@ -12,13 +12,7 @@ public final class AnimalConstants {
 
     public static final String INPUT_GENDER_REQUIRED = "성별을 선택해주세요";
 
-    public static final String INPUT_MISSING_DATE_REQUIRED = "실종날짜를 입력해주세요";
-    public static final String ERROR_MISSING_DATE = "실종날짜를 제대로 입력해주세요";
-    public static final String INPUT_MISSING_LOCATION_REQUIRED = "실종장소를 선택해주세요";
-
     public static final String INPUT_RESCUED_DATE_REQUIRED = "구조날짜를 입력해주세요";
     public static final String ERROR_RESCUED_DATE = "구조날짜를 제대로 입력해주세요";
     public static final String INPUT_FOUND_LOCATION_REQUIRED = "구조장소를 선택해주세요";
-
-    public static final String INPUT_IMAGE_REQUIRED = "동물 사진은 필수로 추가해야 합니다";
 }

@@ -24,7 +24,7 @@
             실종날짜 <span th:text="*{missingDate}"></span>
         </div>
         <div>
-            실종장소 <span th:text="*{missingLocation}"></span>
+            실종장소 <span th:text="|*{address1} *{address2}|"></span>
         </div>
         <div class="board-content" th:utext="*{content}"></div>
     </div>

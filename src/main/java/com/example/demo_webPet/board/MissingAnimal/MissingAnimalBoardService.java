@@ -58,7 +58,8 @@ class MissingAnimalBoardService {
         animal.update(
                 request.species(),
                 request.missingDate(),
-                request.missingLocation()
+                request.address1(),
+                request.address2()
         );
         board.update(
                 request.title(),
