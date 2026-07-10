@@ -9,6 +9,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Entity
 @Getter
 @Setter(AccessLevel.PACKAGE)
@@ -37,6 +40,13 @@ final class RescuedAnimalBoard extends Board {
     RescuedAnimalBoard(){
         super(BoardType.RESCUED_ANIMAL);
         shelter = new Shelter(); // TODO : DB entity로 바꾸면 지우기
+    }
+
+    public void setCreatedAt(String createdAt){
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+        LocalDateTime date = LocalDateTime.parse(createdAt, formatter);
+        super.setCreatedAt(date);
     }
 
     void update(RescuedAnimalApiDto dto){

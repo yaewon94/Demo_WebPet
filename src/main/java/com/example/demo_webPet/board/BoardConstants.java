@@ -7,7 +7,7 @@ public final class BoardConstants {
     private BoardConstants(){}
 
     public static final String DEFAULT_PAGE = "0";
-    public static final int PAGE_SIZE = 5;
+    public static final int PAGE_SIZE = 10;
     public static final Sort SORT = Sort.by("id").descending();
 
     public static final String MODEL_PARAM_BOARD_LIST = "boardList";

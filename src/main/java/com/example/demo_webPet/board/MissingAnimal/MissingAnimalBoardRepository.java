@@ -17,7 +17,8 @@ public interface MissingAnimalBoardRepository extends JpaRepository<MissingAnima
         b.id,
         b.title,
         b.createdAt,
-        u.userName
+        u.userName,
+        null
     )
     from MissingAnimalBoard b
     join b.user u

@@ -1,5 +1,5 @@
 <!-- 게시물 목록 패널 -->
-<th:block th:fragment="list">
+<th:block th:fragment="list_typeA">
     <table>
         <thead>
         <tr>
@@ -25,6 +25,19 @@
         </tr>
         </tbody>
     </table>
+    <div th:replace="~{fragments/board_common :: paging(${boardList})}"></div>
+</th:block>
+
+<th:block th:fragment="list_typeB">
+    <div class="container">
+        <article class="card" th:each="board : ${boardList.content}">
+            <img th:src="${board.thumbnail}" alt="">
+            <a th:href="@{${detail_url}(id=${board.id})}"
+               th:text="${board.title}"></a>
+            <p th:text="${board.userName}"></p>
+            <p th:text="${board.createdAt}"></p>
+        </article>
+    </div>
     <div th:replace="~{fragments/board_common :: paging(${boardList})}"></div>
 </th:block>
 

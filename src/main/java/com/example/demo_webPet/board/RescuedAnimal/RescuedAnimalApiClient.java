@@ -23,7 +23,7 @@ final class RescuedAnimalApiClient {
     RescuedAnimalApiResponse getAnimalList(){
         // TODO : page,size 실무 값으로 변경
         final int page = 1;
-        final int size = 1;
+        final int size = 10;
 
         // 공공데이터 api 요청 => string 반환
         return webClient.get()

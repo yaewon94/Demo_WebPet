@@ -1,20 +1,16 @@
-<html>
-<body>
-<!-- javascript -->
-<script th:if="${errorMsg}">
-    alert('[[${errorMsg}]]');
-</script>
+<!DOCTYPE html>
+<html layout:decorate="~{layout/common_layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-<!-- 링크 패널-->
-<div>
-    <a th:href="${url_add_board}">
-        보호동물 등록
-    </a>
+<div layout:fragment="content">
+    <!-- 링크 패널-->
+    <!--<div>
+        <a th:href="@{${add_url}}">
+            보호동물 등록
+        </a>
+    </div>-->
+
+    <!-- 게시물 목록 -->
+    <div th:replace="~{fragments/board_common :: list_typeB}"></div>
 </div>
-
-<!-- 게시물 목록 패널-->
-<div>
-</div>
-
-</body>
 </html>

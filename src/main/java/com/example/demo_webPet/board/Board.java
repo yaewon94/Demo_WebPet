@@ -1,7 +1,7 @@
 package com.example.demo_webPet.board;
 
 import com.example.demo_webPet.common.constants.CommonValidConstants;
-import com.example.demo_webPet.common.output.FormatConstants;
+import com.example.demo_webPet.common.util.ValidationCheck;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -21,8 +21,7 @@ public abstract class Board
     private final BoardType type;
 
     @Column(nullable = false, updatable = false)
-    @Setter(AccessLevel.PUBLIC)
-    private String createdAt;
+    private LocalDateTime createdAt;
 
     @Column(nullable = false, length = CommonValidConstants.MAX_SIZE_TITLE)
     private String title;
@@ -33,6 +32,10 @@ public abstract class Board
 
     protected Board(BoardType type){
         this.type = type;
+    }
+
+    protected final void setCreatedAt(LocalDateTime createdAt){
+        this.createdAt = createdAt;
     }
 
     public void setTitle(String title){
@@ -51,8 +54,11 @@ public abstract class Board
     // DB 업데이트 직전 호출
     @PrePersist
     private void prePersist() {
-        if(this.createdAt == null || this.createdAt.isEmpty()){
-            this.createdAt = LocalDateTime.now().format(FormatConstants.YMD_HMS);
+        if(this.createdAt == null){
+            this.createdAt = LocalDateTime.now();
+        }
+        else{
+            ValidationCheck.validateNotFutureDate(createdAt, "작성일");
         }
     }
 }
