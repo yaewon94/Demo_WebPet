@@ -32,7 +32,7 @@ public class WebConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(shelterUserOnlyInterceptor)
                 .addPathPatterns(
-                        UrlConstants.URL_BOARD_RESCUED_ANIMAL_ADD);
+                        "/board/rescuedAnimal/add");
 
         registry.addInterceptor(normalUserOnlyInterceptor)
                 .addPathPatterns(

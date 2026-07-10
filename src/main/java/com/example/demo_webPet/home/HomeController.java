@@ -16,7 +16,7 @@ final class HomeController {
 
         // 게시판 패널
         model.addAttribute("url_board_missing_animal_list", UrlConstants.URL_BOARD_MISSING_ANIMAL_LIST);
-        model.addAttribute("url_board_rescued_animal_list", UrlConstants.URL_BOARD_RESCUED_ANIMAL_LIST);
+        model.addAttribute("url_board_rescued_animal_list", "/board/rescuedAnimal/list");
 
         return "home"; // 반환값이 .html
     }

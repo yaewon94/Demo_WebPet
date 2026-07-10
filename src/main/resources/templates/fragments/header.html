@@ -1,9 +1,16 @@
 <!-- 유저 버튼 패널 -->
+<!-- TODO : 로그인 페이지에서 회원가입 버튼이 보이도록. 회원가입 페이지에서 로그인 버튼이 보이도록 -->
+<th:block th:fragment="common_header_panel">
+    <a th:href="@{/}">Home</a>
+    <div th:replace="~{fragments/common:: alert}"></div>
+    <div th:replace="~{fragments/common:: tokens}"></div>
+</th:block>
+
 <th:block th:fragment="user_panel">
-    <div th:if="${loginUser == null}">
+    <span th:if="${loginUser == null}">
         <a th:href="${url_login}">로그인</a>
         <a th:href="${url_signup}">회원가입</a>
-    </div>
+    </span>
     <div th:unless="${loginUser == null}">
         <b th:text="${loginUser.user_name}"></b>님 로그인
         <form th:action="${url_logout}" method="post">

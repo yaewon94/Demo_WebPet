@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/common_layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<div layout:fragment="content" th:object="${board}">
+    <!-- 게시물-->
+<div>
+    <div class="board-detail-title">
+        [<span th:text="${#messages.msg('animalStatus.' + board.animal.status.name())}"></span>]
+        <span th:text="*{title}"></span>
+    </div>
+
+    <b>작성날짜</b> <span th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span>
+
+    <table class="board-detail-section">
+        <tr>
+            <th>공고시작</th>
+            <td th:text="*{noticeStartDate}"></td>
+        </tr>
+        <tr>
+            <th>공고마감</th>
+            <td th:text="*{noticeEndDate}"></td>
+        </tr>
+    </table>
+
+    <section class="board-detail-section">
+        <img th:src="${board.imgUrl1}" alt="">
+        <img th:src="${board.imgUrl2}" alt="">
+        <div th:text="*{content}"></div>
+    </section>
+
+    <table class="board-detail-section">
+        <thead>
+            <tr>
+                <th colspan="2" class="board-detail-table-title">[동물 정보]</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>품종</th>
+                <td th:text="|${#messages.msg('animalSpecies.' + board.animal.species.name())} [${board.animal.breed}]|"></td>
+            </tr>
+            <tr>
+                <th>나이</th>
+                <td th:text="*{animal.birthYear}"></td>
+            </tr>
+            <tr>
+                <th>몸무게</th>
+                <td th:text="*{animal.weight}"></td>
+            </tr>
+            <tr>
+                <th>성별</th>
+                <td th:text="${#messages.msg('animalGender.' + board.animal.gender.name())}"></td>
+            </tr>
+            <tr>
+                <th>구조날짜</th>
+                <td th:text="*{animal.rescuedDate}"></td>
+            </tr>
+            <tr>
+                <th>구조장소</th>
+                <td th:text="*{animal.rescuedAdrs}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="board-detail-section">
+        <thead>
+        <tr>
+            <th colspan="2" class="board-detail-table-title">[보호소 정보]</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <!-- TODO : 보호소 홈페이지 이동링크 추가 -->
+                <th>이름</th>
+                <td th:text="*{shelter.name}"></td>
+            </tr>
+            <tr>
+                <!-- TODO : 전화걸기 기능 추가 -->
+                <th>전화번호</th>
+                <td th:text="*{shelter.tel}"></td>
+            </tr>
+            <tr>
+                <!-- TODO : 지도 표시 -->
+                <th>주소</th>
+                <td th:text="*{shelter.address}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+</html>

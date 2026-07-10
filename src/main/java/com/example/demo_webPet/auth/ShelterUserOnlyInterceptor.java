@@ -22,8 +22,8 @@ public final class ShelterUserOnlyInterceptor implements HandlerInterceptor {
         if (authService.getUser().getUsertype() != UserType.SHELTER) {
             throw new AuthCheckFailException(
                     ErrorCode.ERROR_NOT_SHELTER_USER,
-                    UrlConstants.URL_BOARD_RESCUED_ANIMAL_ROOT,
-                    UrlConstants.URL_BOARD_RESCUED_ANIMAL_LIST);
+                    "/board/rescuedAnimal",
+                    "/board/rescuedAnimal/list");
         }
 
         return true;

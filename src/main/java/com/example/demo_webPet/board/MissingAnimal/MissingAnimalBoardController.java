@@ -88,11 +88,10 @@ final class MissingAnimalBoardController extends BoardController {
     //public String detail(@PathVariable Long id, Model model)
     @GetMapping(UrlConstants.URL_BOARD_MISSING_ANIMAL_DETAIL)
     public String detail(@RequestParam Long id,
-                         @RequestParam(defaultValue = BoardConstants.DEFAULT_PAGE) int page,
                          Model model){
         String urlPrefix = UriBuilder.getUrl(
                 UrlConstants.URL_BOARD_MISSING_ANIMAL_DETAIL,
-                Map.of("id", id.toString(), "commentPage", ""));
+                Map.of("id", id.toString()));
 
         model.addAttribute("board", boardService.getBoard(id));
         model.addAttribute(

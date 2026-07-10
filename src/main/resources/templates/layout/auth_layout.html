@@ -7,8 +7,7 @@
 </head>
 <body>
     <header>
-        <div th:replace="~{fragments/common:: alert}"></div>
-        <div th:replace="~{fragments/common:: tokens}"></div>
+        <span th:replace="~{fragments/header:: common_header_panel}"></span>
     </header>
     <!-- 자식 .html이 들어가는 곳-->
     <main layout:fragment="content"></main>

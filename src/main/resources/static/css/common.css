@@ -31,3 +31,18 @@
     object-fit: contain;
     background: #f5f5f5;
 }
+
+.board-detail-title{
+    font-size: xx-large;
+    font-weight: bold;
+    margin-top: 40px;
+    margin-bottom: 10px;
+}
+
+.board-detail-section {
+    margin-bottom: 30px;
+}
+
+.board-detail-table-title {
+    text-align: left;
+}

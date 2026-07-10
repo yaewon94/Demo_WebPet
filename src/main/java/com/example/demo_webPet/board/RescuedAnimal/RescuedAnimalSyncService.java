@@ -52,8 +52,8 @@ class RescuedAnimalSyncService {
     }
 
     // @ cron = 초 분 시 일 월 요일
-    //@Scheduled(cron = "0 0 */6 * * *") // 6시간마다 실행
-    @Scheduled(fixedDelay = 60000) // 1분마다 실행 [개발모드]
+    @Scheduled(cron = "0 0 */6 * * *") // 6시간마다 실행
+    //@Scheduled(fixedDelay = 60000) // 1분마다 실행 [개발모드]
     public void updateAnimals() {
         sync();
     }
