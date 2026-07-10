@@ -91,7 +91,6 @@ class BoardCommentService {
         BoardComment comment = checkConditionForModifyDelete(request);
         // DB에서 삭제
         commentRepository.deleteById(request.commentId());
-        // TODO : 게시물 삭제시 댓글도 삭제
     }
 
     @Transactional

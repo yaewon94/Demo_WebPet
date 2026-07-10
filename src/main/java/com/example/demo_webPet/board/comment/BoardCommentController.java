@@ -36,13 +36,13 @@ final class BoardCommentController {
     }
 
     @PostMapping("/modify")
-    public void modifyComment(@RequestBody @Valid BoardCommentWriteRequest request) throws IllegalAccessException {
+    public void modifyComment(@RequestBody @Valid BoardCommentWriteRequest request) {
         // dto validation 오류는 GlobalExceptionRestApiExceptionHandler에서 처리
         commentService.modifyComment(request);
     }
 
     @PostMapping("/delete")
-    public void deleteComment(@RequestBody @Valid BoardCommentDeleteRequest request) throws IllegalAccessException {
+    public void deleteComment(@RequestBody @Valid BoardCommentDeleteRequest request) {
         // dto validation 오류는 GlobalExceptionRestApiExceptionHandler에서 처리
         commentService.deleteComment(request);
     }

@@ -33,6 +33,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	runtimeOnly("org.postgresql:postgresql")
 
+	// WebClient
+	implementation("org.springframework.boot:spring-boot-starter-webflux")
+
 	// lambok
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")

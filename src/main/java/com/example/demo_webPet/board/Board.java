@@ -1,12 +1,11 @@
 package com.example.demo_webPet.board;
 
 import com.example.demo_webPet.common.constants.CommonValidConstants;
-import com.example.demo_webPet.user.User;
+import com.example.demo_webPet.common.output.FormatConstants;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -21,14 +20,9 @@ public abstract class Board
     @Transient // DB에 저장하지 않는 필드
     private final BoardType type;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false, updatable = false)
-    @Setter(AccessLevel.PUBLIC)
-    private User user;
-
-    @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    @Setter(AccessLevel.PUBLIC)
+    private String createdAt;
 
     @Column(nullable = false, length = CommonValidConstants.MAX_SIZE_TITLE)
     private String title;
@@ -52,5 +46,13 @@ public abstract class Board
     public final void update(String title, String content){
         setTitle(title);
         setContent(content);
+    }
+
+    // DB 업데이트 직전 호출
+    @PrePersist
+    private void prePersist() {
+        if(this.createdAt == null || this.createdAt.isEmpty()){
+            this.createdAt = LocalDateTime.now().format(FormatConstants.YMD_HMS);
+        }
     }
 }

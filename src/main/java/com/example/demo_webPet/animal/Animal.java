@@ -1,16 +1,19 @@
 package com.example.demo_webPet.animal;
 
 import com.example.demo_webPet.board.MissingAnimal.MissingAnimalBoardWriteRequest;
+import com.example.demo_webPet.board.RescuedAnimal.RescuedAnimalApiDto;
 import com.example.demo_webPet.common.util.ValidationCheck;
-import com.example.demo_webPet.shelter.Shelter;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Entity
 @Getter
+@Setter(AccessLevel.PACKAGE)
 @Table(name="TB_Animal")
 public final class Animal {
 
@@ -23,9 +26,14 @@ public final class Animal {
     @Column(nullable = false)
     private AnimalSpecies species = AnimalSpecies.DOG;
 
-    //@Min(0) // java validation 레벨의 검증임
-    //@Max(100)
-    private Integer age = 0;
+    @Column(nullable = false)
+    private String breed; // 품종 이름
+
+    @Column(nullable = false)
+    private String birthYear;
+
+    @Column(nullable = false)
+    private String weight;
 
     @Enumerated(EnumType.STRING)
     private AnimalGender gender;
@@ -41,26 +49,41 @@ public final class Animal {
     // 시,구
     private String missingAdrs2;
 
-    private LocalDate rescuedDate;
-    private String foundLocation;
-    @Embedded
-    private Shelter shelter;
+    private String rescuedDate;
 
-    void setAge(Integer age) {
-        if(age == null){
-            this.age = null;
+    private String rescuedAdrs;
+
+    private String shelter_id;
+
+    public void setGender(String gender) {
+        if(gender.equalsIgnoreCase("M")){
+            this.gender = AnimalGender.MALE;
+        }else if(gender.equalsIgnoreCase("F")){
+            this.gender = AnimalGender.FEMALE;
         }
-        else if(age < AnimalConstants.MIN_AGE || age > AnimalConstants.MAX_AGE){
-            throw new IllegalArgumentException("동물 나이가 알맞지 않습니다 : " + age);
+    }
+
+    public void setStatus(String status) {
+        if(status.contains("보호")){
+            this.status = AnimalStatus.PROTECTING;
         }
-        this.age = age;
+    }
+
+    public void setSpecies(String species) {
+        if(species.equals("개")){
+            this.species = AnimalSpecies.DOG;
+        }else if(species.equals("고양이")){
+            this.species = AnimalSpecies.CAT;
+        }else{
+            this.species = AnimalSpecies.ETC;
+        }
     }
 
     @PrePersist
     @PreUpdate
     private void validateDate() {
         ValidationCheck.validateNotFutureDate(missingDate, "실종날짜");
-        ValidationCheck.validateNotFutureDate(rescuedDate, "구조날짜");
+        //ValidationCheck.validateNotFutureDate(rescuedDate, "구조날짜");
     }
 
     public static Animal from(MissingAnimalBoardWriteRequest dto){
@@ -73,10 +96,32 @@ public final class Animal {
         return animal;
     }
 
+    public static Animal from(RescuedAnimalApiDto dto){
+        Animal animal = new Animal();
+        update(dto, animal);
+        return animal;
+    }
+
     public void update(AnimalSpecies species, LocalDate missingDate, String missingAdrs1, String missingAdrs2){
         this.species = species;
         this.missingDate = missingDate;
         this.missingAdrs1 = missingAdrs1;
         this.missingAdrs2 = missingAdrs2;
+    }
+
+    public void update(RescuedAnimalApiDto dto){
+        update(dto, this);
+    }
+
+    private static void update(RescuedAnimalApiDto dto, Animal animal){
+        animal.setRescuedDate(dto.happenDt());
+        animal.setRescuedAdrs(dto.happenPlace());
+        animal.setSpecies(dto.upKindNm());
+        animal.setGender(dto.sexCd());
+        animal.setBirthYear(dto.age());
+        animal.setStatus(dto.processState());
+        animal.setWeight(dto.weight());
+        animal.setBreed(dto.kindNm());
+        animal.setShelter_id(dto.careRegNo());
     }
 }
