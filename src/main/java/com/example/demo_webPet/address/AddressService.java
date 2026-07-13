@@ -2,6 +2,9 @@ package com.example.demo_webPet.address;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -9,6 +12,15 @@ public class AddressService {
 
     private final AddressRepository repository;
 
+    List<Address> getAddressList(){
+        return repository.findSidoList();
+    }
+
+    List<Address> getAddressList(String sidoCode){
+        return repository.findByParentId(sidoCode);
+    }
+
+    @Transactional(readOnly = true)
     public Address findByAddress(String address){
         if (address == null || address.isBlank()) {
             throw new IllegalArgumentException("주소가 비었습니다");

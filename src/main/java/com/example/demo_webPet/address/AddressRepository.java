@@ -16,6 +16,22 @@ public interface AddressRepository extends JpaRepository<Address, String> {
     """)
     Address findBySidoAndSigungu(String sido, String sigungu);
 
+    @Query("""
+    select a
+    from Address a
+    where a.parentId is null
+    order by a.name
+    """)
+    List<Address> findSidoList();
+
+    @Query("""
+    select a
+    from Address a
+    where a.parentId = :parentId
+    order by a.name
+    """)
+    List<Address> findByParentId(String parentId);
+
     @Modifying
     @Query("""
     delete from Address a
