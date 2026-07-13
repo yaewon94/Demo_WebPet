@@ -1,6 +1,5 @@
 package com.example.demo_webPet.user;
 
-import com.example.demo_webPet.shelter.ShelterConstants;
 import jakarta.validation.constraints.*;
 
 // [ record ]
@@ -21,7 +20,7 @@ record CreateUserRequest(
         @NotNull(message = MSG_USER_TYPE_REQUIRED)
         UserType user_type,
 
-        @NotNull(message = ShelterConstants.MSG_SHELTER_INPUT_REQUIRED)
+        @NotNull(message = "보호소를 선택해주세요")
         Long shelter_id
 ) {
     static CreateUserRequest getNewInstance() {
