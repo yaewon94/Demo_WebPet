@@ -1,53 +1,53 @@
-## 🛠 Tech Stack
+## 🐶 PawLink
 
-### Backend
-- Java
+공공데이터포털의 유기동물 API를 연동하여 보호 중인 동물 정보를 제공, 실종동물 게시판 글 작성이 가능한 사이트입니다.
+외부 API 데이터를 주기적으로 동기화하고, 보호소 및 지역 정보를 연계하여 지역별 보호동물 조회 기능을 구현했습니다.
+
+### 주요 기능
+
+- 공공데이터 API(JSON) 연동
+- 보호동물 데이터 자동 수집 및 저장
+- 보호소 정보 관리 및 보호동물-보호소 관계 매핑
+- 지역별 보호동물 조회 기능
+- Scheduler를 이용한 주기적 데이터 동기화
+
+---
+
+### 🔄 데이터 동기화 구조
+
+외부 API 데이터와 내부 DB 데이터를 동기화하기 위해
+기존 데이터와 신규 데이터를 구분하여 처리했습니다.
+
+- 기존 보호동물 데이터
+  - 식별자(desertionNo) 기준 조회
+  - 변경된 정보 Update
+
+- 신규 보호동물 데이터
+  - Entity 생성
+  - DB Insert
+
+---
+
+### 🏠 보호소 데이터 관리
+
+보호동물 API에서 제공하는 보호소 정보를 별도로 관리하여
+보호동물 게시물과 보호소 정보를 연결했습니다.
+
+---
+
+### 구현 기술
+
 - Spring Boot
 - Spring Data JPA
-- Spring Security
 - WebClient
-
-### Database
 - PostgreSQL
-
-### Frontend
-- HTML
 - Thymeleaf
-- CKEditor
-- JavaScript
-- AJAX
+- Java Scheduler
 
-### Tools
-- GitHub
-- IntelliJ IDEA
+### 개발 과정에서 해결한 문제
 
-## 📂 PawLink
-### 🔹 공통
-- JPA(Entity) 기반 데이터 관리
-- Java Record DTO 사용
-- Bean Validation을 이용한 입력값 검증
-- 전역 예외 처리(`@ControllerAdvice`) 및 에러 코드 관리
-- Enum 다국어 처리를 위한 `messages.properties` 적용
-- 게시물 목록 페이징 구현
-### 👤 User / Auth
-- 회원가입
-- Spring Security 기반 로그인 / 로그아웃
-- 권한별 접근 제어
-
-> 기존 Session 방식에서 Spring Security로 변경
->
-> **변경 이유**
-> POST 요청의 인증 및 권한 검증을 보다 안전하고 일관성 있게 처리하기 위해 Spring Security 기반으로 리팩터링
-### 🐾 실종동물 게시판
-- 게시글 CRUD
-- 게시글 등록 후 Detail 페이지로 Redirect
-- 게시글 수정 / 삭제 공통 화면 구성
-- CKEditor를 이용한 게시글 작성
-- AJAX 기반 댓글 기능
-- 회원 / 비회원 댓글 로직 분리
-### 🐶 보호동물 게시판
-- 공공데이터 API(JSON) 연동
-- JSON → DTO → Entity 변환
-- 보호동물 데이터 DB 저장
-- Scheduler를 이용한 주기적 데이터 동기화
-- 기존 데이터 Update / 신규 데이터 Insert 로직 구현
+- 외부 API 데이터의 불완전한 지역 코드 및 보호소 데이터 처리
+- 동기화 과정에서 발생하는 중복 데이터 방지
+- Entity 연관관계 설정 및 영속성 관리
+- 지역 검색을 위한 Address-Shelter-Board 관계 설계
+- 공공데이터의 지역 코드 예외 데이터를 처리하여 내부 지역 계층 구조에 맞게 정규화
