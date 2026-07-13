@@ -4,7 +4,19 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 interface ShelterRepository extends JpaRepository<Shelter, String> {
+
+    @Query("""
+    select s
+    from Shelter s
+    join s.address a
+    where a.id = :sigunguCode
+      and a.parentId = :sidoCode
+      and s.isActive = true
+    """)
+    List<Shelter> findActiveShelters(String sidoCode, String sigunguCode);
 
     @Modifying
     @Query("""

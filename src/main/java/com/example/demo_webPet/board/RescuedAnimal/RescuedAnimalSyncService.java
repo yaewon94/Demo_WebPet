@@ -1,5 +1,6 @@
 package com.example.demo_webPet.board.RescuedAnimal;
 
+import com.example.demo_webPet.address.AddressSyncService;
 import com.example.demo_webPet.animal.Animal;
 import com.example.demo_webPet.animal.AnimalRepository;
 import com.example.demo_webPet.shelter.Shelter;
@@ -19,6 +20,7 @@ class RescuedAnimalSyncService {
     private final RescuedAnimalApiClient apiClient;
     private final RescuedAnimalBoardRepository boardRepository;
     private final AnimalRepository animalRepository;
+    private final AddressSyncService addressSyncService;
     private final ShelterService shelterService;
 
     /*  Spring Boot 실행
@@ -55,10 +57,10 @@ class RescuedAnimalSyncService {
     }
 
     // @ cron = 초 분 시 일 월 요일
-    //@Scheduled(cron = "0 0 */6 * * *") // 6시간마다 실행
-    @Scheduled(fixedDelay = 60000) // 1분마다 실행 [개발모드]
+    @Scheduled(cron = "0 0 */6 * * *") // 6시간마다 실행
     @Transactional
     public void updateAnimals() {
+        addressSyncService.sync();
         sync();
     }
 
@@ -72,11 +74,11 @@ class RescuedAnimalSyncService {
             RescuedAnimalBoard board = boardRepository.getByDesertionNo(dto.desertionNo());
 
             if(board != null){
-                board.getShelter().update(dto);
-                board.getAnimal().update(dto);
+                shelterService.update(dto);
+                board.getAnimal().update(dto); // TODO : AnimalService 추가되면 거기로 위임
                 board.update(dto);
             }else{
-                Shelter shelter = shelterService.findOrCreate(dto);
+                Shelter shelter = shelterService.update(dto);
                 Animal animal = animalRepository.save(Animal.from(dto));
 
                 RescuedAnimalBoard newBoard = RescuedAnimalBoard.from(dto);

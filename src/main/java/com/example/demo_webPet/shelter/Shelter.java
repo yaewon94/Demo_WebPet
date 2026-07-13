@@ -16,6 +16,7 @@ import java.time.LocalDate;
 public class Shelter {
 
     @Id
+    @Column(nullable = false, updatable = false)
     private String id;
 
     @Column(nullable = false)
@@ -45,17 +46,21 @@ public class Shelter {
 
     public Shelter(){}
 
-    static Shelter from(RescuedAnimalApiDto dto){
+    static Shelter from(ShelterDto dto, Address address){
         Shelter shelter = new Shelter();
+        shelter.setId(dto.careRegNo());
         shelter.setName(dto.careNm());
-        shelter.setTel(dto.careTel());
-        shelter.setDetailAddress(dto.careAddr());
+        shelter.setAddress(address);
         return shelter;
     }
 
-    public void update(RescuedAnimalApiDto dto){
+    void update(RescuedAnimalApiDto dto){
         setName(dto.careNm());
         setTel(dto.careTel());
         setDetailAddress(dto.careAddr());
+    }
+
+    void update(ShelterDto dto){
+        setName(dto.careNm());
     }
 }
