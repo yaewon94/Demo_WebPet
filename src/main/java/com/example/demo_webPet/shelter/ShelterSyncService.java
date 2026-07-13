@@ -23,12 +23,6 @@ public class ShelterSyncService {
     private final ShelterRepository shelterRepository;
     private final AddressRepository addressRepository;
 
-    // [debug ver]
-    @EventListener(ApplicationReadyEvent.class)
-    public void init() {
-        syncAllData();
-    }
-
     // @ cron = 초 분 시 일 월 요일
     @Scheduled(cron = "0 0 0 1 * *")
     @Transactional

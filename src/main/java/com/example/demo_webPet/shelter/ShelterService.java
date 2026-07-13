@@ -9,7 +9,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class ShelterService {
 
     private final ShelterRepository repository;
@@ -23,17 +22,22 @@ public class ShelterService {
                         dto,
                         addressService.findByAddress(dto.careAddr())));
         shelter.update(dto);
-        return repository.save(shelter);
+        Shelter result = repository.save(shelter);
+        System.out.println("저장완료 = " + result.getId() + ", " + result.getName());
+        return result;
     }
 
+    @Transactional(readOnly = true)
     public void update(RescuedAnimalApiDto dto){
         repository.getReferenceById(dto.careRegNo()).update(dto);
     }
 
+    @Transactional(readOnly = true)
     public List<Shelter> getShelterList(){
         return repository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public Shelter getShelter(String id){
         return repository.findById(id).orElse(null);
     }
