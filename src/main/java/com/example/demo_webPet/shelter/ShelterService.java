@@ -23,7 +23,6 @@ public class ShelterService {
                         addressService.findByAddress(dto.careAddr())));
         shelter.update(dto);
         Shelter result = repository.save(shelter);
-        System.out.println("저장완료 = " + result.getId() + ", " + result.getName());
         return result;
     }
 

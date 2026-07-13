@@ -31,15 +31,19 @@ public class ShelterSyncService {
     }
 
     private void sync(){
-        List<Address> addressList = addressRepository.findByParentIdIsNotNull();
+        List<Address> addressList = addressRepository.findAll();
         for(Address address : addressList){
-            sync(address.getParentId(), address.getId());
+            if(address.getParentId() == null){ // 특수케이스 : 세종특별자치시
+                sync(address.getId(), address.getId());
+            } else {
+                sync(address.getParentId(), address.getId());
+            }
         }
     }
 
     private void sync(String sidoCode, String sigunguCode){
         List<ShelterDto> apiResult = apiClient.getShelterList(sidoCode, sigunguCode);
-        if(apiResult == null) return;
+        if(apiResult.isEmpty()) return;
 
         Map<String, Shelter> shelterMap = shelterRepository
                 .findActiveShelters(sidoCode, sigunguCode)

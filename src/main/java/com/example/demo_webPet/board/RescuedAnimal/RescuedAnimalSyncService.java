@@ -1,10 +1,10 @@
 package com.example.demo_webPet.board.RescuedAnimal;
 
-import com.example.demo_webPet.address.AddressSyncService;
 import com.example.demo_webPet.animal.Animal;
 import com.example.demo_webPet.animal.AnimalRepository;
 import com.example.demo_webPet.shelter.Shelter;
 import com.example.demo_webPet.shelter.ShelterService;
+import com.example.demo_webPet.shelter.ShelterSyncService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,6 @@ class RescuedAnimalSyncService {
     private final RescuedAnimalApiClient apiClient;
     private final RescuedAnimalBoardRepository boardRepository;
     private final AnimalRepository animalRepository;
-    private final AddressSyncService addressSyncService;
     private final ShelterService shelterService;
 
     /*  Spring Boot 실행
@@ -37,12 +36,13 @@ class RescuedAnimalSyncService {
     /*// Spring Boot 완전히 시작 후 호출됨
     // 접속자가 보호동물 게시판에 안들어온 경우 쓸일이 없기 때문에
     // 이때 초기화 하는건 비효율적
+    // [debug ver]
     @EventListener(ApplicationReadyEvent.class)
     public void init() {
-        sync();
+        syncAllData();
     }*/
 
-    void syncIfNeeded(){
+    /*void syncIfNeeded(){
         if (boardRepository.count() > 0) {
             return;
         }
@@ -52,15 +52,14 @@ class RescuedAnimalSyncService {
             if (boardRepository.count() > 0) {
                 return;
             }
-            sync();
+            syncAllData();
         }
-    }
+    }*/
 
     // @ cron = 초 분 시 일 월 요일
     @Scheduled(cron = "0 0 */6 * * *") // 6시간마다 실행
     @Transactional
-    public void updateAnimals() {
-        addressSyncService.sync();
+    public void syncAllData() {
         sync();
     }
 
@@ -78,7 +77,7 @@ class RescuedAnimalSyncService {
                 board.getAnimal().update(dto); // TODO : AnimalService 추가되면 거기로 위임
                 board.update(dto);
             }else{
-                Shelter shelter = shelterService.update(dto);
+                Shelter shelter = shelterService.createOrUpdate(dto);
                 Animal animal = animalRepository.save(Animal.from(dto));
 
                 RescuedAnimalBoard newBoard = RescuedAnimalBoard.from(dto);

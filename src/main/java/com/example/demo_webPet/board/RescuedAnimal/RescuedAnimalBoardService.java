@@ -29,9 +29,6 @@ class RescuedAnimalBoardService {
         );
         Page<BoardDto_forList> boards = boardRepository.findBoardList(pageable);
 
-        // 동기화
-        syncService.syncIfNeeded();
-
         return boards;
     }
 

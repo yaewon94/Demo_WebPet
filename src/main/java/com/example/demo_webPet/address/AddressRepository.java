@@ -11,13 +11,6 @@ public interface AddressRepository extends JpaRepository<Address, String> {
     @Query("""
     select a
     from Address a
-    where a.parentId is not null
-    """)
-    List<Address> findByParentIdIsNotNull();
-
-    @Query("""
-    select a
-    from Address a
     where a.parentId = :sido
     and a.id = :sigungu
     """)

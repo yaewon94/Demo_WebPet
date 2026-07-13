@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 @Table(name="TB_Board_RescuedAnimal")
 final class RescuedAnimalBoard extends Board {
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shelter_id", nullable = false)
     private Shelter shelter;
 
