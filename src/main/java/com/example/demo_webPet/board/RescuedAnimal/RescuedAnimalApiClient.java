@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.List;
+import java.util.Objects;
+
 @Component
 @RequiredArgsConstructor
 final class RescuedAnimalApiClient {
@@ -17,14 +20,13 @@ final class RescuedAnimalApiClient {
     @Value("${animal.api.host}")
     private String apiHost;
 
-    RescuedAnimalApiResponse getAnimalList(){
+    List<RescuedAnimalApiDto> getAnimalList(){
         final String API_PATH = "/1543061/abandonmentPublicService_v2/abandonmentPublic_v2";
         // TODO : page,size 실무 값으로 변경
         final int page = 1;
         final int size = 10;
 
-        // 공공데이터 api 요청
-        return webClient.get()
+        RescuedAnimalApiResponse response = webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .scheme("https")
                         .host(apiHost)
@@ -37,5 +39,12 @@ final class RescuedAnimalApiClient {
                 .retrieve()
                 .bodyToMono(RescuedAnimalApiResponse.class)
                 .block();
+
+        // 공공데이터 api 요청
+        return Objects.requireNonNull(response)
+                .getResponse()
+                .getBody()
+                .getItems()
+                .getItem();
     }
 }

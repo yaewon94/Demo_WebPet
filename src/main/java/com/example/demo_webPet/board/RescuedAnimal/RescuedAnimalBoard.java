@@ -18,7 +18,8 @@ import java.time.format.DateTimeFormatter;
 @Table(name="TB_Board_RescuedAnimal")
 final class RescuedAnimalBoard extends Board {
 
-    @Embedded
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shelter_id", nullable = false)
     private Shelter shelter;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -37,9 +38,11 @@ final class RescuedAnimalBoard extends Board {
     private String imgUrl1;
     private String imgUrl2;
 
+    @Column(nullable = false)
+    private boolean isValid = true;
+
     RescuedAnimalBoard(){
         super(BoardType.RESCUED_ANIMAL);
-        shelter = new Shelter(); // TODO : DB entity로 바꾸면 지우기
     }
 
     public void setCreatedAt(String createdAt){
@@ -51,7 +54,6 @@ final class RescuedAnimalBoard extends Board {
 
     void update(RescuedAnimalApiDto dto){
         update(dto, this);
-        this.animal.update(dto);
     }
 
     static RescuedAnimalBoard from(RescuedAnimalApiDto dto){
@@ -69,10 +71,5 @@ final class RescuedAnimalBoard extends Board {
         board.setTitle(dto.noticeNo());
         board.setContent(dto.specialMark());
         board.setCreatedAt(dto.updTm());
-
-        board.shelter.setId(dto.careRegNo());
-        board.shelter.setName(dto.careNm());
-        board.shelter.setTel(dto.careTel());
-        board.shelter.setAddress(dto.careAddr());
     }
 }

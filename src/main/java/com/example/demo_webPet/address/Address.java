@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @Table(name="TB_Address")
-class Address {
+public class Address {
 
     @Id
     private String id;

@@ -21,10 +21,10 @@ record CreateUserRequest(
         UserType user_type,
 
         @NotNull(message = "보호소를 선택해주세요")
-        Long shelter_id
+        String shelter_id
 ) {
     static CreateUserRequest getNewInstance() {
-        return new CreateUserRequest(null, null, UserType.NORMAL, -1L);
+        return new CreateUserRequest(null, null, UserType.NORMAL, null);
     }
 
     private static final int VALUE_MIN_USER_NAME_SIZE = 8;

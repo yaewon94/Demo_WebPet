@@ -2,6 +2,8 @@ package com.example.demo_webPet.board.RescuedAnimal;
 
 import com.example.demo_webPet.animal.Animal;
 import com.example.demo_webPet.animal.AnimalRepository;
+import com.example.demo_webPet.shelter.Shelter;
+import com.example.demo_webPet.shelter.ShelterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ class RescuedAnimalSyncService {
     private final RescuedAnimalApiClient apiClient;
     private final RescuedAnimalBoardRepository boardRepository;
     private final AnimalRepository animalRepository;
+    private final ShelterService shelterService;
 
     /*  Spring Boot 실행
             ↓
@@ -52,37 +55,38 @@ class RescuedAnimalSyncService {
     }
 
     // @ cron = 초 분 시 일 월 요일
-    @Scheduled(cron = "0 0 */6 * * *") // 6시간마다 실행
-    //@Scheduled(fixedDelay = 60000) // 1분마다 실행 [개발모드]
+    //@Scheduled(cron = "0 0 */6 * * *") // 6시간마다 실행
+    @Scheduled(fixedDelay = 60000) // 1분마다 실행 [개발모드]
+    @Transactional
     public void updateAnimals() {
         sync();
     }
 
-    @Transactional
+    // TODO : 데이터가 몇천건 이상이므로, DB에 접근하는 방법 변경하기
     private void sync() {
-        // 외부 API 호출
-        RescuedAnimalApiResponse response =apiClient.getAnimalList();
-
-        // DTO 변환
-        List<RescuedAnimalApiDto> animals = response
-                .getResponse()
-                .getBody()
-                .getItems()
-                .getItem();
+        List<RescuedAnimalApiDto> animals = apiClient.getAnimalList();
 
         // Entity 변환 => DB 저장
         List<RescuedAnimalBoard> boards = new ArrayList<>();
         for(RescuedAnimalApiDto dto : animals){
             RescuedAnimalBoard board = boardRepository.getByDesertionNo(dto.desertionNo());
+
             if(board != null){
+                board.getShelter().update(dto);
+                board.getAnimal().update(dto);
                 board.update(dto);
             }else{
-                Animal newAnimal = animalRepository.save(Animal.from(dto));
+                Shelter shelter = shelterService.findOrCreate(dto);
+                Animal animal = animalRepository.save(Animal.from(dto));
+
                 RescuedAnimalBoard newBoard = RescuedAnimalBoard.from(dto);
-                newBoard.setAnimal(newAnimal);
+                newBoard.setAnimal(animal);
+                newBoard.setShelter(shelter);
+
                 boards.add(newBoard);
             }
         }
+
         boardRepository.saveAll(boards);
     }
 }

@@ -4,7 +4,7 @@ import com.example.demo_webPet.auth.AuthService;
 import com.example.demo_webPet.common.output.ModelParamConstants;
 import com.example.demo_webPet.common.constants.UrlConstants;
 import com.example.demo_webPet.common.util.ValidationCheck;
-import com.example.demo_webPet.shelter.ShelterDto;
+import com.example.demo_webPet.shelter.Shelter;
 import com.example.demo_webPet.shelter.ShelterService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,6 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -33,7 +32,7 @@ final class UserController {
         return UserType.values();
     }
     @ModelAttribute("list_shelter")
-    private List<ShelterDto> shelters() { return shelterService.getShelterList(); }
+    private List<Shelter> shelters() { return shelterService.getShelterList(); }
 
     // TEMP
     @GetMapping(UrlConstants.URL_SIGNUP)

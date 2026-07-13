@@ -37,7 +37,8 @@ public final class User {
     @Enumerated(EnumType.STRING)
     private final UserType type;
 
-    @Embedded
+    @ManyToOne
+    @JoinColumn(name = "shelter_id")
     private Shelter shelter;
 
     @NotBlank
