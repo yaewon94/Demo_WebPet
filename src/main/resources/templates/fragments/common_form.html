@@ -1,0 +1,9 @@
+<th:block th:fragment="select_address(url)">
+    <form th:action="${url}" method="get" id="select-address-form">
+        지역선택
+        <select id="address1" name="sidoCode"></select>
+        <select id="address2" name="sigunguCode"></select>
+        <button type="submit">조회</button>
+    </form>
+    <script th:src="@{/js/util-address.js(v=${appVersion})}"></script>
+</th:block>

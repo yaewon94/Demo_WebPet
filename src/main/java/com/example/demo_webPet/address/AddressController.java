@@ -15,24 +15,16 @@ final class AddressController {
     private final AddressService service;
 
     @GetMapping
-    @ResponseBody
-    public Map<String, List<String>> getAddressList(){
-        Map<String, List<String>> result = new HashMap<>();
-        result.put("address1",
-                service.getAddressList().stream()
-                .map(Address::getName)
-                .toList());
+    public Map<String, List<AddressResponse>> getAddressList(){
+        Map<String, List<AddressResponse>> result = new HashMap<>();
+        result.put("address1", service.getAddressList());
         return result;
     }
 
     @GetMapping(params = "address1")
-    @ResponseBody
-    public Map<String, List<String>> getAddress2(@RequestParam String address1) {
-        Map<String, List<String>> result = new HashMap<>();
-        result.put("address2",
-                service.getAddressList(address1).stream()
-                        .map(Address::getName)
-                        .toList());
+    public Map<String, List<AddressResponse>> getAddress2(@RequestParam String address1) {
+        Map<String, List<AddressResponse>> result = new HashMap<>();
+        result.put("address2", service.getAddressList(address1));
         return result;
     }
 }

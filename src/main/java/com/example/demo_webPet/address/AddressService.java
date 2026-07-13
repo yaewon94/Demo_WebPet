@@ -12,11 +12,11 @@ public class AddressService {
 
     private final AddressRepository repository;
 
-    List<Address> getAddressList(){
+    List<AddressResponse> getAddressList(){
         return repository.findSidoList();
     }
 
-    List<Address> getAddressList(String sidoCode){
+    List<AddressResponse> getAddressList(String sidoCode){
         return repository.findByParentId(sidoCode);
     }
 

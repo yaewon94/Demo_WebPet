@@ -21,15 +21,21 @@ class RescuedAnimalBoardService {
     private final RescuedAnimalBoardRepository boardRepository;
 
     Page<BoardDto_forList> getBoardList(int page){
-        // DB 먼저 출력
         Pageable pageable = PageRequest.of(
                 page,
                 BoardConstants.PAGE_SIZE,
                 BoardConstants.SORT
         );
-        Page<BoardDto_forList> boards = boardRepository.findBoardList(pageable);
+        return boardRepository.findBoardList(pageable);
+    }
 
-        return boards;
+    Page<BoardDto_forList> getBoardList(int page, String addressCode){
+        Pageable pageable = PageRequest.of(
+                page,
+                BoardConstants.PAGE_SIZE,
+                BoardConstants.SORT
+        );
+        return boardRepository.findBoardList(pageable, addressCode);
     }
 
     RescuedAnimalBoard getBoard(Long id){

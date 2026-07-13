@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 interface RescuedAnimalBoardRepository extends JpaRepository<RescuedAnimalBoard, Long> {
 
@@ -25,4 +26,23 @@ interface RescuedAnimalBoardRepository extends JpaRepository<RescuedAnimalBoard,
     from RescuedAnimalBoard b
     """)
     Page<BoardDto_forList> findBoardList(Pageable pageable);
+
+    @Query("""
+    select new com.example.demo_webPet.board.BoardDto_forList(
+        b.id,
+        b.title,
+        b.createdAt,
+        s.name,
+        b.imgUrl1
+    )
+    from RescuedAnimalBoard b
+    join b.shelter s
+    join s.address a
+    where (
+        a.id = :addressCode
+        or a.parentId = :addressCode)
+    """)
+    Page<BoardDto_forList> findBoardList(
+            Pageable pageable,
+            @Param("addressCode") String addressCode);
 }

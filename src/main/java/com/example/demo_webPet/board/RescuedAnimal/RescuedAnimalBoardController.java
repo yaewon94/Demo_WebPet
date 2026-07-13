@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
+import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,15 +23,27 @@ final class RescuedAnimalBoardController extends BoardController {
     @GetMapping("/list")
     public String showAnimalListPage(
             @RequestParam(defaultValue = BoardConstants.DEFAULT_PAGE) int page,
+            @RequestParam(required = false) String sidoCode,
+            @RequestParam(required = false) String sigunguCode,
             Model model){
-        String urlPrefix = UriBuilder.getUrl(
-                "/board/rescuedAnimal/list",
-                Map.of("page", ""));
-        Page<BoardDto_forList> boardList = boardService.getBoardList(page);
+
+        Page<BoardDto_forList> boardList;
+
+        if(sidoCode == null || sidoCode.isBlank()){
+            boardList = boardService.getBoardList(page);
+        }else{
+            boardList = boardService.getBoardList(
+                    page,
+                    Objects.requireNonNullElse(sigunguCode, sidoCode));
+        }
+
         model.addAttribute(BoardConstants.MODEL_PARAM_BOARD_LIST, boardList);
         model.addAttribute(
                 BoardConstants.MODEL_PARAM_PAGING,
-                new PagingResponse(urlPrefix, page, boardList.getTotalPages()));
+                new PagingResponse(
+                        UriBuilder.getUrl("/board/rescuedAnimal/list", Map.of("page", "")),
+                        page,
+                        boardList.getTotalPages()));
         return "/board/rescuedAnimal/list";
     }
 

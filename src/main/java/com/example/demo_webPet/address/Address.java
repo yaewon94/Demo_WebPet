@@ -34,7 +34,14 @@ public class Address {
         Address address = new Address();
         address.setId(dto.orgCd());
         address.setName(dto.orgdownNm());
-        address.setParentId(dto.uprCd());
+
+        // 자기 자신을 부모로 가진 경우 최상위로 처리
+        if(dto.orgCd().equals(dto.uprCd())) {
+            address.setParentId(null);
+        } else {
+            address.setParentId(dto.uprCd());
+        }
+
         return address;
     }
 

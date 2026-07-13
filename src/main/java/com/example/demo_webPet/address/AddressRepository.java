@@ -17,20 +17,26 @@ public interface AddressRepository extends JpaRepository<Address, String> {
     Address findBySidoAndSigungu(String sido, String sigungu);
 
     @Query("""
-    select a
+    select new com.example.demo_webPet.address.AddressResponse(
+        a.id,
+        a.name
+    )
     from Address a
     where a.parentId is null
     order by a.name
     """)
-    List<Address> findSidoList();
+    List<AddressResponse> findSidoList();
 
     @Query("""
-    select a
+    select new com.example.demo_webPet.address.AddressResponse(
+        a.id,
+        a.name
+    )
     from Address a
     where a.parentId = :parentId
     order by a.name
     """)
-    List<Address> findByParentId(String parentId);
+    List<AddressResponse> findByParentId(String parentId);
 
     @Modifying
     @Query("""

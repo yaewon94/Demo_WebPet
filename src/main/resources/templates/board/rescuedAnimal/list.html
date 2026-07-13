@@ -3,12 +3,8 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <div layout:fragment="content">
-    <!-- 링크 패널-->
-    <!--<div>
-        <a th:href="@{${add_url}}">
-            보호동물 등록
-        </a>
-    </div>-->
+    <!-- 지역 선택 패널 -->
+    <div th:replace="~{fragments/common_form :: select_address(@{/board/rescuedAnimal/list})}"></div>
 
     <!-- 게시물 목록 -->
     <div th:replace="~{fragments/board_common :: list_typeB}"></div>
