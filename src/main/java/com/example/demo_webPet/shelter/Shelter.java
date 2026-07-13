@@ -25,7 +25,6 @@ public class Shelter {
     @Column
     private String tel;
 
-    @Column(nullable = false)
     private String detailAddress;
 
     @ManyToOne
@@ -33,16 +32,7 @@ public class Shelter {
     private Address address;
 
     @Column(nullable = false)
-    private LocalDate updateDate;
-
-    @Column(nullable = false)
     private boolean isActive = true;
-
-    @PrePersist
-    @PreUpdate
-    private void updateDate() {
-        setUpdateDate(LocalDate.now());
-    }
 
     public Shelter(){}
 
@@ -50,6 +40,16 @@ public class Shelter {
         Shelter shelter = new Shelter();
         shelter.setId(dto.careRegNo());
         shelter.setName(dto.careNm());
+        shelter.setAddress(address);
+        return shelter;
+    }
+
+    static Shelter from(RescuedAnimalApiDto dto, Address address){
+        Shelter shelter = new Shelter();
+        shelter.setId(dto.careRegNo());
+        shelter.setName(dto.careNm());
+        shelter.setTel(dto.careTel());
+        shelter.setDetailAddress(dto.careAddr());
         shelter.setAddress(address);
         return shelter;
     }

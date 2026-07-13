@@ -1,7 +1,7 @@
 package com.example.demo_webPet.address;
 
-import com.example.demo_webPet.shelter.ShelterService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,14 +13,19 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class AddressSyncService {
+class AddressSyncService {
 
     private final AddressApiClient apiClient;
     private final AddressRepository repository;
-    private final ShelterService shelterService;
 
+    // @ cron = 초 분 시 일 월 요일
+    @Scheduled(cron = "0 0 0 1 1 *")
     @Transactional
-    public void sync(){
+    public void syncAllData() {
+        sync();
+    }
+
+    private void sync(){
         Map<String, Address> addressMap = repository.findAll().stream()
                         .collect(Collectors.toMap(
                                 Address::getId,
@@ -37,7 +42,6 @@ public class AddressSyncService {
 
             for(AddressDto sigungu : sigunguList){
                 saveOrUpdate(sigungu, addressMap, entityList);
-                if(sigungu.uprCd() != null) shelterService.sync(sigungu.uprCd(), sigungu.orgCd());
             }
         }
 

@@ -19,7 +19,7 @@ public class Address {
     @Column(nullable = false)
     private String name;
 
-    private String parent_id; // 시군구 일 경우, 부모 시/도 코드
+    private String parentId; // 시군구 일 경우, 부모 시/도 코드
 
     @Column(nullable = false)
     private LocalDate updateDate;
@@ -34,13 +34,13 @@ public class Address {
         Address address = new Address();
         address.setId(dto.orgCd());
         address.setName(dto.orgdownNm());
-        address.setParent_id(dto.uprCd());
+        address.setParentId(dto.uprCd());
         return address;
     }
 
     void update(AddressDto dto){
         setId(dto.orgCd());
         setName(dto.orgdownNm());
-        setParent_id(dto.uprCd());
+        setParentId(dto.uprCd());
     }
 }

@@ -30,11 +30,13 @@ final class ShelterApiClient {
                         .path(API_PATH)
                         .queryParam("serviceKey", serviceKey)
                         .queryParam("_type", "json")
+                        .queryParam("upr_cd", sidoCode)
+                        .queryParam("org_cd", sigunguCode)
                         .build())
                 .retrieve()
                 .bodyToMono(ShelterApiResponse.class)
                 .block();
 
-        return Objects.requireNonNull(response).body().items().item();
+        return Objects.requireNonNull(response).response().body().items().item();
     }
 }

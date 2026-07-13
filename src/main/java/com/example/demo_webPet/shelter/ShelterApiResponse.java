@@ -3,9 +3,14 @@ package com.example.demo_webPet.shelter;
 import java.util.List;
 
 record ShelterApiResponse(
-        Header header,
-        Body body
+        Response response
 ) {
+
+    public record Response(
+            Header header,
+            Body body
+    ) {
+    }
 
     public record Header(
             String errorMsg,
