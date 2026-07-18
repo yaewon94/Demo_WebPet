@@ -22,11 +22,10 @@ public class ShelterService {
                         dto,
                         addressService.findByAddress(dto.careAddr())));
         shelter.update(dto);
-        Shelter result = repository.save(shelter);
-        return result;
+        return repository.save(shelter);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void update(RescuedAnimalApiDto dto){
         repository.getReferenceById(dto.careRegNo()).update(dto);
     }

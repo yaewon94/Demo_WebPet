@@ -55,7 +55,7 @@ public final class Animal {
 
     private String shelter_id;
 
-    public void setGender(String gender) {
+    void setGender(String gender) {
         if(gender.equalsIgnoreCase("M")){
             this.gender = AnimalGender.MALE;
         }else if(gender.equalsIgnoreCase("F")){
@@ -63,13 +63,13 @@ public final class Animal {
         }
     }
 
-    public void setStatus(String status) {
+    void setStatus(String status) {
         if(status.contains("보호")){
             this.status = AnimalStatus.PROTECTING;
         }
     }
 
-    public void setSpecies(String species) {
+    void setSpecies(String species) {
         if(species.equals("개")){
             this.species = AnimalSpecies.DOG;
         }else if(species.equals("고양이")){
@@ -88,32 +88,33 @@ public final class Animal {
 
     public static Animal from(MissingAnimalBoardWriteRequest dto){
         Animal animal = new Animal();
-        animal.species = dto.species();
         animal.status = AnimalStatus.MISSING;
-        animal.missingDate = dto.missingDate();
-        animal.missingAdrs1 = dto.address1();
-        animal.missingAdrs2 = dto.address2();
+        updateAnimal(dto, animal);
         return animal;
     }
 
     public static Animal from(RescuedAnimalApiDto dto){
         Animal animal = new Animal();
-        update(dto, animal);
+        updateAnimal(dto, animal);
         return animal;
     }
 
-    public void update(AnimalSpecies species, LocalDate missingDate, String missingAdrs1, String missingAdrs2){
-        this.species = species;
-        this.missingDate = missingDate;
-        this.missingAdrs1 = missingAdrs1;
-        this.missingAdrs2 = missingAdrs2;
+    public void update(MissingAnimalBoardWriteRequest dto){
+        updateAnimal(dto, this);
     }
 
     public void update(RescuedAnimalApiDto dto){
-        update(dto, this);
+        updateAnimal(dto, this);
     }
 
-    private static void update(RescuedAnimalApiDto dto, Animal animal){
+    private static void updateAnimal(MissingAnimalBoardWriteRequest dto, Animal animal){
+        animal.species = dto.species();
+        animal.setMissingDate(dto.missingDate());
+        animal.setMissingAdrs1(dto.address1());
+        animal.setMissingAdrs2(dto.address2());
+    }
+
+    private static void updateAnimal(RescuedAnimalApiDto dto, Animal animal){
         animal.setRescuedDate(dto.happenDt());
         animal.setRescuedAdrs(dto.happenPlace());
         animal.setSpecies(dto.upKindNm());

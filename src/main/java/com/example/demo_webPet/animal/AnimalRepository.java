@@ -2,5 +2,5 @@ package com.example.demo_webPet.animal;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface AnimalRepository extends JpaRepository<Animal, Long> {
+interface AnimalRepository extends JpaRepository<Animal, Long> {
 }

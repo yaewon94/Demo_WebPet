@@ -55,12 +55,7 @@ class MissingAnimalBoardService {
 
         // entity 변경하면 JPA가 영속성 객체 변경 감지해서 DB 자동 update
         Animal animal = board.getAnimal();
-        animal.update(
-                request.species(),
-                request.missingDate(),
-                request.address1(),
-                request.address2()
-        );
+        animal.update(request);
         board.update(
                 request.title(),
                 request.content());

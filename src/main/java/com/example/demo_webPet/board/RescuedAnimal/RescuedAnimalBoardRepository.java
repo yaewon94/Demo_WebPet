@@ -7,13 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 interface RescuedAnimalBoardRepository extends JpaRepository<RescuedAnimalBoard, Long> {
 
-    @Query("""
-    select b from RescuedAnimalBoard b
-    where b.desertionNo = :desertionNo
-    """)
-    RescuedAnimalBoard getByDesertionNo(String desertionNo);
+    List<RescuedAnimalBoard> findAllByDesertionNoIn(List<String> desertionNos);
 
     @Query("""
     select new com.example.demo_webPet.board.BoardDto_forList(

@@ -1,7 +1,7 @@
 package com.example.demo_webPet.board.RescuedAnimal;
 
 public record RescuedAnimalApiDto(
-     String desertionNo, // 동물번호
+     String desertionNo, // 유기번호
      String happenDt, // 발견날짜
      String happenPlace, // 발견장소
      String upKindNm, // 종류 (개, 고양이, 기타)
