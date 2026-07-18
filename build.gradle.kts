@@ -32,6 +32,8 @@ dependencies {
 	// Database
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("com.google.guava:guava:33.4.0-jre")
+	implementation("org.flywaydb:flyway-core")
+	implementation("org.flywaydb:flyway-database-postgresql")
 	runtimeOnly("org.postgresql:postgresql")
 
 	// WebClient
