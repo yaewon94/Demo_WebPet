@@ -2,10 +2,10 @@ package com.example.demo_webPet.board.MissingAnimal;
 
 import com.example.demo_webPet.animal.Animal;
 import com.example.demo_webPet.board.BoardConstants;
-import com.example.demo_webPet.board.BoardDeniedException;
 import com.example.demo_webPet.board.BoardDto_forList;
 import com.example.demo_webPet.board.BoardType;
 import com.example.demo_webPet.board.comment.BoardCommentRepository;
+import com.example.demo_webPet.common.exception.AccessDeniedException;
 import com.example.demo_webPet.common.output.HtmlUtils;
 import com.example.demo_webPet.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +50,7 @@ class MissingAnimalBoardService {
 
         // 다른 사람이 작성한 게시물에 수정하려는 경우
         if(!Objects.equals(board.getUser().getId(), loginUserId)){
-            throw new BoardDeniedException(ERROR_BOARD_ACCESS_DENIED);
+            throw new AccessDeniedException(ERROR_BOARD_ACCESS_DENIED);
         }
 
         // entity 변경하면 JPA가 영속성 객체 변경 감지해서 DB 자동 update
@@ -75,7 +75,7 @@ class MissingAnimalBoardService {
         int deleted = boardRepository.deleteByIdAndUserId(boardId, loginUserId);
         if (deleted == 0) {
             // 삭제된 게시물이 없다 => 게시물 작성자 id != 현재 로그인 유저 id
-            throw new BoardDeniedException(ERROR_BOARD_ACCESS_DENIED);
+            throw new AccessDeniedException(ERROR_BOARD_ACCESS_DENIED);
         }
     }
 
@@ -84,7 +84,7 @@ class MissingAnimalBoardService {
         // 수정할 게시물이 없다 => 게시물 작성자 id != 현재 로그인 유저 id
         return boardRepository.findModifyDtoById(boardId, loginUserId)
                 .orElseThrow(() ->
-                        new BoardDeniedException(ERROR_BOARD_ACCESS_DENIED));
+                        new AccessDeniedException(ERROR_BOARD_ACCESS_DENIED));
     }
 
     MissingAnimalBoardDetailResponse getBoard(Long id){

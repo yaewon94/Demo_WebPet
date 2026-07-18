@@ -1,8 +1,8 @@
 package com.example.demo_webPet.board.RescuedAnimal;
 
 import com.example.demo_webPet.board.BoardConstants;
-import com.example.demo_webPet.board.BoardDeniedException;
 import com.example.demo_webPet.board.BoardDto_forList;
+import com.example.demo_webPet.common.exception.AccessDeniedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,6 +40,6 @@ class RescuedAnimalBoardService {
 
     RescuedAnimalBoard getBoard(Long id){
         return boardRepository.findById(id).orElseThrow(() ->
-                new BoardDeniedException(ERROR_BOARD_ACCESS_DENIED));
+                new AccessDeniedException(ERROR_BOARD_ACCESS_DENIED));
     }
 }
