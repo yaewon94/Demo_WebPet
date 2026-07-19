@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_DB: demo
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 0616
+      POSTGRES_PASSWORD: "0616"
 
     ports:
       - "5432:5432"
