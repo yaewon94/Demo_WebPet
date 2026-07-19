@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: demo-postgres
+
+    environment:
+      POSTGRES_DB: demo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 0616
+
+    ports:
+      - "5432:5432"
+
+    # DB 보존 기능 (docker compose up, docker compose down 해도 데이터가 남음)
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
