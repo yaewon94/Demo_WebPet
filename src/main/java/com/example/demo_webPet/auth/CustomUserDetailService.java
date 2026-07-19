@@ -4,7 +4,7 @@ import com.example.demo_webPet.common.error.ErrorCode;
 import com.example.demo_webPet.user.User;
 import com.example.demo_webPet.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.NonNull;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
