@@ -4,9 +4,9 @@ services:
     image: postgres:17
     container_name: pawlink-db
     environment:
-      POSTGRES_DB: demo
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: "0616"
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
 
