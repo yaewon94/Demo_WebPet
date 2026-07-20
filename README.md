@@ -1,53 +1,129 @@
-## 🐶 PawLink
+# 🐶 PawLink
 
-공공데이터포털의 유기동물 API를 연동하여 보호 중인 동물 정보를 제공, 실종동물 게시판 글 작성이 가능한 사이트입니다.
-외부 API 데이터를 주기적으로 동기화하고, 보호소 및 지역 정보를 연계하여 지역별 보호동물 조회 기능을 구현했습니다.
+공공데이터포털의 유기동물 API를 연동하여 보호동물 정보를 제공하고,
+실종동물 게시판을 운영하는 웹 서비스입니다.
 
-### 주요 기능
+외부 API 데이터를 주기적으로 동기화하고,
+보호소 및 지역 정보를 연계하여 지역별 보호동물 조회 기능을 제공합니다.
 
-- 공공데이터 API(JSON) 연동
+---
+
+## 🛠 Tech Stack
+
+- Java 21
+- Spring Boot
+- Spring Data JPA
+- Spring Security
+- Thymeleaf
+- PostgreSQL
+- WebClient
+- Flyway
+- Docker / Docker Compose
+
+---
+
+## ✨ 주요 기능
+
+- 공공데이터포털 유기동물 API 연동
 - 보호동물 데이터 자동 수집 및 저장
-- 보호소 정보 관리 및 보호동물-보호소 관계 매핑
-- 지역별 보호동물 조회 기능
+- 보호소 정보 관리 및 보호동물-보호소 연관관계 구성
+- 지역별 보호동물 조회
 - Scheduler를 이용한 주기적 데이터 동기화
 
 ---
 
-### 🔄 데이터 동기화 구조
+## 🚀 실행 방법
 
-외부 API 데이터와 내부 DB 데이터를 동기화하기 위해
-기존 데이터와 신규 데이터를 구분하여 처리했습니다.
+### 1. 환경 변수 설정
 
-- 기존 보호동물 데이터
-  - 식별자(desertionNo) 기준 조회
-  - 변경된 정보 Update
+`.env.example`을 복사하여 `.env` 파일을 생성합니다.
 
-- 신규 보호동물 데이터
-  - Entity 생성
-  - DB Insert
+```bash
+cp .env.example .env
+```
+
+필요한 값을 입력합니다.
+
+```properties
+POSTGRES_DB=
+POSTGRES_USER=
+POSTGRES_PASSWORD=
+ANIMAL_API_KEY=
+```
+
+### 2. 프로젝트 실행
+
+```bash
+./gradlew bootJar
+docker compose up --build
+```
+
+브라우저에서
+
+```
+http://localhost:8080
+```
+
+으로 접속합니다.
 
 ---
 
-### 🏠 보호소 데이터 관리
+## 🐳 Docker
 
-보호동물 API에서 제공하는 보호소 정보를 별도로 관리하여
-보호동물 게시물과 보호소 정보를 연결했습니다.
+Docker Compose를 사용하여 Spring Boot와 PostgreSQL을 함께 실행합니다.
+
+실행
+
+```bash
+docker compose up --build
+```
+
+종료
+
+```bash
+docker compose down
+```
 
 ---
 
-### 구현 기술
+## 🔄 Database Migration
 
-- Spring Boot
-- Spring Data JPA
-- WebClient
-- PostgreSQL
-- Thymeleaf
-- Java Scheduler
+Flyway를 이용해 데이터베이스 스키마 변경 이력을 관리합니다.
 
-### 개발 과정에서 해결한 문제
+- 스키마 버전 관리
+- 마이그레이션 자동 적용
 
-- 외부 API 데이터의 불완전한 지역 코드 및 보호소 데이터 처리
-- 동기화 과정에서 발생하는 중복 데이터 방지
-- Entity 연관관계 설정 및 영속성 관리
-- 지역 검색을 위한 Address-Shelter-Board 관계 설계
-- 공공데이터의 지역 코드 예외 데이터를 처리하여 내부 지역 계층 구조에 맞게 정규화
+---
+
+## 🔐 Environment Variables
+
+DB 비밀번호와 외부 API Key는 `.env` 파일로 관리하며 Git 저장소에는 포함하지 않습니다.
+
+예시 파일은 `.env.example`을 제공합니다.
+
+---
+
+## ⚙️ 데이터 동기화
+
+외부 API 데이터를 기존 DB와 비교하여 동기화합니다.
+
+- 기존 데이터 → 변경 사항 Update
+- 신규 데이터 → Insert
+
+보호동물 식별번호(`desertionNo`)를 기준으로 중복을 방지합니다.
+
+---
+
+## 🏠 보호소 데이터 관리
+
+보호소 정보를 별도 Entity로 관리하고,
+보호동물과 연관관계를 구성하여 지역별 조회에 활용합니다.
+
+---
+
+## 💡 해결한 문제
+
+- 공공데이터의 지역 코드 예외 데이터를 내부 지역 체계에 맞게 정규화
+- 외부 API 동기화 시 중복 데이터 방지
+- 보호동물-보호소-지역 간 연관관계 설계
+- JPA 영속성 및 연관관계 관리
